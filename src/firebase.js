@@ -1,25 +1,22 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; 
+import { getAuth } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyApNnVfcSiBh705nhv54Htaz2GrLXXQfLY",
-  authDomain: "safe-pay-2e6dc.firebaseapp.com",
-  projectId: "safe-pay-2e6dc",
-  storageBucket: "safe-pay-2e6dc.firebasestorage.app",
-  messagingSenderId: "1043813139616",
-  appId: "1:1043813139616:web:e01c7d943ad76e85a9b5c5",
-  measurementId: "G-Z4DS6BN63W",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 
-// Authentication
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-// Analytics শুধু browser এ চালাও
 let analytics;
 if (typeof window !== "undefined") {
   analytics = getAnalytics(app);

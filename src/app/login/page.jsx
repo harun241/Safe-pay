@@ -45,7 +45,14 @@ export default function LoginPage() {
         <button className="w-full bg-green-500 text-white p-3 rounded hover:bg-green-600 transition">
           Login
         </button>
+         <p className="mt-4 text-gray-600 text-center">
+          Already have an account?{" "}
+          <a href="/register" className="text-green-500 hover:underline">
+            Register
+          </a>
+        </p>
       </form>
+        
     </div>
   );
 }
