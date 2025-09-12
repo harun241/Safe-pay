@@ -3,6 +3,9 @@ import "./globals.css";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
+// redux provider ================
+import ReduxProvider from '../Redux/ReduxProvider'
+
 
 // Google Fonts
 const geistSans = Geist({
@@ -30,11 +33,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <AuthProvider>
-          <Navbar /> {/* Navbar handles dark toggle */}
-          <main className="flex-1 pt-16">{children}</main>
-          <Footer />
-        </AuthProvider>
+        <ReduxProvider>
+          <AuthProvider>
+            <Navbar /> {/* Navbar handles dark toggle */}
+            <main className="flex-1 pt-16">{children}</main>
+            <Footer />
+          </AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
