@@ -27,16 +27,27 @@ export default function Navbar() {
             <Link href="/contact" className="hover:text-green-400 transition">Contact</Link>
 
             {user ? (
-              // User logged in
               <div className="flex items-center space-x-4">
-                {user.photoURL && (
-                  <img
-                    src={user.photoURL}
-                    alt="User Photo"
-                    className="h-8 w-8 rounded-full object-cover"
-                  />
-                )}
-                <span>{user.displayName || user.email}</span>
+                {/* Profile with Tooltip */}
+                <div className="relative group">
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt="User Photo"
+                      className="h-8 w-8 rounded-full object-cover cursor-pointer"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer">
+                      <span className="text-white font-medium">
+                        {user.displayName?.[0] || user.email?.[0]}
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:opacity-100 transition-all bg-gray-800 text-white text-sm px-2 py-1 rounded mt-2 whitespace-nowrap z-50">
+                    {user.displayName || user.email}
+                  </div>
+                </div>
+
                 <button
                   onClick={logout}
                   className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg font-medium transition"
@@ -45,7 +56,6 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              // User not logged in
               <>
                 <Link
                   href="/login"
@@ -84,12 +94,18 @@ export default function Navbar() {
 
             {user ? (
               <div className="flex flex-col space-y-2 items-center">
-                {user.photoURL && (
+                {user.photoURL ? (
                   <img
                     src={user.photoURL}
                     alt="User Photo"
-                    className="h-8 w-8 rounded-full object-cover"
+                    className="h-8 w-8 rounded-full object-cover cursor-pointer"
                   />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer">
+                    <span className="text-white font-medium">
+                      {user.displayName?.[0] || user.email?.[0]}
+                    </span>
+                  </div>
                 )}
                 <span>{user.displayName || user.email}</span>
                 <button
