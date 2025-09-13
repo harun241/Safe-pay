@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,31 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      const res = await login(email, password);
+      console.log(res?.user?.uid);
+       if (res.user.uid) {
+              try {
+      
+                // upDateAt  when user login like a lest Login
+                const res = await fetch("/api/users", {
+                  method: "PATCH",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify({email,updatedAt: new Date().toISOString()  }),
+                });
+      
+                
+              } catch (error) {
+                 Swal.fire({
+                   position: "top-end",
+                   icon: "error",
+                   title: `${error.message}`,
+                   showConfirmButton: false,
+                   timer: 1500,
+                 });
+              }
+            }
       router.push("/"); // redirect to homepage
     } catch (error) {
       alert(error.message);
