@@ -5,9 +5,12 @@ import { useState } from "react";
 import { Shield, Menu, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
+
+ 
 
   return (
     <nav className="bg-gray-900 text-white shadow-lg fixed top-0 left-0 w-full z-50">
