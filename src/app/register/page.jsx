@@ -40,7 +40,7 @@ export default function RegisterPage() {
             headers: {
               "content-type": "application/json",
             },
-            body: JSON.stringify({ name,email, password }),
+            body: JSON.stringify({ uid:response.user.uid,name,email, password }),
           });
 
           const data = await res.json();
@@ -65,7 +65,11 @@ export default function RegisterPage() {
         }
       }
       
+<<<<<<< HEAD
+      // router.push("/dashboard"); // Redirect after signup
+=======
       router.push("/login"); // Redirect after signup
+>>>>>>> e4da3a60919dea1f203d57f4bbd7eb2e882aeb59
     } catch (err) {
      
       setError(err.message);

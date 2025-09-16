@@ -1,16 +1,31 @@
-import {  connectDb } from "@/lib/connectDb";
+import { connectDb } from "@/lib/connectDb";
 import User from "@/models/usersModel";
 
-
-
-// save user info in dataBase 
+// save user info in dataBase
 export async function POST(request) {
   await connectDb(); // connect to MongoDB
-  const { name, email,password } = await request.json();
+  const { uid, name, email, password } = await request.json();
+  // 1. Get user IP
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+
+  // 2. Get location from IP
+  const response = await fetch(`https://ipinfo.io/${ip}/json`);
+  const data = await response.json();
 
   try {
-      const user = await User.create({ name, email,password });
-     
+    const user = await User.create({
+      uid,
+      name,
+      email,
+      password,
+      ip: ip,
+      country: data?.country_name || data?.country,
+      city: data?.city,
+      location: data?.loc,
+      time: new Date().toISOString(),
+    });
+
     return new Response(JSON.stringify(user), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
@@ -19,15 +34,31 @@ export async function POST(request) {
   }
 }
 
-// updateAt when user every login 
+// updateAt when user every login and update location and ip
 export async function PATCH(request) {
   await connectDb(); // connect to MongoDB
-  const { email, updatedAt } = await request.json();
+  const { uid, updatedAt } = await request.json();
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+
+  // 2. Get location from IP
+  const response = await fetch(`https://ipinfo.io/${ip}/json`);
+  const data = await response.json();
+
+  const updateDog = {
+    updatedAt,
+    ip: ip,
+    country: data?.country_name || data?.country,
+    city: data?.city,
+    location: data?.loc,
+    time: new Date().toISOString(),
+  };
 
   try {
     const user = await User.findOneAndUpdate(
-      { email }, // filter
-      { $set: { updatedAt } }, // update correctly
+      { uid }, // filter
+      { $set: updateDog }, // update correctly
       { new: true } // return updated doc
     );
 
@@ -44,4 +75,3 @@ export async function PATCH(request) {
     });
   }
 }
-
