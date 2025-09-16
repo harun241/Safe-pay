@@ -14,7 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const res = await login(email, password);
-      console.log(res?.user?.uid);
+      
        if (res.user.uid) {
               try {
       
@@ -24,7 +24,7 @@ export default function LoginPage() {
                   headers: {
                     "content-type": "application/json",
                   },
-                  body: JSON.stringify({email,updatedAt: new Date().toISOString()  }),
+                  body: JSON.stringify({uid:res.user.uid,email,updatedAt: new Date().toISOString()  }),
                 });
       
                 
