@@ -1,4 +1,7 @@
+
+import FloatingChat from "./Components/FloatingChat";
 import Hero from "./Components/Hero";
+import Testimonials from "./Components/Testimonial";
 
 
 export default function HomePage() {
@@ -14,6 +17,8 @@ export default function HomePage() {
           sending instant alerts and blocking suspicious activities automatically.
         </p>
       </div>
+      <Testimonials></Testimonials>
+     <FloatingChat></FloatingChat>
     </div>
   );
 }

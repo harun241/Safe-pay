@@ -37,6 +37,7 @@ export default function RootLayout({ children }) {
           <AuthProvider>
             <Navbar /> {/* Navbar handles dark toggle */}
             <main className="flex-1 pt-16">{children}</main>
+           
             <Footer />
           </AuthProvider>
         </ReduxProvider>
