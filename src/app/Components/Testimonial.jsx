@@ -33,7 +33,7 @@ export default function Testimonials() {
       </div>
 
       {/* CTA Aside */}
-      <aside className="p-8 bg-gradient-to-br from-blue-700 to-indigo-700 text-white rounded-2xl flex flex-col justify-between shadow-lg">
+      <aside className="p-8 bg-gradient-to-br from-green-500 to-blue-500  text-white rounded-2xl flex flex-col justify-between shadow-lg">
         <div>
           <h4 className="text-2xl font-bold">Get Started Today</h4>
           <p className="mt-3 text-sm text-blue-100 leading-relaxed">
@@ -44,7 +44,7 @@ export default function Testimonials() {
         <div className="mt-8">
           <a
             href="/contact"
-            className="block text-center bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-50 transition"
+            className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
           >
             Request a Demo
           </a>

@@ -65,7 +65,7 @@ export default function RegisterPage() {
         }
       }
       
-      router.push("/dashboard"); // Redirect after signup
+      router.push("/login"); // Redirect after signup
     } catch (err) {
      
       setError(err.message);
