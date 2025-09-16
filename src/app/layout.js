@@ -5,6 +5,8 @@ import Footer from "./Components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 // redux provider ================
 import ReduxProvider from '../Redux/ReduxProvider'
+// Theme Toggle Provider ===============
+import { ThemeProvider } from "./Components/ThemeProvider";
 
 
 // Google Fonts
@@ -29,17 +31,25 @@ export const metadata = {
 // Root Layout
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
         <ReduxProvider>
           <AuthProvider>
             <Navbar /> {/* Navbar handles dark toggle */}
             <main className="flex-1 pt-16">{children}</main>
+           
             <Footer />
           </AuthProvider>
         </ReduxProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -4,30 +4,35 @@ import Link from "next/link";
 import { useState } from "react";
 import { Shield, Menu, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
 
- 
+  const navClasses = "bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white shadow-lg fixed top-0 left-0 w-full z-50";
+  const mobileMenuClasses = "md:hidden bg-gray-200 dark:bg-gray-800";
 
   return (
-    <nav className="bg-gray-900 text-white shadow-lg fixed top-0 left-0 w-full z-50">
+    <nav className={navClasses}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Shield className="h-7 w-7 text-green-400" />
+            <Shield className="h-7 w-7 text-green-500 dark:text-green-400" />
             <span className="font-bold text-xl">SafePay</span>
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="hover:text-green-400 transition">Home</Link>
-            <Link href="/features" className="hover:text-green-400 transition">Features</Link>
-            <Link href="/about" className="hover:text-green-400 transition">About</Link>
-            <Link href="/contact" className="hover:text-green-400 transition">Contact</Link>
+            <Link href="/" className="hover:text-green-500 dark:hover:text-green-400 transition">Home</Link>
+            <Link href="/features" className="hover:text-green-500 dark:hover:text-green-400 transition">Features</Link>
+            <Link href="/about" className="hover:text-green-500 dark:hover:text-green-400 transition">About</Link>
+            <Link href="/contact" className="hover:text-green-500 dark:hover:text-green-400 transition">Contact</Link>
+            
+            
+            <ThemeSwitcher />
 
             {user ? (
               <div className="flex items-center space-x-4">
@@ -46,7 +51,7 @@ export default function Navbar() {
                       </span>
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:opacity-100 transition-all bg-gray-800 text-white text-sm px-2 py-1 rounded mt-2 whitespace-nowrap z-50">
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:opacity-100 transition-all bg-gray-700 dark:bg-gray-800 text-white text-sm px-2 py-1 rounded mt-2 whitespace-nowrap z-50">
                     {user.displayName || user.email}
                   </div>
                 </div>
@@ -59,42 +64,48 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <>
-                <Link
+              <div className="flex items-center space-x-2"> {/* Login/Register বাটনগুলোর জন্য একটি div যোগ করা হলো */}
+                 <Link
                   href="/login"
-                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition"
+                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition text-white"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium transition"
+                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium transition text-white"
                 >
                   Register
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          <div className="md:hidden flex items-center gap-4">
+             
+             <ThemeSwitcher />
+             <button
+                onClick={() => setOpen(!open)}
+              >
+                {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-gray-800">
+        <div className={mobileMenuClasses}>
           <div className="flex flex-col space-y-4 px-4 py-6">
-            <Link href="/" className="hover:text-green-400 transition">Home</Link>
-            <Link href="/features" className="hover:text-green-400 transition">Features</Link>
-            <Link href="/about" className="hover:text-green-400 transition">About</Link>
-            <Link href="/contact" className="hover:text-green-400 transition">Contact</Link>
+            <Link href="/" className="hover:text-green-500 dark:hover:text-green-400 transition">Home</Link>
+            <Link href="/features" className="hover:text-green-500 dark:hover:text-green-400 transition">Features</Link>
+            <Link href="/about" className="hover:text-green-500 dark:hover:text-green-400 transition">About</Link>
+            <Link href="/contact" className="hover:text-green-500 dark:hover:text-green-400 transition">Contact</Link>
 
+            {/* divider */}
+            <hr className="border-gray-300 dark:border-gray-700" />
+            
             {user ? (
               <div className="flex flex-col space-y-2 items-center">
                 {user.photoURL ? (
@@ -113,7 +124,7 @@ export default function Navbar() {
                 <span>{user.displayName || user.email}</span>
                 <button
                   onClick={logout}
-                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition"
+                  className="bg-red-500 hover:bg-red-600 w-full px-4 py-2 rounded-lg font-medium transition text-white"
                 >
                   Logout
                 </button>
@@ -122,13 +133,13 @@ export default function Navbar() {
               <div className="flex flex-col space-y-2">
                 <Link
                   href="/login"
-                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium text-center transition"
+                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium text-center transition text-white"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium text-center transition"
+                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium text-center transition text-white"
                 >
                   Register
                 </Link>

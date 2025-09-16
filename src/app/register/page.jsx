@@ -65,7 +65,11 @@ export default function RegisterPage() {
         }
       }
       
+<<<<<<< HEAD
       // router.push("/dashboard"); // Redirect after signup
+=======
+      router.push("/login"); // Redirect after signup
+>>>>>>> e4da3a60919dea1f203d57f4bbd7eb2e882aeb59
     } catch (err) {
      
       setError(err.message);

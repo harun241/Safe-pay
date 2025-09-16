@@ -48,7 +48,7 @@ export default function ContactPage() {
       </div>
 
       <p className="mt-10 text-gray-500 text-sm">
-        © {new Date().getFullYear()} SafePay. All Rights Reserved.
+      
       </p>
     </section>
   );
