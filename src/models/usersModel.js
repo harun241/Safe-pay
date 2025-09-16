@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    uid: {
+      type: String,
+      require: true,
+      unique: true,
+    },
     name: {
       type: String,
-      require:true
+      require: true,
     },
     email: {
       type: String,
@@ -13,8 +18,16 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      require:true
+      require: true,
     },
+
+    ip: {
+      type: String,
+    },
+    country: { type: String },
+    city: { type: String },
+    location:{type: String},
+    time: { type: Date, default: new Date().toISOString() },
   },
   { timestamps: true }
 );
