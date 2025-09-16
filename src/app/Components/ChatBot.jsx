@@ -5,7 +5,7 @@ import { useState } from "react";
 const predefinedQA = [
   {
     question: "Learn about FraudNet products",
-    answer: "FraudNet offers a comprehensive platform for fraud detection and risk management."
+    answer: "safepay offers a comprehensive platform for fraud detection and risk management."
   },
   {
     question: "Find solution to a problem",

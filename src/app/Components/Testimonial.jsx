@@ -21,12 +21,12 @@ export default function Testimonials() {
       {/* Testimonials */}
       <div className="lg:col-span-2 grid gap-6">
         <Testimonial
-          quote="Fraud.net delivered tangible value within 90 days. We gained $100mm in new sales and reduced fraud by 30%."
+          quote="SafePay delivered tangible value within 90 days. We gained $100mm in new sales and reduced fraud by 30%."
           name="Senior VP"
           role="Fareportal"
         />
         <Testimonial
-          quote="The usability of Fraud.net is night and day compared to our prior platform."
+          quote="The usability of SafePay is night and day compared to our prior platform."
           name="Fraud Manager"
           role="Global Financial Institution"
         />
