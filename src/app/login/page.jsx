@@ -16,25 +16,57 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
     try {
-      const response = await login(email, password);
+      const res = await login(email, password);
+<<<<<<< HEAD
+      
+       if (res.user.uid) {
+              try {
+      
+                // upDateAt  when user login like a lest Login
+                const res = await fetch("/api/users", {
+                  method: "PATCH",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify({uid:res.user.uid,email,updatedAt: new Date().toISOString()  }),
+                });
+      
+                
+              } catch (error) {
+                 Swal.fire({
+                   position: "top-end",
+                   icon: "error",
+                   title: `${error.message}`,
+                   showConfirmButton: false,
+                   timer: 1500,
+                 });
+              }
+            }
+=======
 
-      if (response.user.uid) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Login Successful",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        router.push("/dashboard"); // ✅ redirect after login
+      if (res.user.uid) {
+        try {
+          await fetch("/api/users", {
+            method: "PATCH",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ email, updatedAt: new Date().toISOString() }),
+          });
+        } catch (error) {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: `${error.message}`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       }
-    } catch (err) {
-      setError(err.message);
+>>>>>>> e4da3a60919dea1f203d57f4bbd7eb2e882aeb59
+      router.push("/"); // redirect to homepage
+    } catch (error) {
       Swal.fire({
         position: "top-end",
         icon: "error",

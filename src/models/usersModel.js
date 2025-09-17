@@ -20,13 +20,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    balance: { type: Number, default: 1000 },
 
     ip: {
       type: String,
     },
     country: { type: String },
     city: { type: String },
-    location:{type: String},
+    location: { type: String },
     time: { type: Date, default: new Date().toISOString() },
   },
   { timestamps: true }
