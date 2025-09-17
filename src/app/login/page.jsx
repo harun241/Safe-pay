@@ -18,7 +18,6 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const res = await login(email, password);
-<<<<<<< HEAD
       
        if (res.user.uid) {
               try {
@@ -43,28 +42,6 @@ export default function LoginPage() {
                  });
               }
             }
-=======
-
-      if (res.user.uid) {
-        try {
-          await fetch("/api/users", {
-            method: "PATCH",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({ email, updatedAt: new Date().toISOString() }),
-          });
-        } catch (error) {
-          Swal.fire({
-            position: "top-end",
-            icon: "error",
-            title: `${error.message}`,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      }
->>>>>>> e4da3a60919dea1f203d57f4bbd7eb2e882aeb59
       router.push("/"); // redirect to homepage
     } catch (error) {
       Swal.fire({
