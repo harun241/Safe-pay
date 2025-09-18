@@ -12,7 +12,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,22 +24,25 @@ export default function RegisterPage() {
       setError("Passwords do not match");
       return;
     }
-    
 
     setLoading(true);
     try {
       const response = await register(email, password);
-      
+
       if (response.user.uid) {
         try {
-
-          // user info save in Database 
+          // user info save in Database
           const res = await fetch("/api/users", {
             method: "POST",
             headers: {
               "content-type": "application/json",
             },
-            body: JSON.stringify({ uid:response.user.uid,name,email, password }),
+            body: JSON.stringify({
+              uid: response.user.uid,
+              name,
+              email,
+              password,
+            }),
           });
 
           const data = await res.json();
@@ -55,19 +57,18 @@ export default function RegisterPage() {
             });
           }
         } catch (error) {
-           Swal.fire({
-             position: "top-end",
-             icon: "error",
-             title: `${error.message}`,
-             showConfirmButton: false,
-             timer: 1500,
-           });
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: `${error.message}`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       }
-      
-      // router.push("/dashboard"); // Redirect after signup
+
+      router.push("/login"); // ✅ Final redirect after signup
     } catch (err) {
-     
       setError(err.message);
       console.error(err);
     } finally {
