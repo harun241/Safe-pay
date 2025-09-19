@@ -17,9 +17,9 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await login(email, password);
+      const response = await login(email, password);
       
-       if (res.user.uid) {
+       if (response?.user?.uid) {
               try {
       
                 // upDateAt  when user login like a lest Login
@@ -28,7 +28,7 @@ export default function LoginPage() {
                   headers: {
                     "content-type": "application/json",
                   },
-                  body: JSON.stringify({uid:res.user.uid,email,updatedAt: new Date().toISOString()  }),
+                  body: JSON.stringify({uid:response.user.uid,email,updatedAt: new Date().toISOString()  }),
                 });
       
                 
