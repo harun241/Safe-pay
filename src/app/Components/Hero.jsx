@@ -1,15 +1,22 @@
 "use client";
 import Link from "next/link";
+import PaymentCardSlider from "./PaymentCardSlider";
 
 export default function Hero() {
   return (
-    <section className="bg-gradient-to-r from-green-500 to-blue-500 text-white py-32 px-6 md:px-20 text-center w-11/12 mt-10 rounded-2xl mx-auto">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6">
+    <section className="bg-gradient-to-r from-green-500 to-blue-500 text-white  md:py-28 px-6 md:px-20 text-center w-11/12 rounded-2xl mx-auto">
+      {/* Title */}
+      <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6">
         Protect Your Transactions with AI
       </h1>
-      <p className="text-lg md:text-2xl mb-8">
-        SafePay is an AI-powered fraud detection platform that keeps your online transactions safe in real-time.
+
+      {/* Sub heading */}
+      <p className="text-lg md:text-xl mb-6 md:mb-8">
+        SafePay is an AI-powered fraud detection platform that keeps your online
+        transactions safe in real-time.
       </p>
+
+      {/* CTA buttons */}
       <div className="flex justify-center gap-4 flex-wrap">
         <Link
           href="/features"
@@ -24,9 +31,16 @@ export default function Hero() {
           Contact Us
         </Link>
       </div>
-      <p className="mt-8 text-sm md:text-base text-white/80">
+
+      {/* Trusted message */}
+      <p className="mt-6 md:mt-8 text-sm md:text-base text-white/80">
         Trusted by thousands of users worldwide.
       </p>
+
+      {/* Payment Card Slider */}
+      <div className="mt-8 md:mt-12">
+        <PaymentCardSlider />
+      </div>
     </section>
   );
 }

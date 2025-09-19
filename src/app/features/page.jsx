@@ -1,51 +1,103 @@
-export default function FeaturesPage() {
-  const features = [
-    {
-      title: "Real-time Monitoring",
-      description:
-        "Monitor all transactions in real-time to detect any suspicious activity instantly.",
-      icon: "🕒",
-    },
-    {
-      title: "AI-based Fraud Detection",
-      description:
-        "Our AI models analyze transaction patterns to prevent fraud before it happens.",
-      icon: "🤖",
-    },
-    {
-      title: "Instant Alerts",
-      description:
-        "Get immediate notifications for any unusual transaction on your account.",
-      icon: "📩",
-    },
-    {
-      title: "Automatic Card Blocking",
-      description:
-        "Suspected fraudulent transactions trigger automatic card blocking for security.",
-      icon: "🔒",
-    },
-  ];
+// FraudNetSection.jsx
+"use client";
 
+import React from "react";
+
+const expertiseCards = [
+  {
+    icon: "💡",
+    title: "AI & Machine Learning",
+    description: "Custom models for your protection and threat detection."
+  },
+  {
+    icon: "⚖️",
+    title: "Intelligent Risk Decisioning",
+    description: "Robust rules and transparent scoring for smarter decisions."
+  },
+  {
+    icon: "🌐",
+    title: "Global Anti-Fraud Network",
+    description: "Collaborative insights across industries worldwide."
+  },
+  {
+    icon: "💾",
+    title: "Data Hub",
+    description: "Seamless integrations with limitless options."
+  }
+];
+
+const resourceCards = [
+  {
+    icon: "📋",
+    title: "Case Management",
+    description: "Manage and track all your fraud cases efficiently."
+  },
+  {
+    icon: "🔄",
+    title: "Data Orchestration",
+    description: "Streamline and integrate data flows with ease."
+  },
+  {
+    icon: "📊",
+    title: "Advanced Analytics",
+    description: "Gain insights from intelligent analytics dashboards."
+  }
+];
+
+const Features = () => {
   return (
-    <div className="max-w-7xl mx-auto p-6 md:p-10">
-      <h1 className="text-4xl md:text-5xl font-bold text-green-500 text-center mb-12">
-        Features
-      </h1>
+    <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-16 px-6">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-12">
+        {/* Left Column */}
+        <div className="relative">
+          <div className="absolute -top-10 -left-10 opacity-10 text-6xl select-none pointer-events-none">🛡️</div>
+          <h2 className="text-3xl font-bold mb-4">Why safepay</h2>
+          <p className="mb-6">
+            Discover why businesses choose Fraud.net for cutting-edge fraud prevention, AI-driven insights, and reliable, real-time protection.
+          </p>
+          <a href="#" className="inline-block bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-md font-semibold mb-4">
+            Learn More
+          </a>
+          <br />
+          <a href="#" className="text-indigo-400 hover:underline">
+            Benefits for AWS Customers →
+          </a>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {features.map((feature, idx) => (
-          <div
-            key={idx}
-            className="bg-white shadow-lg rounded-xl p-6 hover:shadow-2xl transition duration-300"
-          >
-            <div className="text-4xl mb-4">{feature.icon}</div>
-            <h2 className="text-2xl font-semibold mb-2 text-gray-800">
-              {feature.title}
-            </h2>
-            <p className="text-gray-600">{feature.description}</p>
+        {/* Middle Column */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-semibold mb-4">Our Expertise</h3>
+          <div className="grid gap-4">
+            {expertiseCards.map((card, idx) => (
+              <div key={idx} className="flex items-start gap-4 bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition">
+                <span className="text-3xl">{card.icon}</span>
+                <div>
+                  <h4 className="font-semibold text-lg">{card.title}</h4>
+                  <p className="text-gray-300 text-sm">{card.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-semibold mb-4">User Resources</h3>
+          <div className="grid gap-4">
+            {resourceCards.map((card, idx) => (
+              <div key={idx} className="flex items-start gap-4 bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition">
+                <span className="text-3xl">{card.icon}</span>
+                <div>
+                  <h4 className="font-semibold text-lg">{card.title}</h4>
+                  <p className="text-gray-300 text-sm">{card.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default Features;

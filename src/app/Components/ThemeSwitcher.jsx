@@ -1,9 +1,7 @@
-
 'use client';
-
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { Sun, Moon, Sparkles } from 'lucide-react';
+import { Sun, Moon, Star } from 'lucide-react'; // Sun for light, Moon crescent for dark, Star for sparkle
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -28,35 +26,35 @@ export function ThemeSwitcher() {
     >
       <div className="relative w-full h-full rounded-2xl bg-white dark:bg-gray-900 flex items-center justify-center transition-all duration-500 overflow-hidden">
         {/* Light mode icon */}
-        <Sun className={`absolute w-6 h-6 text-yellow-500 transition-all duration-500 transform ${
-          theme === 'dark' 
-            ? 'rotate-90 scale-0 opacity-0' 
-            : 'rotate-0 scale-100 opacity-100'
-        }`} />
-        
-        {/* Dark mode icon */}
-        <Moon className={`absolute w-6 h-6 text-indigo-400 transition-all duration-500 transform ${
-          theme === 'dark' 
-            ? 'rotate-0 scale-100 opacity-100' 
-            : '-rotate-90 scale-0 opacity-0'
-        }`} />
-        
+        <Sun
+          className={`absolute w-6 h-6 text-yellow-500 transition-all duration-500 transform ${
+            theme === 'dark' ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'
+          }`}
+        />
+
+        {/* Dark mode icon (crescent) */}
+        <Moon
+          className={`absolute w-6 h-6 text-indigo-400 transition-all duration-500 transform ${
+            theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'
+          }`}
+        />
+
         {/* Sparkle effect */}
-        <Sparkles className={`absolute w-3 h-3 text-pink-400 transition-all duration-700 transform ${
-          theme === 'dark'
-            ? 'top-1 right-1 rotate-12 scale-100 opacity-100'
-            : 'top-1 right-1 rotate-0 scale-0 opacity-0'
-        }`} />
-        
+        <Star
+          className={`absolute w-3 h-3 text-pink-400 transition-all duration-700 transform ${
+            theme === 'dark' ? 'top-1 right-1 rotate-12 scale-100 opacity-100' : 'top-1 right-1 rotate-0 scale-0 opacity-0'
+          }`}
+        />
+
         {/* Glow effect */}
-        <div className={`absolute inset-0 rounded-2xl transition-all duration-700 ${
-          theme === 'dark'
-            ? 'bg-gradient-to-br from-purple-500/20 to-pink-500/20'
-            : 'bg-gradient-to-br from-yellow-400/20 to-orange-500/20'
-        }`} />
+        <div
+          className={`absolute inset-0 rounded-2xl transition-all duration-700 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-br from-purple-500/20 to-pink-500/20'
+              : 'bg-gradient-to-br from-yellow-400/20 to-orange-500/20'
+          }`}
+        />
       </div>
     </button>
   );
 }
-
-
