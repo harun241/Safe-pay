@@ -1,172 +1,578 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { Shield, Menu, X } from "lucide-react";
+import { useTheme } from "next-themes";
+import { motion, AnimatePresence } from "framer-motion";
+
 import { useAuth } from "@/context/AuthContext";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [hoverPreview, setHoverPreview] = useState(null); // hovered link
-  const { user, logout } = useAuth();
+import {
+  Shield,
+  Menu,
+  X,
+  ChevronDown,
+  Home,
+  Cpu,
+  FileText,
+  Building2,
+  User,
+  LogOut,
+  Settings,
+  LayoutDashboard,
+  LogIn,
+  UserPlus,
+  UserPlus2,
+} from "lucide-react";
 
-  // Glassy navbar background
-  const navClasses = "bg-gray-800/80 backdrop-blur-md text-gray-100 shadow-lg fixed top-0 left-0 w-full z-50";
-  const mobileMenuClasses = "md:hidden bg-gray-800/80 backdrop-blur-md text-gray-100";
-
-  const navLinks = [
-    { name: "Home", href: "/", preview: "Welcome to SafePay! Learn about our platform and services." },
-    { name: "Technology", href: "/features", preview: "Explore our AI-powered fraud prevention and risk management tools." },
-    { name: "Resources", href: "/resources", preview: "Access guides, tutorials, and documentation to maximize FraudNet." },
-    { name: "Company", href: "/company", preview: "Discover our mission, vision, team, and latest news." }
-  ];
+// --- Desktop Dropdown ---
+const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
+  if (!item.dropdownItems) return null;
 
   return (
-    <nav className={navClasses}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <Shield className="h-7 w-7 text-green-500 dark:text-green-400" />
-            <span className="font-bold text-xl">SafePay</span>
-          </Link>
+    <div
+      key={`desktop-dropdown-${item.name}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="relative"
+    >
+      <button className="flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-300 hover:text-white hover:bg-white/10">
+        <item.icon className="w-4 h-4 mr-2" />
+        {item.name}
+        <ChevronDown
+          size={16}
+          className={`ml-2 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-6 relative">
-            {navLinks.map((link, idx) => (
-              <div
-                key={idx}
-                onMouseEnter={() => setHoverPreview(link.name)}
-                onMouseLeave={() => setHoverPreview(null)}
-                className="relative"
-              >
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute top-full mt-2 w-64 rounded-xl shadow-xl border z-50 overflow-hidden bg-gray-950/90 backdrop-blur-md border-gray-700/50"
+          >
+            <div className="py-2">
+              {item.dropdownItems.map((subItem) => (
                 <Link
-                  href={link.href}
-                  className={`transition ${
-                    hoverPreview === link.name
-                      ? "bg-gradient-to-r from-purple-500 to-cyan-400 text-transparent bg-clip-text font-semibold"
-                      : "hover:text-green-500 dark:hover:text-green-400"
+                  key={`desktop-sub-${subItem.href}`}
+                  href={subItem.href}
+                  onClick={subItem.onClick}
+                  className="flex items-center w-full text-left px-4 py-2.5 text-sm transition-colors duration-200 text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
+                >
+                  {subItem.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// --- Mobile User Menu ---
+const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
+  const userDropdownItems = [
+    { label: "Dashboard", href: "/dashboard", key: "mobile-dashboard" },
+    { label: "Account Settings", href: "/settings", key: "mobile-settings" },
+    { label: "Logout", href: "#", onClick: logout, key: "mobile-logout" },
+  ];
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <motion.div
+        key="mobile-user-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="lg:hidden fixed inset-0 z-30 bg-black/50"
+        onClick={() => setIsOpen(false)}
+      />
+      <motion.div
+        key="mobile-user-panel"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto bg-gray-950 shadow-2xl"
+      >
+        <div className="p-5 pt-20">
+          {user ? (
+            <div key="mobile-user-logged-in" className="border-b border-gray-800 pb-4">
+              <div className="px-3 py-2 mb-2">
+                <p className="text-sm font-semibold text-white truncate">
+                  {user.displayName || "User"}
+                </p>
+                <p className="text-xs text-gray-400 truncate">
+                  {user.email}
+                </p>
+              </div>
+              <hr className="border-gray-700 my-1" />
+              {userDropdownItems.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={() => {
+                    setIsOpen(false);
+                    if (item.onClick) item.onClick();
+                  }}
+                  className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
+                    item.label === "Logout"
+                      ? "text-red-400 hover:bg-red-500/10"
+                      : "text-gray-300 hover:bg-white/10 hover:text-white"
                   }`}
                 >
-                  {link.name}
+                  {item.label === "Dashboard" && (
+                    <LayoutDashboard size={16} className="mr-2" />
+                  )}
+                  {item.label === "Account Settings" && (
+                    <Settings size={16} className="mr-2" />
+                  )}
+                  {item.label === "Logout" && (
+                    <LogOut size={16} className="mr-2" />
+                  )}
+                  {item.label}
                 </Link>
+              ))}
+            </div>
+          ) : (
+            <div key="mobile-user-logged-out">
+              <Link
+                key="mobile-login-link"
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="block py-4 text-lg text-gray-200 border-b border-gray-800"
+              >
+                Login
+              </Link>
+              <Link
+                key="mobile-register-link"
+                href="/register"
+                onClick={() => setIsOpen(false)}
+                className="block py-4 text-lg text-gray-200 border-b border-gray-800"
+              >
+                Register
+              </Link>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </>
+  );
+};
 
-                {/* Hover Preview Card */}
-                {hoverPreview === link.name && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg rounded-lg p-4 text-sm z-50">
-                    {link.preview}
-                  </div>
-                )}
-              </div>
-            ))}
+// --- Mobile Navigation (Main Menu Only) ---
+const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
+  const [openSubmenus, setOpenSubmenus] = useState({});
 
-            <ThemeSwitcher />
+  const handleSubMenuToggle = (e, itemName) => {
+    e.preventDefault();
+    setOpenSubmenus((prev) => ({ ...prev, [itemName]: !prev[itemName] }));
+  };
 
-            {user ? (
-              <div className="flex items-center space-x-4">
-                {/* Profile */}
-                <div className="relative group">
-                  {user.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt="User Photo"
-                      className="h-8 w-8 rounded-full object-cover cursor-pointer"
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <motion.div
+        key="mobile-nav-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="lg:hidden fixed inset-0 z-30 bg-black/50"
+        onClick={() => setIsOpen(false)}
+      />
+      <motion.div
+        key="mobile-nav-panel"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto bg-gray-950 shadow-2xl"
+      >
+        <div className="p-5 pt-20">
+          {navItems.map((item) => (
+            <div key={`mobile-nav-item-${item.name}`} className="border-b border-gray-800">
+              {item.dropdownItems ? (
+                <>
+                  <button
+                    onClick={(e) => handleSubMenuToggle(e, item.name)}
+                    className="w-full flex items-center justify-between py-4 text-lg text-gray-200"
+                  >
+                    <span>{item.name}</span>
+                    <ChevronDown
+                      size={20}
+                      className={`transition-transform duration-300 ${
+                        openSubmenus[item.name] ? "rotate-180" : ""
+                      }`}
                     />
-                  ) : (
-                    <div className="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer">
-                      <span className="text-white font-medium">
-                        {user.displayName?.[0] || user.email?.[0]}
-                      </span>
+                  </button>
+                  {openSubmenus[item.name] && (
+                    <div className="pl-4 pb-2 space-y-2">
+                      {item.dropdownItems.map((subItem) => (
+                        <Link
+                          key={`mobile-sub-${subItem.href}`}
+                          href={subItem.href}
+                          onClick={() => setIsOpen(false)}
+                          className="block py-2 text-gray-400 hover:text-cyan-400"
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:opacity-100 transition-all bg-gray-700 dark:bg-gray-800 text-white text-sm px-2 py-1 rounded mt-2 whitespace-nowrap z-50">
-                    {user.displayName || user.email}
-                  </div>
-                </div>
-
-                <button
-                  onClick={logout}
-                  className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg font-medium transition text-white"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
+                </>
+              ) : (
                 <Link
-                  href="/login"
-                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition text-white"
+                  key={`mobile-nav-link-${item.href}`}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block py-4 text-lg text-gray-200"
                 >
-                  Login
+                  {item.name}
                 </Link>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </>
+  );
+};
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
-            <ThemeSwitcher />
-            <button onClick={() => setOpen(!open)}>
-              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+// --- Main Navbar Component ---
+export default function Navbar() {
+  const { theme } = useTheme();
+  const { user, logout } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow =
+      isMobileMenuOpen || isMobileUserMenuOpen ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen, isMobileUserMenuOpen]);
+
+  const navItems = [
+    { name: "Home", href: "/", icon: Home },
+    {
+      name: "Technology",
+      href: "/features",
+      icon: Cpu,
+      dropdownItems: [
+        { label: "AI & Machine Learning", href: "/features/ai-ml" },
+        { label: "Intelligent Risk Decisioning", href: "/features/risk-decisioning" },
+        { label: "Global Anti-Fraud Network", href: "/features/fraud-network" },
+        { label: "Data Hub", href: "/features/data-hub" },
+      ],
+    },
+    {
+      name: "Resources",
+      href: "/resources",
+      icon: FileText,
+      dropdownItems: [
+        { label: "Fraud Prevention", href: "/resources/fraud" },
+        { label: "Entity Risk Solutions", href: "/resources/entity-risk" },
+        { label: "Compliance Guides", href: "/resources/compliance" },
+      ],
+    },
+    {
+      name: "Company",
+      href: "/company",
+      icon: Building2,
+      dropdownItems: [
+        { label: "About Us", href: "/company/about" },
+        { label: "Careers", href: "/company/careers" },
+        { label: "Contact Us", href: "/contact" },
+      ],
+    },
+  ];
+
+  if (!mounted) {
+    
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 h-16">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+          <div className="h-7 w-7 bg-cyan-400 rounded"></div>
+          <div className="hidden lg:flex space-x-2">
+            <div className="h-6 w-16 bg-gray-700 rounded"></div>
+            <div className="h-6 w-20 bg-gray-700 rounded"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-6 w-16 bg-gray-700 rounded lg:hidden"></div>
+            <div className="h-6 w-6 bg-gray-600 rounded lg:hidden"></div>
           </div>
         </div>
-      </div>
+      </header>
+    );
+  }
 
-      {/* Mobile Menu */}
-      {open && (
-        <div className={mobileMenuClasses}>
-          <div className="flex flex-col space-y-4 px-4 py-6">
-            {navLinks.map((link, idx) => (
-              <Link
-                key={idx}
-                href={link.href}
-                className="hover:text-green-500 dark:hover:text-green-400 transition"
-              >
-                {link.name}
-              </Link>
-            ))}
+  return (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled || isMobileMenuOpen || isMobileUserMenuOpen
+            ? "bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 shadow-lg"
+            : "bg-transparent border-b border-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+      <Shield
+        className={`h-7 w-7 transition-colors ${
+          theme === "dark" ? "text-cyan-400" : "text-green-500"
+        }`}
+      />
+      <span
+        className={`font-bold text-xl transition-colors ${
+          theme === "dark" ? "text-cyan-400" : "text-green-500"
+        }`}
+      >
+        SafePay
+      </span>
+    </Link>
 
-            <hr className="border-gray-300 dark:border-gray-700" />
-
-            {user ? (
-              <div className="flex flex-col space-y-2 items-center">
-                {user.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt="User Photo"
-                    className="h-8 w-8 rounded-full object-cover cursor-pointer"
-                  />
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center space-x-2">
+  {navItems.map((item) =>
+    item.dropdownItems ? (
+      <DesktopDropdown
+        key={`desktop-item-${item.name}`}
+        item={item}
+        isOpen={activeDropdown === item.name}
+        onMouseEnter={() => setActiveDropdown(item.name)}
+        onMouseLeave={() => setActiveDropdown(null)}
+        theme={theme} 
+      />
+    ) : (
+      <Link
+        key={`desktop-link-${item.href}`}
+        href={item.href}
+        className={`
+          flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200
+          ${
+            theme === "dark"
+              ? "text-gray-300 hover:text-white hover:bg-white/10"
+              : "text-gray-700 hover:text-white hover:bg-green-500/20"
+          }
+        `}
+      >
+        <item.icon
+          className={`w-4 h-4 mr-2 transition-colors ${
+            theme === "dark" ? "text-gray-300" : "text-gray-700"
+          }`}
+        />
+        {item.name}
+      </Link>
+    )
+  )}
+</nav>
+            {/* Right Section */}
+            <div className="flex items-center space-x-2">
+              <div className="hidden lg:flex items-center space-x-2">
+                <ThemeSwitcher />
+                {user ? (
+                  <div
+                    key="desktop-user-menu"
+                    onMouseEnter={() => setActiveDropdown("user-menu")}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                    className="relative"
+                  >
+                    <button className="flex items-center p-2 rounded-full hover:bg-white/10">
+                      <img
+                        src={
+                          user.photoURL ||
+                          `https://ui-avatars.com/api/?name=${
+                            encodeURIComponent(user.displayName || user.email)
+                          }&background=0ea5e9&color=fff`
+                        }
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full"
+                        onError={(e) => {
+                          e.target.src = "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff";
+                        }}
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {activeDropdown === "user-menu" && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute top-full right-0 mt-2 w-56 rounded-xl shadow-xl border z-50 overflow-hidden bg-gray-950/90 backdrop-blur-md border-gray-700/50"
+                        >
+                          <div className="p-2">
+                            <div className="px-3 py-2">
+                              <p className="text-sm font-semibold text-white truncate">
+                                {user.displayName || "User"}
+                              </p>
+                              <p className="text-xs text-gray-400 truncate">
+                                {user.email}
+                              </p>
+                            </div>
+                            <hr className="border-gray-700 my-1" />
+                            {[
+                              { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+                              { label: "Account Settings", href: "/settings", icon: Settings },
+                              { label: "Logout", href: "#", onClick: logout, icon: LogOut },
+                            ].map((item) => (
+                              <Link
+                                key={`user-menu-${item.label}`}
+                                href={item.href}
+                                onClick={item.onClick}
+                                className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
+                                  item.label === "Logout"
+                                    ? "text-red-400 hover:bg-red-500/10"
+                                    : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                }`}
+                              >
+                                <item.icon size={16} className="mr-2" />
+                                {item.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer">
-                    <span className="text-white font-medium">
-                      {user.displayName?.[0] || user.email?.[0]}
-                    </span>
+                  <div key="desktop-auth-buttons" className="flex items-center space-x-2">
+                    <Link
+                      href="/login"
+                      className="flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:text-white hover:bg-white/10"
+                    >
+                      <LogIn size={16} className="mr-2" /> Login
+                    </Link>
+                    <Link
+                      href="/register"
+                      className={`flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg transition-shadow shadow-md hover:shadow-lg ${
+                        theme === "dark"
+                          ? "bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-cyan-500/30"
+                          : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-blue-500/30"
+                      }`}
+                    >
+                      <UserPlus size={16} className="mr-2" /> Get Started
+                    </Link>
                   </div>
                 )}
-                <span>{user.displayName || user.email}</span>
+              </div>
+
+              {/* Mobile Toggle */}
+              <div className="lg:hidden flex items-center">
+                <ThemeSwitcher />
                 <button
-                  onClick={logout}
-                  className="bg-red-500 hover:bg-red-600 w-full px-4 py-2 rounded-lg font-medium transition text-white"
+                  onClick={() => setIsMobileUserMenuOpen(!isMobileUserMenuOpen)}
+                  className="p-2 rounded-lg text-gray-400 hover:text-white ml-2"
+                  aria-label="User Menu"
                 >
-                  Logout
+                  {user ? (
+                    <img
+                      key={`mobile-avatar-${user.uid}`}
+                      src={
+                        user.photoURL ||
+                        `https://ui-avatars.com/api/?name=${
+                          encodeURIComponent(user.displayName || user.email)
+                        }&background=0ea5e9&color=fff&size=24`
+                      }
+                      alt="User"
+                      className="w-6 h-6 rounded-full"
+                      onError={(e) => {
+                        e.target.src = "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=24";
+                      }}
+                    />
+                  ) : (
+                    <User size={24} />
+                  )}
+                </button>
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2 rounded-lg text-gray-400 hover:text-white ml-2"
+                  aria-label="Toggle Menu"
+                >
+                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
               </div>
-            ) : (
-              <div className="flex flex-col space-y-2">
-                <Link
-                  href="/login"
-                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium text-center transition text-white"
-                >
-                  Login
-                </Link>
-              </div>
-            )}
+            </div>
           </div>
         </div>
-      )}
-    </nav>
+      </header>
+
+      {/* Mobile Menus */}
+      <MobileNav
+        isOpen={isMobileMenuOpen}
+        setIsOpen={setIsMobileMenuOpen}
+        navItems={navItems}
+      />
+      <MobileUserMenu
+        isOpen={isMobileUserMenuOpen}
+        setIsOpen={setIsMobileUserMenuOpen}
+        user={user}
+        logout={logout}
+      />
+
+      
+      {/* Bottom Navbar  */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-gray-950/80 backdrop-blur-md border-t border-gray-700/50">
+        <nav className="flex justify-around items-center h-16">
+          {navItems.slice(0, 4).map((item) => (
+            <Link
+              key={`bottom-nav-${item.href}`}
+              href={item.href}
+              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
+            >
+              <item.icon size={22} className="mb-1" />
+              <span className="text-[10px] leading-tight">{item.name}</span>
+            </Link>
+          ))}
+
+          
+          {user ? (
+            <Link
+              key="bottom-nav-dashboard"
+              href="/dashboard"
+              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
+            >
+              <LayoutDashboard size={22} className="mb-1" />
+              <span className="text-[10px] leading-tight">Dashboard</span>
+            </Link>
+          ) : (
+            <button
+              key="bottom-login-btn"
+              onClick={() => setIsMobileUserMenuOpen(true)}
+              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
+            >
+              <UserPlus2 size={22} className="mb-1" />
+              <span className="text-[10px] leading-tight">Get Started</span>
+            </button>
+          )}
+        </nav>
+      </div>
+      
+    </>
   );
 }
