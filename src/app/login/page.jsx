@@ -44,16 +44,17 @@ export default function LoginPage() {
             }
       router.push("/"); // redirect to homepage
     } catch (error) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: `${err.message}`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } finally {
-      setLoading(false);
-    }
+  Swal.fire({
+    position: "top-end",
+    icon: "error",
+    title: `${error.message}`, // এখানে err না, error
+    showConfirmButton: false,
+    timer: 1500,
+  });
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (
