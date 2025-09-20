@@ -1,70 +1,114 @@
 import { connectDb } from "@/lib/connectDb";
 import Transaction from "@/models/transactionModel";
 
+
 export async function POST(request) {
- await connectDb()
-  const body = await request.formData(); // SSLCommerz sends as form-data
+  await connectDb();
 
+  // 1. Parse form-data from SSLCommerz
+  const body = await request.formData();
   const payload = Object.fromEntries(body);
-  const amount = Number(payload.amount);
+  const amount = Number(payload.amount || 0);
+  const userId = payload.value_a;
 
-  // Get IP
+  
+
+  // 2. Extract IP address
   const forwarded = request.headers.get("x-forwarded-for");
-  let ip = forwarded?.split(",")[0]?.trim() || "unknown";
+  let ip = forwarded?.split(",")[0]?.trim() || request.ip || "unknown";
   if (ip === "::1" || ip.startsWith("127.")) {
-    ip = "8.8.8.8"; // fallback for local dev (Google DNS IP)
+    ip = "8.8.8.8"; // fallback for localhost
   }
 
-  // Get location info
-  const response = await fetch(`https://ipinfo.io/${ip}/json`);
-  const data = await response.json();
+  // 3. Resolve IP to geo-location
+  let country = "Unknown",
+    city = "Unknown",
+    location = "Unknown";
+  try {
+    const resp = await fetch(`https://ipinfo.io/${ip}/json`);
+    const data = await resp.json();
+    country = data?.country_name || data?.country || "Unknown";
+    city = data?.city || "Unknown";
+    location = data?.loc || "Unknown";
+  } catch (err) {
+    console.warn("ipinfo failed:", err);
+  }
 
-  console.log('id',payload.value_a);
-  // Features: previous_txn_count_24h
-  // -------------------------------
+  // 4. Count previous successful transactions in last 24h
   const prev24hCount = await Transaction.countDocuments({
-    user_id: payload.value_a,
+    user_id: userId,
     status: "SUCCESS",
     timestamp: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
   });
 
-  // -------------------------------
-  // Features: avg_amount_30d
-  // -------------------------------
-  const last30d = await Transaction.aggregate([
+  // 5. Compute total amount in last 30 days (excluding current txn)
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+  const agg = await Transaction.aggregate([
     {
       $match: {
-        user_id: payload.value_a,
+        user_id: userId,
         status: "SUCCESS",
-        timestamp: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+        timestamp: { $gte: thirtyDaysAgo },
       },
     },
     {
       $group: {
         _id: null,
-        avgAmount: { $avg: "$amount" },
+        sumAmount: { $sum: "$amount" },
+        cnt: { $sum: 1 },
       },
     },
   ]);
 
-  const avgAmount30d = last30d[0]?.avgAmount || 0;
+   const prevSum30d = agg[0]?.sumAmount || 0;
+   
 
-  await Transaction.create({
+   // 6. Calculate new total INCLUDING current transaction
+   const totalAmount30d = prevSum30d + amount;
+
+   
+
+
+  // 7. Create transaction document
+  const txnDoc = {
     transaction_id: payload.tran_id,
-    user_id: payload.value_a,
+    user_id: userId,
     amount,
-    payment_method: payload.card_brand,
-    card_type: payload.card_type,
-    merchant_id: payload.store_id,
-    country: data?.country_name || data?.country,
-    city: data?.city,
-    location: data?.loc,
+    payment_method: payload.card_brand || "sslcommerz",
+    card_type: payload.card_type || null,
+    merchant_id: payload.store_id || null,
     previous_txn_count_24h: prev24hCount,
-    avg_amount_30d: avgAmount30d,
-    status:'SUCCESS',
-
+    avg_amount_30d: totalAmount30d, // ✅ new field
+    country,
+    city,
+    location,
+    status: "SUCCESS",
     timestamp: new Date(),
-  });
+  };
 
-  return new Response("Payment success & saved!", { status: 200 });
+  try {
+    const created = await Transaction.create(txnDoc);
+    console.log("Saved txn:", created.transaction_id);
+  } catch (err) {
+    console.error("Failed to save txn:", err);
+  }
+
+  // 8. Redirect to frontend
+  const redirectHtml = `
+    <html>
+      <head>
+        <meta http-equiv="refresh" content="0; url=http://localhost:3000/" />
+      </head>
+      <body>
+        <p>Payment processed. Redirecting...</p>
+        <script>window.location.href = "http://localhost:3000/examplePayforTest/?payment=success";</script>
+      </body>
+    </html>
+  `;
+
+  return new Response(redirectHtml, {
+    status: 200,
+    headers: { "Content-Type": "text/html" },
+  });
 }
