@@ -67,7 +67,7 @@ export default function RegisterPage() {
         }
       }
 
-      router.push("/login"); // ✅ Final redirect after signup
+      router.push("/"); // ✅ Final redirect after signup
     } catch (err) {
       setError(err.message);
       console.error(err);
