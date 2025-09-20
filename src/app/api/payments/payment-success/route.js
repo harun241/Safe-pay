@@ -37,7 +37,7 @@ export async function POST(request) {
   // 4. Count previous successful transactions in last 24h
   const prev24hCount = await Transaction.countDocuments({
     user_id: userId,
-    status: "SUCCESS",
+    status: "pending",
     timestamp: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
   });
 
@@ -48,7 +48,7 @@ export async function POST(request) {
     {
       $match: {
         user_id: userId,
-        status: "SUCCESS",
+        status: "pending",
         timestamp: { $gte: thirtyDaysAgo },
       },
     },
@@ -83,7 +83,7 @@ export async function POST(request) {
     country,
     city,
     location,
-    status: "SUCCESS",
+    
     timestamp: new Date(),
   };
 
