@@ -15,14 +15,17 @@ const transactionSchema = new mongoose.Schema({
   country: { type: String },
   city: { type: String },
   location: { type: String },
-  is_fraud: { type: Boolean, default: false },
+  is_fraud: { type: Boolean, default: null },
 
   status: {
     type: String,
     default: "pending",
     required: true,
   },
-  timestamp: { type: Date, default: Date.now },
+  timestamp: {
+    type: Date,
+    required: true,
+  },
 });
 
 const Transaction =
