@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    balance: { type: Number, default: 1000 },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
 
     // instead of single ip/country keep history
     loginHistory: [
