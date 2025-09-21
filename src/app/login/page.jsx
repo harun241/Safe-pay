@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
+import GoogleSignInButton from "../Components/GoogleAuthBotton";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -103,7 +104,13 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
+        <br />
+        <GoogleSignInButton/>
+        <p className="mt-4 text-gray-600 text-center">
+          <a href="/forget-password" className="text-green-500 hover:underline">
+            Forget password
+          </a>
+        </p>
         <p className="mt-4 text-gray-600 text-center">
           Don’t have an account?{" "}
           <a href="/register" className="text-green-500 hover:underline">
