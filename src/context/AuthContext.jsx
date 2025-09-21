@@ -8,6 +8,9 @@ import {
   signOut,
 
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/firebase";
 import {useDispatch}from 'react-redux'
@@ -42,9 +45,18 @@ export function AuthProvider({ children }) {
   const register = (email, password) => createUserWithEmailAndPassword(auth, email, password);
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
   const logout = () => signOut(auth);
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
+
+  const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    
+
+    return result;
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout,resetPassword,googleSignIn, loading }}>
       {children}
     </AuthContext.Provider>
   );

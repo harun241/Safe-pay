@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
+import GoogleSignInButton from "../Components/GoogleAuthBotton";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -17,9 +18,9 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await login(email, password);
+      const response = await login(email, password);
       
-       if (res.user.uid) {
+       if (response?.user?.uid) {
               try {
       
                 // upDateAt  when user login like a lest Login
@@ -28,7 +29,7 @@ export default function LoginPage() {
                   headers: {
                     "content-type": "application/json",
                   },
-                  body: JSON.stringify({uid:res.user.uid,email,updatedAt: new Date().toISOString()  }),
+                  body: JSON.stringify({uid:response.user.uid,email,updatedAt: new Date().toISOString()  }),
                 });
       
                 
@@ -44,16 +45,17 @@ export default function LoginPage() {
             }
       router.push("/"); // redirect to homepage
     } catch (error) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: `${err.message}`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } finally {
-      setLoading(false);
-    }
+  Swal.fire({
+    position: "top-end",
+    icon: "error",
+    title: `${error.message}`, // এখানে err না, error
+    showConfirmButton: false,
+    timer: 1500,
+  });
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (
@@ -102,7 +104,13 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
+        <br />
+        <GoogleSignInButton/>
+        <p className="mt-4 text-gray-600 text-center">
+          <a href="/forget-password" className="text-green-500 hover:underline">
+            Forget password
+          </a>
+        </p>
         <p className="mt-4 text-gray-600 text-center">
           Don’t have an account?{" "}
           <a href="/register" className="text-green-500 hover:underline">
