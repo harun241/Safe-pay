@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import GoogleSignInButton from "../Components/GoogleAuthBotton";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ export default function LoginPage() {
       const response = await login(email, password);
       
        if (response?.user?.uid) {
-              try {
+              
       
                 // upDateAt  when user login like a lest Login
                 const res = await fetch("/api/users", {
@@ -29,30 +29,36 @@ export default function LoginPage() {
                   headers: {
                     "content-type": "application/json",
                   },
-                  body: JSON.stringify({uid:response.user.uid,email,updatedAt: new Date().toISOString()  }),
+                  body: JSON.stringify({
+                    uid: response.user.uid,
+                    email,
+                    updatedAt: new Date().toISOString(),
+                    loginSuccess: true,
+                  }),
                 });
       
-                
-              } catch (error) {
-                 Swal.fire({
-                   position: "top-end",
-                   icon: "error",
-                   title: `${error.message}`,
-                   showConfirmButton: false,
-                   timer: 1500,
-                 });
-              }
+                if (res.status === 403) {
+                  Swal.fire({
+                    icon: "warning",
+                    title: "Account Locked",
+                    text: "Too many failed attempts. Try again in 15 minutes.",
+                  });
+                  logout();
+                  return;
+                }
+             
             }
       router.push("/"); // redirect to homepage
     } catch (error) {
-  Swal.fire({
-    position: "top-end",
-    icon: "error",
-    title: `${error.message}`, // এখানে err না, error
-    showConfirmButton: false,
-    timer: 1500,
-  });
-} finally {
+      
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${error.message}`, // এখানে err না, error
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } finally {
   setLoading(false);
 }
 
