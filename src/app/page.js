@@ -1,4 +1,6 @@
 import AdditionalResources from "./Components/AditionalResources";
+import AiBot from "./Components/Ai";
+import ChatBot from "./Components/ChatBot";
 import FloatingChat from "./Components/FloatingChat";
 import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
@@ -33,6 +35,7 @@ export default function HomePage() {
         <FloatingChat />
         <ImpactSection/>
         <AdditionalResources/>
+     <AiBot></AiBot>
       </div>
     </div>
   );
