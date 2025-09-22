@@ -15,7 +15,7 @@ export default function AiBot() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/chat", {
+      const res = await axios.post("https://ai-agent-p3mt.onrender.com/chat", {
         user_input: userInput,
       });
       const botReply = res.data.response;
