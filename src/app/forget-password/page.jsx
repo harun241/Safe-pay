@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { useAuth } from "@/context/AuthContext";
 
+
 export default function ForgetPasswordPage() {
-  const { resetPassword } = useAuth(); // assumes you exposed this in AuthContext
+  const { resetPassword } = useAuth; // assumes you exposed this in AuthContext
   const router = useRouter();
 
   const [email, setEmail] = useState("");

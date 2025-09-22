@@ -34,7 +34,7 @@ export async function POST(request) {
     value_a: user_id,
   };
 
-  console.log("data",data);
+ 
 
   const response = await fetch(
     "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
@@ -49,7 +49,7 @@ export async function POST(request) {
 
   const apiResponse = await response.json();
 
-  console.log("api", apiResponse);
+
 
   return new Response(JSON.stringify({ url: apiResponse.GatewayPageURL }), {
     status: 200,
