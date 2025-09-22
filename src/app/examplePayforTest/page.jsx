@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function PayButton() {
   const user = useSelector((state) => state.userInfo);
-  console.log(user?.uid);
+  
  const searchParams = useSearchParams();
  const paymentStatus = searchParams.get("payment");
 
@@ -28,7 +28,7 @@ export default function PayButton() {
       });
 
       const data = await res.json();
-      console.log(data);
+      
       if (data.url) {
         window.location.href = data.url; // redirect to SSLCommerz payment page
       }
