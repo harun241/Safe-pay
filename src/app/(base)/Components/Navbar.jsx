@@ -35,7 +35,7 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
       key={`desktop-dropdown-${item.name}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="relative"
+      className="relativ"
     >
       <button className="flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-300 hover:text-white hover:bg-white/10">
         <item.icon className="w-4 h-4 mr-2" />

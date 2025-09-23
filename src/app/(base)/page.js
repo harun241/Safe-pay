@@ -9,7 +9,7 @@ import Testimonials from "./Components/Testimonial";
 
 export default function HomePage() {
   return (
-    <div className="bg-gray-900 text-white">
+    <div className=" text-white pt-16">
       {/* Hero Section */}
       <div className="pb-20"> {/* niche space added */}
         <Hero />
