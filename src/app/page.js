@@ -4,6 +4,7 @@ import ChatBot from "./Components/ChatBot";
 import FloatingChat from "./Components/FloatingChat";
 import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
+import PricingSection from "./Components/PricingSection";
 import Testimonials from "./Components/Testimonial";
 
 export default function HomePage() {
@@ -33,9 +34,10 @@ export default function HomePage() {
       {/* Floating Chat */}
       <div className="pb-20">
         <FloatingChat />
-        <ImpactSection/>
-        <AdditionalResources/>
-     <AiBot></AiBot>
+        <ImpactSection />
+        <AdditionalResources />
+        <AiBot></AiBot>
+        <PricingSection></PricingSection>
       </div>
     </div>
   );
