@@ -67,8 +67,6 @@ export async function POST(request) {
    // 6. Calculate new total INCLUDING current transaction
    const totalAmount30d = prevSum30d + amount;
 
-   
-
 
   // 7. Create transaction document
   const txnDoc = {
@@ -83,7 +81,6 @@ export async function POST(request) {
     country,
     city,
     location,
-    
     timestamp: new Date(),
   };
 
