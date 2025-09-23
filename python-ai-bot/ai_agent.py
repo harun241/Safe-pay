@@ -13,7 +13,6 @@ with open(dataset_path, "r", encoding="utf-8") as f:
             question_norm = re.sub(r'[^\w\s]', '', question.lower())
             conversations[question_norm] = answer
 
-
 # Function to normalize user input
 def normalize_text(text):
     text = text.lower()

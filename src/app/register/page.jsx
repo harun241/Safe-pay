@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
-import GoogleSignInButton from "../Components/GoogleAuthBotton";
+import GoogleSignInButton from "../(base)/Components/GoogleAuthBotton";
 
 export default function RegisterPage() {
   const { register } = useAuth();
