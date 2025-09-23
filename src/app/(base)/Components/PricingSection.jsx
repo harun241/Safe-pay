@@ -117,9 +117,9 @@ export default function PricingSection() {
                       ? "/plans/pro"
                       : "/plans/enterprise"
                 }
-                className={`block text-center w-full py-3 rounded-xl font-semibold transition shadow-md ${plan.highlight
-                    ? "bg-white text-blue-700 hover:bg-gray-100"
-                    : "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-900 dark:text-white hover:opacity-90"
+                className={`border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition ${plan.highlight
+                    ? "border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
+                    : "border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
                   }`}
               >
                 {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
