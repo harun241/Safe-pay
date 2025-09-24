@@ -18,9 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-      >
+      data-new-gr-c-s-check-loaded="14.1254.0" 
+      data-gr-ext-installed="">
         <ThemeProvider
-          attribute="class"
+          attribute="class"J
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange={false}
