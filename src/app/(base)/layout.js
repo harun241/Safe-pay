@@ -13,14 +13,13 @@ export default function BaseLayout({ children }) {
         <div className="md:px-3 lg:max-w-[1600px] mx-auto">
           {children}
         </div>
-        
         <div className={`transition-colors duration-500 ${theme === "dark"
           ? "bg-slate-900 text-slate-300"
           : "bg-white text-slate-600"
           }`}>
-          <Footer></Footer>
+          <Footer></Footer> 
         </div>
       </div>
     </>
-  );
+  ); 
 }
