@@ -6,7 +6,7 @@ import Navbar from "./Components/Navbar";
 export default function BaseLayout({ children }) {
   return (
     <>
-      <div className="px-3 md:px-10">
+      <div className="md:px-3 lg:max-w-[1600px] mx-auto">
         <Navbar></Navbar>
         {children}
         <Footer></Footer>
