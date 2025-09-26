@@ -8,6 +8,7 @@ export default function AiBot() {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+
   const sendMessage = async () => {
     if (!userInput.trim()) return;
 
@@ -15,7 +16,7 @@ export default function AiBot() {
     setLoading(true);
 
     try {
-      const res = await axios.post("https://ai-agent-p3mt.onrender.com/chat", {
+      const res = await axios.post(process.env.NEXT_PUBLIC_AI_SERVER, {
         user_input: userInput,
       });
       const botReply = res.data.response;
@@ -43,11 +44,10 @@ export default function AiBot() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`my-2 p-2 rounded-lg ${
-              msg.sender === "user"
+            className={`my-2 p-2 rounded-lg ${msg.sender === "user"
                 ? "bg-indigo-400 text-white text-right"
                 : "bg-green-300 text-gray-900 text-left"
-            }`}
+              }`}
           >
             {msg.text}
           </div>
@@ -55,14 +55,14 @@ export default function AiBot() {
         {loading && <div className="text-gray-500">Bot is typing...</div>}
       </div>
       <div className="flex">
-     <input
-  type="text"
-  className="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 text-black"
-  placeholder="Type your message..."
-  value={userInput}
-  onChange={(e) => setUserInput(e.target.value)}
-  onKeyDown={handleKeyDown}
-/>
+        <input
+          type="text"
+          className="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 text-black"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
 
         <button
           className="bg-indigo-500 text-black px-4 rounded-r-lg hover:bg-indigo-600"
