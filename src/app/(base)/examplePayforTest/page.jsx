@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 
+// nothing
 // 👇 Extract the content that uses useSearchParams
 function PayButtonContent() {
   const user = useSelector((state) => state.userInfo);
