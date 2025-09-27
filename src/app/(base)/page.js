@@ -38,7 +38,10 @@ export default function HomePage() {
         <AdditionalResources />
         <AiBot></AiBot>
         <PricingSection></PricingSection>
+        
       </div>
     </div>
   );
 }
+
+ 
