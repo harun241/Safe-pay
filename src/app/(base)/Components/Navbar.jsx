@@ -283,8 +283,8 @@ export default function Navbar() {
       href: "/features",
       icon: Cpu,
       dropdownItems: [
-        { label: "AI & Machine Learning", href: "/features/ai-ml" },
-        { label: "Intelligent Risk Decisioning", href: "/features/risk-decisioning" },
+        { label: "AI & Machine Learning", href: "/machinelearning" },
+        { label: "Intelligent Risk Decisioning", href: "/risk" },
         { label: "Global Anti-Fraud Network", href: "/features/fraud-network" },
         { label: "Data Hub", href: "/features/data-hub" },
       ],
@@ -304,8 +304,8 @@ export default function Navbar() {
       href: "/company",
       icon: Building2,
       dropdownItems: [
-        { label: "About Us", href: "/company/about" },
-        { label: "Careers", href: "/company/careers" },
+        { label: "About Us", href: "/about" },
+        { label: "Careers", href: "/careers" },
         { label: "Contact Us", href: "/contact" },
       ],
     },
