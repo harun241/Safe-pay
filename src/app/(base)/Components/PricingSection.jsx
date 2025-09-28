@@ -3,14 +3,16 @@
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 export default function PricingSection() {
+  const { theme } = useTheme();
+
   const plans = [
     {
       title: "Basic",
       price: "49",
-      description:
-        "Perfect for startups or small businesses wanting fraud protection.",
+      description: "Perfect for startups or small businesses wanting fraud protection.",
       features: [
         "Real-time fraud monitoring",
         "Basic anomaly detection",
@@ -19,14 +21,11 @@ export default function PricingSection() {
         "Basic dashboard analytics",
         "Standard support (24-48h)",
       ],
-      highlight: false,
-      style: "bg-white/70 dark:bg-gray-800/50 backdrop-blur-lg border-gray-200 dark:border-gray-700",
     },
     {
       title: "Pro",
       price: "149",
-      description:
-        "Ideal for growing businesses needing advanced AI protection.",
+      description: "Ideal for growing businesses needing advanced AI protection.",
       features: [
         "Everything in Basic",
         "AI-powered risk scoring",
@@ -36,13 +35,11 @@ export default function PricingSection() {
         "Priority support",
       ],
       highlight: true,
-      style: "bg-gradient-to-b from-blue-600 to-blue-800 text-white border-blue-500 shadow-2xl",
     },
     {
       title: "Enterprise",
       price: "Custom",
-      description:
-        "Best for enterprises handling high-volume, high-risk transactions.",
+      description: "Best for enterprises handling high-volume, high-risk transactions.",
       features: [
         "Everything in Pro",
         "Dedicated fraud analyst",
@@ -51,79 +48,115 @@ export default function PricingSection() {
         "SLA-backed uptime guarantee",
         "24/7 premium support",
       ],
-      highlight: false,
-      style: "bg-gradient-to-b from-gray-900 to-gray-800 text-white border-gray-700",
+      customGradient: true, // Custom gradient flag
     },
   ];
 
   return (
-    <section className=" py-20 relative overflow-hidden">
-      {/* Background glow effect */}
-      <div className="" />
+    <section
+      className={`relative py-24 px-6 overflow-hidden transition-colors duration-500
+        ${theme === "dark" ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
+                          : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"}`}
+    >
+      {/* Background Accent */}
+      <div
+        className={`absolute inset-0 opacity-10 transition-colors duration-500
+          ${theme === "dark" ? "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"
+                              : "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-400 via-transparent to-transparent"}`}
+      ></div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <h2 className="text-4xl font-bold text-center mb-4 text-gray-300 dark:text-white">
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className={`text-4xl md:text-5xl font-extrabold text-center mb-4 tracking-wide
+            ${theme === "dark" ? "text-green-400" : "text-cyan-600"}`}
+        >
           Subscription Plans
-        </h2>
-        <p className="text-center text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-          Scale your business confidently with AI-driven fraud detection.
-        </p>
+        </motion.h2>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className={`text-center mb-16 max-w-2xl mx-auto text-lg
+            ${theme === "dark" ? "text-gray-300" : "text-slate-600"}`}
+        >
+          Scale your business confidently with AI-driven fraud detection.
+        </motion.p>
+
+        <div className="grid gap-10 md:grid-cols-3">
           {plans.map((plan, i) => (
             <motion.div
-              key={plan.title}
+              key={i}
               initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.2 }}
-              whileHover={{ y: -10 }}
-              className={`relative p-8 rounded-2xl border transition-all duration-300 ${plan.style}`}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className={`relative p-10 rounded-2xl transition-all duration-300 ${
+                plan.customGradient
+                  ? theme === "dark"
+                    ? "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white shadow-2xl hover:shadow-pink-400/50"
+                    : "bg-gradient-to-r from-purple-400 via-pink-300 to-red-400 text-white shadow-2xl hover:shadow-pink-300/50"
+                  : theme === "dark"
+                  ? plan.highlight
+                    ? "bg-gray-900/80 backdrop-blur-md text-white shadow-2xl hover:shadow-green-400/50"
+                    : "bg-gray-800/70 backdrop-blur-md text-gray-100 shadow-lg hover:shadow-green-400/30"
+                  : plan.highlight
+                  ? "bg-white border border-slate-300 shadow-xl hover:shadow-cyan-400/30 text-slate-900"
+                  : "bg-white border border-slate-100 shadow-md hover:shadow-cyan-300/20 text-slate-900"
+              }`}
             >
-              {plan.highlight && (
-                <span className="absolute top-4 right-4 text-xs font-bold bg-yellow-400 text-gray-900 px-3 py-1 rounded-full shadow-md">
+              {plan.highlight && !plan.customGradient && (
+                <span
+                  className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full shadow-md
+                    ${theme === "dark" ? "bg-green-400 text-gray-900" : "bg-cyan-500 text-white"}`}
+                >
                   Most Popular
                 </span>
               )}
-              <h3 className="text-2xl font-semibold mb-2">{plan.title}</h3>
-              <p className="opacity-80 mb-6">{plan.description}</p>
-              <p className="text-5xl font-bold mb-6">
-                {plan.price === "Custom" ? (
-                  "Custom"
-                ) : (
-                  <>
-                    ${plan.price}
-                    <span className="text-lg opacity-70">/mo</span>
-                  </>
-                )}
+
+              <h3 className={`text-2xl font-semibold mb-3 ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+                {plan.title}
+              </h3>
+              <p className={`opacity-80 mb-8 ${theme === "dark" ? "text-gray-300" : "text-slate-600"}`}>
+                {plan.description}
               </p>
 
-              {/* Divider */}
-              <div className="border-t border-white/20 mb-6" />
+              <p className={`text-5xl font-extrabold mb-8 ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+                {plan.price === "Custom" ? "Custom" : <>${plan.price}<span className="text-lg font-medium opacity-70">/mo</span></>}
+              </p>
 
-              <ul className="space-y-3 mb-8">
+              <div className={`border-t mb-8 ${theme === "dark" ? "border-white/20" : "border-slate-300"}`} />
+
+              <ul className={`space-y-4 mb-10 ${theme === "dark" ? "text-gray-300" : "text-slate-700"}`}>
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-400 shrink-0" />
+                  <li key={idx} className="flex items-start gap-3">
+                    <CheckCircle className={`w-5 h-5 shrink-0 ${theme === "dark" ? "text-green-400" : "text-cyan-600"}`} />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
 
               <Link
-                href={
-                  plan.title === "Basic"
-                    ? "/plans/basic"
-                    : plan.title === "Pro"
-                      ? "/plans/pro"
-                      : "/plans/enterprise"
-                }
-                className={`border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition ${plan.highlight
-                    ? "border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-                    : "border-2 border-white  font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-                  }`}
-              >
-                {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
-              </Link>
+  href={
+    plan.title === "Basic"
+      ? "/plans/basic"
+      : plan.title === "Pro"
+      ? "/plans/pro"
+      : "/plans/enterprise"
+  }
+  className={`border-2 rounded-lg font-semibold px-6 py-3 transition hover:text-green-600 ${
+    theme === "dark"
+      ? "border-white text-white hover:bg-white"
+      : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+  }`}
+>
+  {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
+</Link>
+
             </motion.div>
           ))}
         </div>

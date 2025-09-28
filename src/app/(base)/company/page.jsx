@@ -24,7 +24,8 @@ const companySections = [
   {
     title: "Careers",
     description: "Join our world-class team",
-    icon: "💼"
+    icon: "💼",
+    href: "/careers"
   },
   {
     title: "Newsroom",

@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 // --- Desktop Dropdown ---
-const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
+const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) => {
   if (!item.dropdownItems) return null;
 
   return (
@@ -37,14 +37,18 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
       onMouseLeave={onMouseLeave}
       className="relative"
     >
-      <button className="flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-300 hover:text-white hover:bg-white/10">
-        <item.icon className="w-4 h-4 mr-2" />
+      <button
+        className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+          theme === "dark"
+            ? "text-gray-300 hover:text-white hover:bg-white/10"
+            : "text-gray-700 hover:text-white hover:bg-green-500/20"
+        }`}
+      >
+        <item.icon className={`w-4 h-4 mr-2 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`} />
         {item.name}
         <ChevronDown
           size={16}
-          className={`ml-2 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -55,7 +59,11 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full mt-2 w-64 rounded-xl shadow-xl border z-50 overflow-hidden bg-gray-950/90 backdrop-blur-md border-gray-700/50"
+            className={`absolute top-full mt-2 w-64 rounded-xl shadow-xl border z-50 overflow-hidden backdrop-blur-md ${
+              theme === "dark"
+                ? "bg-gray-950/90 border-gray-700/50"
+                : "bg-white/90 border-gray-300/50"
+            }`}
           >
             <div className="py-2">
               {item.dropdownItems.map((subItem) => (
@@ -63,7 +71,11 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
                   key={`desktop-sub-${subItem.href}`}
                   href={subItem.href}
                   onClick={subItem.onClick}
-                  className="flex items-center w-full text-left px-4 py-2.5 text-sm transition-colors duration-200 text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
+                  className={`flex items-center w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                    theme === "dark"
+                      ? "text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
+                      : "text-gray-700 hover:bg-green-500/20 hover:text-white"
+                  }`}
                 >
                   {subItem.label}
                 </Link>
@@ -77,7 +89,7 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave }) => {
 };
 
 // --- Mobile User Menu ---
-const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
+const MobileUserMenu = ({ isOpen, setIsOpen, user, logout, theme }) => {
   const userDropdownItems = [
     { label: "Dashboard", href: "/dashboard", key: "mobile-dashboard" },
     { label: "Account Settings", href: "/settings", key: "mobile-settings" },
@@ -103,18 +115,16 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto bg-gray-950 shadow-2xl"
+        className={`lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto shadow-2xl ${
+          theme === "dark" ? "bg-gray-950 text-gray-300" : "bg-white text-gray-800"
+        }`}
       >
         <div className="p-5 pt-20">
           {user ? (
             <div key="mobile-user-logged-in" className="border-b border-gray-800 pb-4">
               <div className="px-3 py-2 mb-2">
-                <p className="text-sm font-semibold text-white truncate">
-                  {user.displayName || "User"}
-                </p>
-                <p className="text-xs text-gray-400 truncate">
-                  {user.email}
-                </p>
+                <p className="text-sm font-semibold truncate">{user.displayName || "User"}</p>
+                <p className="text-xs truncate text-gray-400">{user.email}</p>
               </div>
               <hr className="border-gray-700 my-1" />
               {userDropdownItems.map((item) => (
@@ -128,18 +138,14 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
                   className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
                     item.label === "Logout"
                       ? "text-red-400 hover:bg-red-500/10"
-                      : "text-gray-300 hover:bg-white/10 hover:text-white"
+                      : theme === "dark"
+                      ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                      : "text-gray-700 hover:bg-green-500/20 hover:text-white"
                   }`}
                 >
-                  {item.label === "Dashboard" && (
-                    <LayoutDashboard size={16} className="mr-2" />
-                  )}
-                  {item.label === "Account Settings" && (
-                    <Settings size={16} className="mr-2" />
-                  )}
-                  {item.label === "Logout" && (
-                    <LogOut size={16} className="mr-2" />
-                  )}
+                  {item.label === "Dashboard" && <LayoutDashboard size={16} className="mr-2" />}
+                  {item.label === "Account Settings" && <Settings size={16} className="mr-2" />}
+                  {item.label === "Logout" && <LogOut size={16} className="mr-2" />}
                   {item.label}
                 </Link>
               ))}
@@ -150,7 +156,7 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
                 key="mobile-login-link"
                 href="/login"
                 onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg text-gray-200 border-b border-gray-800"
+                className="block py-4 text-lg border-b border-gray-800"
               >
                 Login
               </Link>
@@ -158,7 +164,7 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
                 key="mobile-register-link"
                 href="/register"
                 onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg text-gray-200 border-b border-gray-800"
+                className="block py-4 text-lg border-b border-gray-800"
               >
                 Register
               </Link>
@@ -170,8 +176,8 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout }) => {
   );
 };
 
-// --- Mobile Navigation (Main Menu Only) ---
-const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
+// --- Mobile Navigation ---
+const MobileNav = ({ isOpen, setIsOpen, navItems, theme }) => {
   const [openSubmenus, setOpenSubmenus] = useState({});
 
   const handleSubMenuToggle = (e, itemName) => {
@@ -198,7 +204,9 @@ const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto bg-gray-950 shadow-2xl"
+        className={`lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto shadow-2xl ${
+          theme === "dark" ? "bg-gray-950 text-gray-300" : "bg-white text-gray-800"
+        }`}
       >
         <div className="p-5 pt-20">
           {navItems.map((item) => (
@@ -207,7 +215,7 @@ const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
                 <>
                   <button
                     onClick={(e) => handleSubMenuToggle(e, item.name)}
-                    className="w-full flex items-center justify-between py-4 text-lg text-gray-200"
+                    className="w-full flex items-center justify-between py-4 text-lg"
                   >
                     <span>{item.name}</span>
                     <ChevronDown
@@ -224,7 +232,11 @@ const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
                           key={`mobile-sub-${subItem.href}`}
                           href={subItem.href}
                           onClick={() => setIsOpen(false)}
-                          className="block py-2 text-gray-400 hover:text-cyan-400"
+                          className={`block py-2 transition-colors ${
+                            theme === "dark"
+                              ? "text-gray-400 hover:text-cyan-400"
+                              : "text-gray-700 hover:text-cyan-600"
+                          }`}
                         >
                           {subItem.label}
                         </Link>
@@ -237,7 +249,9 @@ const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
                   key={`mobile-nav-link-${item.href}`}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="block py-4 text-lg text-gray-200"
+                  className={`block py-4 text-lg ${
+                    theme === "dark" ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-green-600"
+                  }`}
                 >
                   {item.name}
                 </Link>
@@ -250,7 +264,7 @@ const MobileNav = ({ isOpen, setIsOpen, navItems }) => {
   );
 };
 
-// --- Main Navbar Component ---
+// --- Main Navbar ---
 export default function Navbar() {
   const { theme } = useTheme();
   const { user, logout } = useAuth();
@@ -261,7 +275,6 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   useEffect(() => setMounted(true), []);
-
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -271,9 +284,7 @@ export default function Navbar() {
   useEffect(() => {
     document.body.style.overflow =
       isMobileMenuOpen || isMobileUserMenuOpen ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    return () => (document.body.style.overflow = "auto");
   }, [isMobileMenuOpen, isMobileUserMenuOpen]);
 
   const navItems = [
@@ -283,8 +294,8 @@ export default function Navbar() {
       href: "/features",
       icon: Cpu,
       dropdownItems: [
-        { label: "AI & Machine Learning", href: "/features/ai-ml" },
-        { label: "Intelligent Risk Decisioning", href: "/features/risk-decisioning" },
+        { label: "AI & Machine Learning", href: "/machinelearning" },
+        { label: "Intelligent Risk Decisioning", href: "/risk" },
         { label: "Global Anti-Fraud Network", href: "/features/fraud-network" },
         { label: "Data Hub", href: "/features/data-hub" },
       ],
@@ -304,15 +315,14 @@ export default function Navbar() {
       href: "/company",
       icon: Building2,
       dropdownItems: [
-        { label: "About Us", href: "/company/about" },
-        { label: "Careers", href: "/company/careers" },
+        { label: "About Us", href: "/about" },
+        { label: "Careers", href: "/careers" },
         { label: "Contact Us", href: "/contact" },
       ],
     },
   ];
 
   if (!mounted) {
-    
     return (
       <header className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 h-16">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
@@ -335,7 +345,9 @@ export default function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled || isMobileMenuOpen || isMobileUserMenuOpen
-            ? "bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 shadow-lg"
+            ? theme === "dark"
+              ? "bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 shadow-lg"
+              : "bg-white/80 backdrop-blur-lg border-b border-gray-300 shadow-md"
             : "bg-transparent border-b border-transparent"
         }`}
       >
@@ -343,55 +355,53 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-      <Shield
-        className={`h-7 w-7 transition-colors ${
-          theme === "dark" ? "text-cyan-400" : "text-green-500"
-        }`}
-      />
-      <span
-        className={`font-bold text-xl transition-colors ${
-          theme === "dark" ? "text-cyan-400" : "text-green-500"
-        }`}
-      >
-        SafePay
-      </span>
-    </Link>
+              <Shield
+                className={`h-7 w-7 transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
+                }`}
+              />
+              <span
+                className={`font-bold text-xl transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
+                }`}
+              >
+                SafePay
+              </span>
+            </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center space-x-2">
-  {navItems.map((item) =>
-    item.dropdownItems ? (
-      <DesktopDropdown
-        key={`desktop-item-${item.name}`}
-        item={item}
-        isOpen={activeDropdown === item.name}
-        onMouseEnter={() => setActiveDropdown(item.name)}
-        onMouseLeave={() => setActiveDropdown(null)}
-        theme={theme} 
-      />
-    ) : (
-      <Link
-        key={`desktop-link-${item.href}`}
-        href={item.href}
-        className={`
-          flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200
-          ${
-            theme === "dark"
-              ? "text-gray-300 hover:text-white hover:bg-white/10"
-              : "text-gray-700 hover:text-white hover:bg-green-500/20"
-          }
-        `}
-      >
-        <item.icon
-          className={`w-4 h-4 mr-2 transition-colors ${
-            theme === "dark" ? "text-gray-300" : "text-gray-700"
-          }`}
-        />
-        {item.name}
-      </Link>
-    )
-  )}
-</nav>
+              {navItems.map((item) =>
+                item.dropdownItems ? (
+                  <DesktopDropdown
+                    key={`desktop-item-${item.name}`}
+                    item={item}
+                    isOpen={activeDropdown === item.name}
+                    onMouseEnter={() => setActiveDropdown(item.name)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                    theme={theme}
+                  />
+                ) : (
+                  <Link
+                    key={`desktop-link-${item.href}`}
+                    href={item.href}
+                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                      theme === "dark"
+                        ? "text-gray-300 hover:text-white hover:bg-white/10"
+                        : "text-gray-700 hover:text-white hover:bg-green-500/20"
+                    }`}
+                  >
+                    <item.icon
+                      className={`w-4 h-4 mr-2 ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    />
+                    {item.name}
+                  </Link>
+                )
+              )}
+            </nav>
+
             {/* Right Section */}
             <div className="flex items-center space-x-2">
               <div className="hidden lg:flex items-center space-x-2">
@@ -414,7 +424,8 @@ export default function Navbar() {
                         alt="User Avatar"
                         className="w-8 h-8 rounded-full"
                         onError={(e) => {
-                          e.target.src = "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff";
+                          e.target.src =
+                            "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff";
                         }}
                       />
                     </button>
@@ -424,16 +435,18 @@ export default function Navbar() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute top-full right-0 mt-2 w-56 rounded-xl shadow-xl border z-50 overflow-hidden bg-gray-950/90 backdrop-blur-md border-gray-700/50"
+                          className={`absolute top-full right-0 mt-2 w-56 rounded-xl shadow-xl border z-50 overflow-hidden backdrop-blur-md ${
+                            theme === "dark"
+                              ? "bg-gray-950/90 border-gray-700/50"
+                              : "bg-white/90 border-gray-300/50"
+                          }`}
                         >
                           <div className="p-2">
                             <div className="px-3 py-2">
-                              <p className="text-sm font-semibold text-white truncate">
+                              <p className="text-sm font-semibold truncate">
                                 {user.displayName || "User"}
                               </p>
-                              <p className="text-xs text-gray-400 truncate">
-                                {user.email}
-                              </p>
+                              <p className="text-xs text-gray-400 truncate">{user.email}</p>
                             </div>
                             <hr className="border-gray-700 my-1" />
                             {[
@@ -448,10 +461,12 @@ export default function Navbar() {
                                 className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
                                   item.label === "Logout"
                                     ? "text-red-400 hover:bg-red-500/10"
-                                    : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    : theme === "dark"
+                                    ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    : "text-gray-700 hover:bg-green-500/20 hover:text-white"
                                 }`}
                               >
-                                <item.icon size={16} className="mr-2" />
+                                {item.icon && <item.icon className="mr-2" size={16} />}
                                 {item.label}
                               </Link>
                             ))}
@@ -461,118 +476,68 @@ export default function Navbar() {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <div key="desktop-auth-buttons" className="flex items-center space-x-2">
+                  <>
                     <Link
                       href="/login"
-                      className="flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:text-white hover:bg-white/10"
+                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-green-500/20 hover:text-white"
                     >
-                      <LogIn size={16} className="mr-2" /> Login
+                      Login
                     </Link>
                     <Link
                       href="/register"
-                      className={`flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg transition-shadow shadow-md hover:shadow-lg ${
-                        theme === "dark"
-                          ? "bg-gradient-to-r from-cyan-500 to-blue-500 hover:shadow-cyan-500/30"
-                          : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-blue-500/30"
-                      }`}
+                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600"
                     >
-                      <UserPlus size={16} className="mr-2" /> Get Started
+                      Register
                     </Link>
-                  </div>
+                  </>
                 )}
               </div>
 
-              {/* Mobile Toggle */}
-              <div className="lg:hidden flex items-center">
-                <ThemeSwitcher />
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2 rounded-md"
+              >
+                <Menu size={24} />
+              </button>
+
+              {/* Mobile User Button */}
+              {user && (
                 <button
-                  onClick={() => setIsMobileUserMenuOpen(!isMobileUserMenuOpen)}
-                  className="p-2 rounded-lg text-gray-400 hover:text-white ml-2"
-                  aria-label="User Menu"
+                  onClick={() => setIsMobileUserMenuOpen(true)}
+                  className="lg:hidden p-2 rounded-md"
                 >
-                  {user ? (
-                    <img
-                      key={`mobile-avatar-${user.uid}`}
-                      src={
-                        user.photoURL ||
-                        `https://ui-avatars.com/api/?name=${
-                          encodeURIComponent(user.displayName || user.email)
-                        }&background=0ea5e9&color=fff&size=24`
-                      }
-                      alt="User"
-                      className="w-6 h-6 rounded-full"
-                      onError={(e) => {
-                        e.target.src = "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=24";
-                      }}
-                    />
-                  ) : (
-                    <User size={24} />
-                  )}
+                  <img
+                    src={
+                      user.photoURL ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        user.displayName || user.email
+                      )}&background=0ea5e9&color=fff`
+                    }
+                    alt="User Avatar"
+                    className="w-8 h-8 rounded-full"
+                  />
                 </button>
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="p-2 rounded-lg text-gray-400 hover:text-white ml-2"
-                  aria-label="Toggle Menu"
-                >
-                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              </div>
+              )}
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menus */}
+      {/* Mobile Panels */}
       <MobileNav
         isOpen={isMobileMenuOpen}
         setIsOpen={setIsMobileMenuOpen}
         navItems={navItems}
+        theme={theme}
       />
       <MobileUserMenu
         isOpen={isMobileUserMenuOpen}
         setIsOpen={setIsMobileUserMenuOpen}
         user={user}
         logout={logout}
+        theme={theme}
       />
-
-      
-      {/* Bottom Navbar  */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-gray-950/80 backdrop-blur-md border-t border-gray-700/50">
-        <nav className="flex justify-around items-center h-16">
-          {navItems.slice(0, 4).map((item) => (
-            <Link
-              key={`bottom-nav-${item.href}`}
-              href={item.href}
-              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
-            >
-              <item.icon size={22} className="mb-1" />
-              <span className="text-[10px] leading-tight">{item.name}</span>
-            </Link>
-          ))}
-
-          
-          {user ? (
-            <Link
-              key="bottom-nav-dashboard"
-              href="/dashboard"
-              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
-            >
-              <LayoutDashboard size={22} className="mb-1" />
-              <span className="text-[10px] leading-tight">Dashboard</span>
-            </Link>
-          ) : (
-            <button
-              key="bottom-login-btn"
-              onClick={() => setIsMobileUserMenuOpen(true)}
-              className="flex flex-col items-center justify-center p-1 text-xs font-medium text-gray-400 hover:text-cyan-400 w-1/5"
-            >
-              <UserPlus2 size={22} className="mb-1" />
-              <span className="text-[10px] leading-tight">Get Started</span>
-            </button>
-          )}
-        </nav>
-      </div>
-      
     </>
   );
 }
