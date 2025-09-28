@@ -80,7 +80,7 @@ export default function AiBot() {
           onKeyDown={handleKeyDown}
         />
         <button
-          className="bg-indigo-500 text-black px-4 rounded-r-lg hover:bg-indigo-600"
+          className="bg-indigo-500 text-black px-4 rounded-r-lg hover:bg-cyan-400"
           onClick={sendMessage}
         >
           Send

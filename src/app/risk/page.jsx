@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { Info } from "lucide-react"; // Correct icon import
+import Navbar from "../(base)/Components/Navbar";
 
 export default function RiskDecisioningPage() {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto text-center">
+      <Navbar></Navbar>
+      <div className="max-w-4xl mx-auto text-center mt-10">
         {/* Title */}
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
           Intelligent Risk Decisioning
