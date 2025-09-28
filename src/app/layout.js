@@ -4,9 +4,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import ReduxProvider from '../Redux/ReduxProvider'
 // Theme Toggle Provider ===============
 import { ThemeProvider } from "./(base)/Components/ThemeProvider";
-import QueryClientProvider from "@/Hooks/QueryClientProvider";
-
-
 
 // Metadata
 export const metadata = {
@@ -32,11 +29,9 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange={false}
         >
           <ReduxProvider>
-            <QueryClientProvider>
               <AuthProvider>
                 <main className="flex-1 bg-gray-900">{children}</main>
               </AuthProvider>
-            </QueryClientProvider>
           </ReduxProvider>
         </ThemeProvider>
       </body>
