@@ -1,17 +1,30 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSelector } from "react-redux";
+import { Suspense, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
+import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 
 // nothing
 // 👇 Extract the content that uses useSearchParams
 function PayButtonContent() {
+
+  const dispatch = useDispatch()
+
   const user = useSelector((state) => state.userInfo);
+  const transictions = useSelector((state) => state.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
+
   const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    dispatch(fetchTransactions());
+  }, [dispatch]);
+
+  console.log(transictions)
 
   const handlePayment = async () => {
     setLoading(true);
@@ -48,7 +61,7 @@ function PayButtonContent() {
         <div className="p-4 mt-4 rounded shadow bg-gray-100 text-black">
           <h2 className="text-lg font-bold">Fraud Detection Result:</h2>
           <p>Fraud: 100%<span className={"text-green-600"}>
-            { "✅ Safe"}
+            {"✅ Safe"}
           </span></p>
           <h1>Risk: 0%</h1>
         </div>

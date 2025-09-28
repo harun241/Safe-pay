@@ -1,14 +1,21 @@
+import axiosSecure from '@/Hooks/AxiosSecure/AxiosSecure';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Async thunk to fetch transactions from your API
 export const fetchTransactions = createAsyncThunk(
     'transactions/fetchTransactions',
-    async () => {
-        const res = await fetch('/api/transactions');
-        if (!res.ok) throw new Error('Failed to fetch transactions');
-        return res.json();
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await axiosSecure.get("/api/transactions"); // ✅ only .get()
+            return res.data; // ✅ Axios already parses JSON
+        } catch (error) {
+            // Properly extract error message
+            const message = error.response?.data?.error || error.message || "Failed to fetch transactions";
+            return rejectWithValue(message);
+        }
     }
 );
+
 
 const transactionsSlice = createSlice({
     name: 'transactions',
@@ -33,5 +40,7 @@ const transactionsSlice = createSlice({
             });
     }
 });
+
+
 
 export default transactionsSlice.reducer;
