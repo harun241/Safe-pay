@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 
 const aboutCards = [
   {
@@ -24,8 +25,24 @@ const aboutCards = [
 ];
 
 const AboutSection = () => {
+  const { theme } = useTheme();
+
+  // Dynamic classes based on theme
+  const sectionBg =
+    theme === "dark"
+      ? "bg-gray-900 text-white"
+      : "bg-gray-50 text-gray-900";
+  const subtitleColor =
+    theme === "dark" ? "text-gray-300" : "text-gray-700";
+  const cardBg = theme === "dark" ? "bg-gray-800/70" : "bg-white/80";
+  const cardText = theme === "dark" ? "text-gray-400" : "text-gray-700";
+  const cardShadow =
+    theme === "dark"
+      ? "shadow-lg hover:shadow-green-400/30"
+      : "shadow-md hover:shadow-green-200/40";
+
   return (
-    <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 px-6 overflow-hidden">
+    <section className={`relative py-20 px-6 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>
 
@@ -45,7 +62,7 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-14"
+          className={`text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-14 ${subtitleColor}`}
         >
           SafePay is an AI-powered platform dedicated to securing online
           transactions. Our mission is to protect users from fraud using
@@ -62,7 +79,7 @@ const AboutSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
-              className="bg-gray-800/70 backdrop-blur-md shadow-lg rounded-2xl p-8 hover:shadow-green-400/30 hover:-translate-y-2 transition-all duration-300"
+              className={`rounded-2xl p-8 ${cardBg} ${cardShadow} hover:-translate-y-2 transition-all duration-300`}
             >
               {/* Icon */}
               <div className="text-5xl mb-5 bg-gradient-to-tr from-green-400 to-green-200 text-transparent bg-clip-text">
@@ -71,7 +88,7 @@ const AboutSection = () => {
               <h2 className="text-2xl font-semibold text-green-400 mb-3">
                 {card.title}
               </h2>
-              <p className="text-gray-400 leading-relaxed">{card.description}</p>
+              <p className={`${cardText} leading-relaxed`}>{card.description}</p>
             </motion.div>
           ))}
         </div>

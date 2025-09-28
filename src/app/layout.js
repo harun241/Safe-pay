@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         >
         <ReduxProvider>
           <AuthProvider>
-            <main className="flex-1 bg-gray-900">{children}</main>
+            <main className="flex-1 ">{children}</main>
           </AuthProvider>
         </ReduxProvider>
         </ThemeProvider>

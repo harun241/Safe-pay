@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import { useTheme } from "next-themes";
+import Navbar from "../(base)/Components/Navbar";
 
 const jobs = [
   {
@@ -72,10 +74,27 @@ const jobs = [
 
 export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState(null);
+  const { theme } = useTheme();
+
+  // Dynamic classes based on theme
+  const sectionBg =
+    theme === "dark"
+      ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
+      : "bg-gray-50 text-gray-900";
+  const subtitleColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
+  const cardBg = theme === "dark" ? "bg-gray-800/70" : "bg-white/80";
+  const cardText = theme === "dark" ? "text-gray-300" : "text-gray-700";
+  const cardShadow =
+    theme === "dark"
+      ? "shadow-2xl hover:shadow-green-400/40"
+      : "shadow-md hover:shadow-green-200/40";
+  const buttonBg = theme === "dark" ? "bg-green-400 text-gray-900" : "bg-green-500 text-white";
+  const buttonHover = theme === "dark" ? "hover:bg-green-500" : "hover:bg-green-600";
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24 px-12 overflow-hidden">
+    <section className={`relative w-full min-h-screen py-24 px-12 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
+      <Navbar></Navbar>
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>
 
       {!selectedJob ? (
@@ -93,7 +112,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto mb-20"
+            className={`text-lg md:text-xl leading-relaxed max-w-4xl mx-auto mb-20 ${subtitleColor}`}
           >
             Join us in building AI-powered fraud detection systems to secure the
             future of online transactions. Explore our open positions below.
@@ -107,15 +126,15 @@ export default function CareersPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="p-10 min-h-[300px] bg-gray-800/70 backdrop-blur-md rounded-3xl shadow-2xl cursor-pointer hover:shadow-green-400/40 hover:-translate-y-3 transition-all"
+                className={`p-10 min-h-[300px] ${cardBg} backdrop-blur-md rounded-3xl ${cardShadow} cursor-pointer hover:-translate-y-3 transition-all`}
                 onClick={() => setSelectedJob(job)}
               >
                 <h3 className="text-2xl font-semibold mb-3 text-green-400">
                   {job.title}
                 </h3>
-                <p className="text-gray-400 mb-5">{job.department}</p>
-                <p className="text-sm text-gray-300 mb-1">📍 {job.location}</p>
-                <p className="text-sm text-gray-300">⏱ {job.type}</p>
+                <p className={cardText + " mb-5"}>{job.department}</p>
+                <p className={`${cardText} mb-1`}>📍 {job.location}</p>
+                <p className={cardText}>⏱ {job.type}</p>
               </motion.div>
             ))}
           </div>
@@ -136,23 +155,23 @@ export default function CareersPage() {
           <h2 className="text-4xl font-bold mb-4 text-green-400">
             {selectedJob.title}
           </h2>
-          <p className="text-gray-300 mb-6">{selectedJob.description}</p>
+          <p className={cardText + " mb-6"}>{selectedJob.description}</p>
 
           <h3 className="text-2xl font-semibold mb-2 text-green-400">Responsibilities:</h3>
-          <ul className="list-disc list-inside mb-6 text-gray-300">
+          <ul className={`list-disc list-inside mb-6 ${cardText}`}>
             {selectedJob.responsibilities.map((item, idx) => (
               <li key={idx}>{item}</li>
             ))}
           </ul>
 
           <h3 className="text-2xl font-semibold mb-2 text-green-400">Qualifications:</h3>
-          <ul className="list-disc list-inside mb-6 text-gray-300">
+          <ul className={`list-disc list-inside mb-6 ${cardText}`}>
             {selectedJob.qualifications.map((item, idx) => (
               <li key={idx}>{item}</li>
             ))}
           </ul>
 
-          <button className="px-6 py-3 bg-green-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-green-500 transition">
+          <button className={`px-6 py-3 font-semibold rounded-lg shadow-lg ${buttonBg} ${buttonHover} transition`}>
             Apply Now
           </button>
         </motion.div>
