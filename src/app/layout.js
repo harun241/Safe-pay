@@ -4,6 +4,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import ReduxProvider from '../Redux/ReduxProvider'
 // Theme Toggle Provider ===============
 import { ThemeProvider } from "./(base)/Components/ThemeProvider";
+import QueryClientProvider from "@/Hooks/QueryClientProvider";
 
 
 
@@ -15,23 +16,28 @@ export const metadata = {
 
 // Root Layout
 export default function RootLayout({ children }) {
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-      data-new-gr-c-s-check-loaded="14.1254.0" 
-      data-gr-ext-installed="">
-        <ThemeProvider
-          attribute="class"J
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
-        <ReduxProvider>
-          <AuthProvider>
-            <main className="flex-1 bg-gray-900">{children}</main>
-          </AuthProvider>
-        </ReduxProvider>
-        </ThemeProvider>
+        data-new-gr-c-s-check-loaded="14.1255.0"
+        data-gr-ext-installed=""
+      >
+        <QueryClientProvider>
+          <ThemeProvider
+            attribute="class" J
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange={false}
+          >
+            <ReduxProvider>
+              <AuthProvider>
+                <main className="flex-1 bg-gray-900">{children}</main>
+              </AuthProvider>
+            </ReduxProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
