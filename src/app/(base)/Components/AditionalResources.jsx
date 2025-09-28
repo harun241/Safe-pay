@@ -5,20 +5,26 @@ import React from "react";
 const resources = [
   {
     type: "Webinar",
-    title: "Beyond Transaction Monitoring - The Strategic Shift to Entity Intelligence Fraud Prevention",
-    description: "Join fraud leaders from Planet & Brains Capital to learn why entity intelligence is giving forward-thinking companies a competitive edge.",
+    title:
+      "Beyond Transaction Monitoring - The Strategic Shift to Entity Intelligence Fraud Prevention",
+    description:
+      "Join fraud leaders from Planet & Brains Capital to learn why entity intelligence is giving forward-thinking companies a competitive edge.",
     image: "/images/webinar1.jpg",
+    link: "/demo-payment",
   },
   {
     type: "eBook",
     title: "Real-Time Payments - The Definitive Guide for Payments Leaders",
-    description: "Explore how payments leaders are tackling real-time fraud risks with AI, analytics, and modern RTP strategies.",
+    description:
+      "Explore how payments leaders are tackling real-time fraud risks with AI, analytics, and modern RTP strategies.",
     image: "/images/ebook1.jpg",
   },
   {
     type: "eBook",
-    title: "Transforming Fraud Management - The Case for AI in Fraud Prevention",
-    description: "Discover how AI-powered fraud prevention transforms reactive security into proactive protection. Learn implementation strategies, cost benefits, and future trends.",
+    title:
+      "Transforming Fraud Management - The Case for AI in Fraud Prevention",
+    description:
+      "Discover how AI-powered fraud prevention transforms reactive security into proactive protection. Learn implementation strategies, cost benefits, and future trends.",
     image: "/images/ebook2.jpg",
   },
 ];
@@ -50,7 +56,9 @@ export default function AdditionalResources() {
               )}
 
               <div>
-                <span className="text-sm font-semibold text-green-500">{res.type}</span>
+                <span className="text-sm font-semibold text-green-500">
+                  {res.type}
+                </span>
                 <h3 className="text-lg font-bold mt-1 mb-1 text-gray-900 dark:text-white">
                   {res.title}
                 </h3>
@@ -59,7 +67,7 @@ export default function AdditionalResources() {
                 </p>
               </div>
               <button className="mt-4 text-green-500 font-semibold hover:underline self-start">
-                Request a Demo
+                <a href={res.link}>Request a Demo</a>
               </button>
             </div>
           ))}

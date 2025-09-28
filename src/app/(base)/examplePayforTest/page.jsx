@@ -39,23 +39,27 @@ export default function PayButton() {
     }
   };
 
-  if (paymentStatus === "success") {
-    return (
-      <div>
-        {paymentStatus === "success" && (
-          <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
-            ✅ Payment successful! Thank you.
-          </div>
-        )}
+  // if (paymentStatus === "success") {
+  //   return (
+  //     <div className="h-[300px] bg-gray-50 flex flex-col items-center justify-center  ">
+  //       {paymentStatus === "success" && (
+  //         <div className="bg-green-100  text-green-800 p-4 rounded mb-4">
+  //           ✅ Payment successful! Thank you.
+  //         </div>
+  //       )}
 
-        {/* Your normal homepage content below */}
-        <h1>Welcome to the site</h1>
-      </div>
-    );
-
-  }
+  //       {/* Your normal homepage content below */}
+  //       <h1>Welcome to the site</h1>
+  //     </div>
+  //   );
+  // }
   return (
-    <div className="w-full flex items-center justify-center h-screen">
+    <div className="w-full flex flex-col items-center justify-center h-screen">
+      {paymentStatus === "success" && (
+        <div className="bg-green-100  text-green-800 p-4 rounded mb-4">
+          ✅ Payment successful! Thank you.
+        </div>
+      )}
       <button
         onClick={handlePayment}
         disabled={loading}
