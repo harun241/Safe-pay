@@ -59,9 +59,6 @@ function PayButtonContent() {
 
         <div className="p-4 mt-4 rounded shadow bg-gray-100 text-black">
           <h2 className="text-lg font-bold">Fraud Detection Result:</h2>
-          <p>Fraud: 100%<span className={"text-green-600"}>
-            {"✅ Safe"}
-          </span></p>
           <h1>Risk: 0%</h1>
         </div>
       </div >
