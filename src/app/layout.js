@@ -24,20 +24,21 @@ export default function RootLayout({ children }) {
         data-new-gr-c-s-check-loaded="14.1255.0"
         data-gr-ext-installed=""
       >
-        <QueryClientProvider>
-          <ThemeProvider
-            attribute="class" J
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange={false}
-          >
-            <ReduxProvider>
+
+        <ThemeProvider
+          attribute="class" J
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <ReduxProvider>
+            <QueryClientProvider>
               <AuthProvider>
                 <main className="flex-1 bg-gray-900">{children}</main>
               </AuthProvider>
-            </ReduxProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
+            </QueryClientProvider>
+          </ReduxProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
