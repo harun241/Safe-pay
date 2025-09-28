@@ -99,7 +99,7 @@ export async function POST(request) {
       </head>
       <body>
         <p>Payment processed. Redirecting...</p>
-        <script>window.location.href = "http://localhost:3000/examplePayforTest/?payment=success";</script>
+        <script>window.location.href = "http://localhost:3000/demo-payment/?payment=success";</script>
       </body>
     </html>
   `;
