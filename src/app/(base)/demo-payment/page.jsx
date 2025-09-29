@@ -1,16 +1,26 @@
 "use client";
 
+import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DemoPaymentPage() {
+
+  const dispatch = useDispatch()
+
   const user = useSelector((state) => state.userInfo);
+  const transactions = useSelector((state) => state.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchTransactions());
+  }, [dispatch]);
+
 
   const handlePayment = async () => {
     if (!amount || isNaN(amount)) {
@@ -19,6 +29,7 @@ export default function DemoPaymentPage() {
     }
 
     setLoading(true);
+
     try {
       const res = await fetch("/api/payments/initiate", {
         method: "POST",
@@ -35,16 +46,44 @@ export default function DemoPaymentPage() {
       } else {
         alert("Payment initiation failed");
       }
+
     } catch (err) {
       console.error("Payment error:", err);
       alert("Something went wrong");
     } finally {
       setLoading(false);
     }
+
   };
 
+  const finalTransactions = useMemo(() => {
+    if (paymentStatus === "success") {
+      return transactions?.items || [];
+    }
+    return [];
+  }, [paymentStatus, transactions]);
+
+  console.log(finalTransactions)
+
+  useEffect(() => {
+    if (finalTransactions.length > 0) {
+      const latestTransaction = finalTransactions[finalTransactions.length - 1];
+      console.log("Sending latest transaction:", latestTransaction);
+
+      fetch("/api/save-transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([latestTransaction]), // ✅ wrap in array
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("Backend response:", data))
+        .catch((err) => console.error("Save error:", err));
+    }
+  }, [finalTransactions]);
+
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-16">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20  text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">

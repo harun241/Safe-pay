@@ -17,6 +17,7 @@
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
     "heroicons": "^2.2.0",
+    "json2csv": "^6.0.0-alpha.2",
     "lucide-react": "^0.544.0",
     "mongoose": "^8.18.1",
     "next": "15.5.3",
