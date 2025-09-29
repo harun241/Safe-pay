@@ -24,7 +24,7 @@ export async function POST(req) {
     const latestTransaction = transactions[transactions.length - 1];
 
     // Ensure /data folder exists
-    const dirPath = path.join(process.cwd(), "data");
+    const dirPath = path.join(process.cwd(), "mnt/data");
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 
     const filePath = path.join(dirPath, "transactions.csv");
