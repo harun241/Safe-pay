@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
+import { getDeviceInfo } from "@/lib/getDeviceInfo";
 
 export default function DemoPaymentPage() {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ export default function DemoPaymentPage() {
   }, [dispatch]);
 
   const handlePayment = async () => {
+    const deviceInfo = await getDeviceInfo();
+
     if (!amount || isNaN(amount)) {
       alert("Enter a valid amount");
       return;
@@ -33,6 +36,7 @@ export default function DemoPaymentPage() {
         body: JSON.stringify({
           user_id: user?.uid || "guest_demo",
           amount: Number(amount),
+          ...deviceInfo
         }),
       });
 

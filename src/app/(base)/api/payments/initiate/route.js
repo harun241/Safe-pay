@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 const is_live = false;
 
 export async function POST(request) {
-  const {  user_id, amount,  } =
+  const {  user_id, amount,platform,screen,os,deviceId,browser  } =
     await request.json();
   
   const tran_id = `txn_${new mongoose.Types.ObjectId().toString()}`;
@@ -18,6 +18,7 @@ export async function POST(request) {
     total_amount: amount,
     currency: "BDT",
     tran_id,
+   
     success_url: "http://localhost:3000/api/payments/payment-success",
     fail_url: "http://localhost:3000/api/payments/payment-fail",
     cancel_url: "http://localhost:3000/api/payments/payment-cancel",
@@ -32,9 +33,14 @@ export async function POST(request) {
     cus_country: "Bangladesh",
     cus_phone: "01711111111",
     value_a: user_id,
+    value_b:  deviceId,
+    value_c: browser,
+    value_d: os,
+    
   };
 
  
+  
 
   const response = await fetch(
     "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
