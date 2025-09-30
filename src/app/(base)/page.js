@@ -11,6 +11,7 @@ import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
 import PricingSection from "./Components/PricingSection";
 import Testimonials from "./Components/Testimonial";
+import FaqSection from "./Components/FAQ";
 
 export default function HomePage() {
   const { theme } = useTheme();
@@ -63,6 +64,7 @@ export default function HomePage() {
         <AdditionalResources />
         <AiBot />
         <PricingSection />
+        <FaqSection/>
       </div>
     </div>
   );
