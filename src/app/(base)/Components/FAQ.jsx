@@ -29,24 +29,24 @@ const faqs = [
     ),
   },
   {
-    q: "How quickly can we integrate Darwinium into our existing Fintech stack?",
-    a: "Darwinium offers flexible deployment options, including API and SDK integrations, that allow Fintechs to get up and running in days—not months—without disrupting existing workflows.",
+    q: "How quickly can we integrate SafePayinto our existing Fintech stack?",
+    a: "SafePay offers flexible deployment options, including API and SDK integrations, that allow Fintechs to get up and running in days—not months—without disrupting existing workflows.",
   },
   {
-    q: "Does Darwinium slow down transaction processing or impact customer experience?",
+    q: "Does SafePay slow down transaction processing or impact customer experience?",
     a: "No. Darwinium operates in real time with minimal latency. It silently analyzes risk signals in the background, ensuring that genuine users experience seamless and frictionless transactions.",
   },
   {
-    q: "How does Darwinium differentiate between risky and legitimate users?",
+    q: "How does SafePay differentiate between risky and legitimate users?",
     a: "By combining behavioral analytics, device fingerprinting, geolocation intelligence, and machine learning models, Darwinium builds a holistic risk profile for every user session. This enables accurate separation of fraudsters from genuine customers.",
   },
   {
-    q: "Can Darwinium trigger custom actions for flagged transactions?",
+    q: "Can SafePay trigger custom actions for flagged transactions?",
     a: "Yes. Fintechs can configure custom workflows for flagged activities—such as step-up authentication, transaction holds, or alerting fraud teams—ensuring flexibility in how fraud risks are managed.",
   },
   {
-    q: "What insights does Darwinium provide for fraud investigation and reporting?",
-    a: "Darwinium delivers detailed case reports, risk scores, and forensic-level insights into user sessions. These help fraud teams investigate incidents efficiently, create compliance-ready reports, and continuously refine fraud strategies.",
+    q: "What insights does SafePay provide for fraud investigation and reporting?",
+    a: "SafePay delivers detailed case reports, risk scores, and forensic-level insights into user sessions. These help fraud teams investigate incidents efficiently, create compliance-ready reports, and continuously refine fraud strategies.",
   },
 ];
 
