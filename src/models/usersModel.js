@@ -20,8 +20,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    role:{
-      type: String, default:'user'
+    
+    role: {
+      type: String,
+      enum: ['user', 'admin', 'moderator'],
+      default: 'user',
     },
     failedLoginAttempts: { type: Number, default: 0 },
     lockUntil: { type: Date, default: null },
