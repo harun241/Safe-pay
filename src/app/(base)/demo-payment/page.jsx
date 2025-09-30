@@ -8,6 +8,7 @@ export default function DemoPaymentPage() {
   const user = useSelector((state) => state.userInfo);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
+  console.log(user);
 
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
