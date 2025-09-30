@@ -5,8 +5,8 @@ export async function GET(request) {
   await connectDb();
 
   const { searchParams } = new URL(request.url);
-  const window = searchParams.get("window") || "minute"; // "minute", "hour", or "second"
-  const timezone = searchParams.get("tz") || "UTC"; // dynamic timezone
+  const window = searchParams.get("window") || "minute";
+  const timezone = searchParams.get("tz") || "UTC";
 
   const groupFormat =
     window === "hour"
@@ -36,6 +36,7 @@ export async function GET(request) {
           },
         },
         count: { $sum: 1 },
+        total_amount: { $sum: "$amount" },
       },
     },
     {
@@ -43,15 +44,12 @@ export async function GET(request) {
     },
   ]);
 
-  console.log(data);
-
   const formatted = data.map((item) => ({
     user_id: item._id.user_id,
     date: item._id.bucket,
     count: item.count,
+    amount: item.total_amount,
   }));
-
-  console.log(formatted);
 
   return new Response(JSON.stringify(formatted), { status: 200 });
 }
