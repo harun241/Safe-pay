@@ -44,6 +44,39 @@ export async function POST(request) {
 
 
 
+// GET user info by UID
+export async function GET(request) {
+  await connectDb();
+
+  const { searchParams } = new URL(request.url);
+  const uid = searchParams.get("uid");
+
+  if (!uid) {
+    return new Response(JSON.stringify({ error: "UID is required" }), {
+      status: 400,
+    });
+  }
+
+  try {
+    const user = await User.findOne({ uid });
+
+    if (!user) {
+      return new Response(JSON.stringify({ exists: false }), { status: 404 });
+    }
+
+    return new Response(JSON.stringify({ exists: true, user }), {
+      status: 200,
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+
 
 
 

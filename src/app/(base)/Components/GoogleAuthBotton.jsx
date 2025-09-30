@@ -9,25 +9,48 @@ export default function GoogleSignInButton() {
   const router = useRouter();
   
 
-  const handleGoogleLogin = async () => {
-    try {
-      await googleSignIn();
-      Swal.fire({
-        icon: "success",
-        title: "Logged in with Google!",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      router.push("/");
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: error.message,
-        showConfirmButton: false,
-        timer: 2000,
-      });
-    }
-  };
+ const handleGoogleLogin = async () => {
+  try {
+    const response = await googleSignIn(); // should return user object
+    const { uid, email, displayName } = response.user;
+
+    // Check if user exists
+    const checkRes = await fetch(`/api/users/${uid}`);
+    const exists = checkRes.status === 200;
+
+    const method = exists ? "PATCH" : "POST";
+
+    await fetch("/api/users", {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid,
+        email,
+        name: displayName,
+        updatedAt: new Date().toISOString(),
+        loginSuccess: true,
+      }),
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: "Logged in with Google!",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+
+    router.push("/");
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: error.message,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  }
+};
 
   return (
     <button
