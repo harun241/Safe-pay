@@ -11,6 +11,8 @@ export async function POST(request) {
   const amount = Number(payload.amount || 0);
   const userId = payload.value_a;
 
+ 
+
   
 
   // 2. Extract IP address
@@ -68,21 +70,37 @@ export async function POST(request) {
    const totalAmount30d = prevSum30d + amount;
 
 
+   
+
+  //  get device info
+  
+const devices = {
+ 
+  os: payload.value_d,
+  browser: payload.value_c,
+  deviceId: payload.value_b ,
+};
+
+
   // 7. Create transaction document
   const txnDoc = {
     transaction_id: payload.tran_id,
     user_id: userId,
     amount,
+    devices,
     payment_method: payload.card_brand || "sslcommerz",
     card_type: payload.card_type || null,
     merchant_id: payload.store_id || null,
     previous_txn_count_24h: prev24hCount,
     avg_amount_30d: totalAmount30d, // ✅ new field
+   
     country,
     city,
     location,
     timestamp: new Date(),
   };
+
+  
 
   try {
     const created = await Transaction.create(txnDoc);
