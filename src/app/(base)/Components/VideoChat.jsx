@@ -4,10 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 // Initialize Supabase client with environment variables
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+// const supabase = createClient(
+//   process.env.NEXT_PUBLIC_SUPABASE_URL,
+//   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// );
 
 export default function VideoChat({ roomId }) {
   const localVideoRef = useRef(null);
@@ -16,6 +22,8 @@ export default function VideoChat({ roomId }) {
 
   // Unique ID for this client
   const clientId = useRef(`peer-${Math.random().toString(36).slice(2)}`);
+
+  if (!supabase) return <div>Loading...</div>;
 
   useEffect(() => {
     let localStream;
