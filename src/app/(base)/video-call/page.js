@@ -2,8 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import VideoChat from "../Components/VideoChat";
+import { Suspense } from "react";
 
-export default function VideoCallPage() {
+export default function VideoCall() {
     const searchParams = useSearchParams();
     const roomId = searchParams.get("room") || `room-${Math.floor(Math.random() * 10000)}`;
 
@@ -13,4 +14,13 @@ export default function VideoCallPage() {
             <VideoChat roomId={roomId} />
         </div>
     );
+}
+
+
+export function VideoCallPage() {
+    return (
+        <Suspense fallback={<div>Loading Video......</div>}>
+            <VideoCall></VideoCall>
+        </Suspense>
+    )
 }
