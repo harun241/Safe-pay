@@ -12,14 +12,26 @@ const transactionSchema = new mongoose.Schema({
   previous_txn_count_24h: { type: Number, default: 0 },
   avg_amount_30d: { type: Number, default: 0 },
 
+  devices:  {
+    _id: false,
+    deviceId: String,
+    browser: String,
+    os: String,
+    
+  },
+
+
+
   country: { type: String },
   city: { type: String },
   location: { type: String },
-  is_fraud: { type: Boolean, default: null },
+  is_fraud: { type: Number, default: null },
+
+
 
   status: {
     type: String,
-    default: "pending",
+    default: "success",
     required: true,
   },
   timestamp: {

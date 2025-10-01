@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
-import GoogleSignInButton from "../Components/GoogleAuthBotton";
+import GoogleSignInButton from "../(base)/Components/GoogleAuthBotton";
 
 export default function LoginPage() {
   const { login, logout } = useAuth();
@@ -84,7 +84,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border text-black border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
@@ -98,7 +98,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border text-black border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
@@ -111,7 +111,7 @@ export default function LoginPage() {
           </button>
         </form>
         <br />
-        <GoogleSignInButton/>
+        <GoogleSignInButton />
         <p className="mt-4 text-gray-600 text-center">
           <a href="/forget-password" className="text-green-500 hover:underline">
             Forget password
