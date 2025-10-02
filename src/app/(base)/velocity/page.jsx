@@ -35,6 +35,8 @@ export default function TransactionVelocity() {
       });
   }, []);
 
+  console.log(data);
+
   return (
     <div className="p-6 bg-white rounded-xl shadow-md">
       <h2 className="text-xl font-bold mb-4 mt-20">
