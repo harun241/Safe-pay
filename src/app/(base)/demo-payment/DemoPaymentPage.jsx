@@ -16,6 +16,7 @@ export default function DemoPaymentPage() {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
+
   // Fetch all transactions on mount
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -29,18 +30,23 @@ export default function DemoPaymentPage() {
       return;
     }
     setLoading(true);
+
+    const presentData = {
+      user_id: user?.uid || "guest_demo",
+      amount: Number(amount),
+      ...deviceInfo
+    }
+
     try {
       const res = await fetch("/api/payments/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user?.uid || "guest_demo",
-          amount: Number(amount),
-          ...deviceInfo
-        }),
+        body: JSON.stringify(presentData),
       });
 
+      // console.log(res)
       const data = await res.json();
+      // console.log('this is the data', data.data)
       if (data.url) window.location.href = data.url; // redirect to payment
       else alert("Payment initiation failed");
     } catch (err) {
@@ -51,17 +57,18 @@ export default function DemoPaymentPage() {
     }
   };
 
-  // Only get the latest transaction after successful payment
+
+  // ✅ Only get the latest transaction after successful payment
   const latestTransaction = useMemo(() => {
     if (paymentStatus === "success") {
-      return transactions?.items?.[transactions.items.length - 1] || null;
+      return transactions?.items; // latest transaction
     }
     return null;
   }, [paymentStatus, transactions]);
 
-  // Send the latest transaction to backend CSV
+  // ✅ Send only the latest transaction to backend CSV
   useEffect(() => {
-    if (latestTransaction) {
+    if (latestTransaction || !transactions?.items?.transaction_id === transactions?.items?.transaction_id) {
       console.log("Sending latest transaction:", latestTransaction);
       fetch("/api/save-transactions", {
         method: "POST",
@@ -73,6 +80,7 @@ export default function DemoPaymentPage() {
         .catch((err) => console.error("Save error:", err));
     }
   }, [latestTransaction]);
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-16">
