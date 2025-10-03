@@ -100,11 +100,13 @@ const devices = {
     timestamp: new Date(),
   };
 
+  // console.log(txnDoc)
+
   
 
   try {
     const created = await Transaction.create(txnDoc);
-    console.log("Saved txn:", created.transaction_id);
+    // console.log("Saved txn:", created.transaction_id);
   } catch (err) {
     console.error("Failed to save txn:", err);
   }
