@@ -90,20 +90,22 @@ export default function DemoPaymentPage() {
 
       console.log("Sending latest transaction:", flattenedTransaction);
 
-      fetch("/api/save-transactions", {
+      fetch("http://localhost:8000/save-transaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([flattenedTransaction]),
+        body: JSON.stringify([flattenedTransaction]), // Send full object
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Backend response:", data);
+          console.log("✅ Backend response:", data);
           localStorage.setItem(
             "lastSavedTransactionId",
-            latestTransaction.transaction_id
+            flattenedTransaction.transaction_id
           );
         })
-        .catch((err) => console.error("Save error:", err));
+        .catch((err) => console.error("❌ Save error:", err));
+
+
     }
   }, [latestTransaction]);
 
