@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
@@ -44,7 +44,7 @@ export default function DemoPaymentPage() {
         body: JSON.stringify(presentData),
       });
 
-      // console.log(res)
+      console.log(res)
       const data = await res.json();
       // console.log('this is the data', data.data)
       if (data.url) window.location.href = data.url; // redirect to payment
@@ -66,20 +66,36 @@ export default function DemoPaymentPage() {
     return null;
   }, [paymentStatus, transactions]);
 
+
   // ✅ Send only the latest transaction to backend CSV
+  // ✅ Send only the latest transaction to backend CSV (without duplicates)
   useEffect(() => {
-    if (latestTransaction || !transactions?.items?.transaction_id === transactions?.items?.transaction_id) {
+    if (latestTransaction && latestTransaction.transaction_id) {
+      const lastSavedId = localStorage.getItem("lastSavedTransactionId");
+
+      // If the same transaction already saved, skip sending again
+      if (lastSavedId === latestTransaction.transaction_id) {
+        console.log("Duplicate transaction detected — skipping save.");
+        return;
+      }
+
       console.log("Sending latest transaction:", latestTransaction);
+
       fetch("/api/save-transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([latestTransaction]), // send as array
+        body: JSON.stringify([latestTransaction]),
       })
         .then((res) => res.json())
-        .then((data) => console.log("Backend response:", data))
+        .then((data) => {
+          console.log("Backend response:", data);
+          // ✅ Remember this transaction to prevent duplicate saves
+          localStorage.setItem("lastSavedTransactionId", latestTransaction.transaction_id);
+        })
         .catch((err) => console.error("Save error:", err));
     }
   }, [latestTransaction]);
+
 
 
   return (
