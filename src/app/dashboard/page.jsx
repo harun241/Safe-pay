@@ -14,6 +14,9 @@ export default function DashboardPage() {
   const { theme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [userRole, setUserRole] = useState('user');
+
+  
 
   useEffect(() => {
     setMounted(true); 
@@ -33,8 +36,22 @@ export default function DashboardPage() {
     );
   }
 
+  const handleGetUserRole = async()=>{
+    const checkRes = await fetch(`http://localhost:3000/api/users?uid=${user?.uid}`);
+    const data = await checkRes.json()
+
+    setUserRole(data.user?.role);
+    
+  }
+
+  useEffect(()=>{
+    handleGetUserRole()
+  },[]);
+
   // user's role
-  const userRole = user?.role || "user"; 
+  // const userRole = user?.role || "user"; 
+
+ 
 
   
   const renderDashboard = () => {
