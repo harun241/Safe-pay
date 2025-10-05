@@ -36,6 +36,7 @@ export default function TransactionVelocity() {
   }, []);
 
   console.log(data);
+  
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-md">
