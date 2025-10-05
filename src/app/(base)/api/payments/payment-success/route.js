@@ -11,10 +11,6 @@ export async function POST(request) {
   const amount = Number(payload.amount || 0);
   const userId = payload.value_a;
 
- 
-
-  
-
   // 2. Extract IP address
   const forwarded = request.headers.get("x-forwarded-for");
   let ip = forwarded?.split(",")[0]?.trim() || request.ip || "unknown";
@@ -101,8 +97,6 @@ const devices = {
   };
 
   // console.log(txnDoc)
-
-  
 
   try {
     const created = await Transaction.create(txnDoc);

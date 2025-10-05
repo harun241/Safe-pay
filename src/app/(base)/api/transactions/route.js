@@ -9,6 +9,7 @@ export async function GET() {
     const transactions = await Transaction.findOne({}).sort({ timestamp: -1 });
 
     return new Response(JSON.stringify(transactions), {
+      transactions,
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
