@@ -68,33 +68,45 @@ export default function DemoPaymentPage() {
 
 
   // ✅ Send only the latest transaction to backend CSV
-  // ✅ Send only the latest transaction to backend CSV (without duplicates)
   useEffect(() => {
     if (latestTransaction && latestTransaction.transaction_id) {
       const lastSavedId = localStorage.getItem("lastSavedTransactionId");
 
-      // If the same transaction already saved, skip sending again
       if (lastSavedId === latestTransaction.transaction_id) {
         console.log("Duplicate transaction detected — skipping save.");
         return;
       }
 
-      console.log("Sending latest transaction:", latestTransaction);
+      // ✅ Flatten the nested devices object
+      const flattenedTransaction = {
+        ...latestTransaction,
+        device_os: latestTransaction.devices?.os || "Unknown",
+        device_browser: latestTransaction.devices?.browser || "Unknown",
+        device_id: latestTransaction.devices?.deviceId || "Unknown",
+      };
+
+      // ✅ Remove the nested devices object to avoid [object Object]
+      delete flattenedTransaction.devices;
+
+      console.log("Sending latest transaction:", flattenedTransaction);
 
       fetch("/api/save-transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([latestTransaction]),
+        body: JSON.stringify([flattenedTransaction]),
       })
         .then((res) => res.json())
         .then((data) => {
           console.log("Backend response:", data);
-          // ✅ Remember this transaction to prevent duplicate saves
-          localStorage.setItem("lastSavedTransactionId", latestTransaction.transaction_id);
+          localStorage.setItem(
+            "lastSavedTransactionId",
+            latestTransaction.transaction_id
+          );
         })
         .catch((err) => console.error("Save error:", err));
     }
   }, [latestTransaction]);
+
 
 
 
