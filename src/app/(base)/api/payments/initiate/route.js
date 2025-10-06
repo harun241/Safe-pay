@@ -37,9 +37,7 @@ export async function POST(request) {
     value_c: browser,
     value_d: os,
     
-  };
-
- 
+  }; 
   
 
   const response = await fetch(
@@ -53,7 +51,9 @@ export async function POST(request) {
     }
   );
 
+
   const apiResponse = await response.json();
+
 
 
 
