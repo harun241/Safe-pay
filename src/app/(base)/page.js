@@ -9,6 +9,7 @@ import ImpactSection from "./Components/ImpactSection";
 import PricingSection from "./Components/PricingSection";
 import Testimonials from "./Components/Testimonial";
 import FaqSection from "./Components/FAQ";
+import AdditionalResources from "./Components/AditionalResources";
 
 
 export default function HomePage() {
@@ -59,7 +60,7 @@ export default function HomePage() {
       <div className="pb-20">
         <FloatingChat />
         <ImpactSection />
-    
+        <AdditionalResources/>
         <AiBot />
         <PricingSection />
         <FaqSection/>
