@@ -18,31 +18,11 @@ export default function DashboardPage() {
 
   
 
-  useEffect(() => {
-    setMounted(true); 
-  }, []);
+ useEffect(() => {
+  setMounted(true);
+}, []);
 
-   useEffect(() => {
-  if (user?.uid) {
-    handleGetUserRole();
-  }
-}, [user?.uid]);
-
-  if (loading || !mounted) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div
-          className={`w-12 h-12 rounded-full animate-spin ${
-            mounted && theme === "dark"
-              ? "border-t-4 border-cyan-400"
-              : "border-t-4 border-green-500"
-          }`}
-        />
-      </div>
-    );
-  }
-
- const handleGetUserRole = async () => {
+const handleGetUserRole = async () => {
   try {
     const res = await fetch(`http://localhost:3000/api/users?uid=${user?.uid}`);
     const data = await res.json();
@@ -53,6 +33,28 @@ export default function DashboardPage() {
   }
 };
 
+
+useEffect(() => {
+  if (user?.uid) {
+    handleGetUserRole();
+  }
+}, [user?.uid]);
+
+if (loading || !mounted) {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div
+        className={`w-12 h-12 rounded-full animate-spin ${
+          theme === "dark"
+            ? "border-t-4 border-cyan-400"
+            : "border-t-4 border-green-500"
+        }`}
+      />
+    </div>
+  );
+}
+
+ 
 
 
 
