@@ -44,12 +44,15 @@ export async function POST(request) {
 
 
 
+
 // GET user info by UID
 export async function GET(request) {
   await connectDb();
 
   const { searchParams } = new URL(request.url);
   const uid = searchParams.get("uid");
+
+
 
   if (!uid) {
     return new Response(JSON.stringify({ error: "UID is required" }), {
@@ -73,7 +76,6 @@ export async function GET(request) {
     });
   }
 }
-
 
 
 

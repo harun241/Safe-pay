@@ -6,9 +6,10 @@ export async function GET() {
     await connectDb();
 
     // Fetch all transactions sorted by newest first
-    const transactions = await Transaction.find({}).sort({ timestamp: -1 });
+    const transactions = await Transaction.findOne({}).sort({ timestamp: -1 });
 
     return new Response(JSON.stringify(transactions), {
+      transactions,
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

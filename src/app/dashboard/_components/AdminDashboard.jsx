@@ -11,10 +11,61 @@ import {
   ArrowUp,
   X,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const [stats, setStats] = useState(null);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+
+
+
+
+
+
+useEffect(() => {
+  const fetchStats = async () => {
+    const res = await fetch("/api/admin/user-stats");
+    const data = await res.json();
+    setStats(data);
+    setFetchLoading(false)
+  };
+
+  fetchStats();
+ 
+}, []);
+
+
+
+useEffect(() => {
+  const fetchUsers = async () => {
+    setFetchLoading(true)
+    const res = await fetch("/api/admin/users");
+    const data = await res.json();
+    setUsers(data);
+    setFetchLoading(false)
+  };
+  fetchUsers();
+}, []);
+
+
+
+if ( fetchLoading) {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div
+        className={`w-12 h-12 rounded-full animate-spin ${
+          theme === "dark"
+            ? "border-t-4 border-cyan-400"
+            : "border-t-4 border-green-500"
+        }`}
+      />
+    </div>
+  );
+}
+
 
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
@@ -34,10 +85,10 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {/* User Stats Cards */}
-        {renderStatCard("Total Users", "12,847", "+5.2%", <Users />)}
+        {renderStatCard("Total Users", stats?.totalUsers, stats?.growth, <Users />)}
         {renderStatCard("Active Users", "11,203", "+2.8%", <Users />)}
         {renderStatCard("Blocked Users", "1,644", "+12.3%", <Users />)}
-        {renderStatCard("Admin Users", "23", "No change", <Shield />)}
+        {renderStatCard("Admin Users", stats?.adminUsers, "No change", <Shield />)}
       </div>
 
       <div
@@ -70,22 +121,11 @@ export default function AdminDashboard() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {/* Dummy data for now*/}
-              {renderTableRow(
-                "Sarah Johnson",
-                "sarah.johnson@email.com",
-                "User",
-                "Active"
-              )}
-              {renderTableRow(
-                "Michael Chen",
-                "michael.chen@email.com",
-                "Admin",
-                "Active"
-              )}
-              {/* More rows if needed */}
-            </tbody>
+            <tbody>
+  {users.map((u) =>
+    renderTableRow(u.name, u.email, u.role,u.uid, u.status)
+  )}
+</tbody>
           </table>
         </div>
       </div>
@@ -102,30 +142,31 @@ const renderStatCard = (title, value, change, icon) => (
       <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-700">{icon}</div>
     </div>
     <div className="flex items-end">
-      <div className="text-3xl font-bold">{value}</div>
+      <div className="text-3xl font-bold text-amber-50">{value}</div>
       <div
         className={`ml-2 text-sm font-medium ${
-          change.startsWith("+")
+          change?.startsWith("+")
             ? "text-green-500"
-            : change.startsWith("-")
+            : change?.startsWith("-")
             ? "text-red-500"
             : "text-gray-500"
         }`}
       >
-        {change}
+        {change ?? "No change"}
       </div>
     </div>
   </div>
 );
 
-const renderTableRow = (name, email, role, status) => (
-  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+const renderTableRow = (name, email, role,uid, status) => (
+  <tr key={uid} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center space-x-3">
         <div className="w-8 h-8 rounded-full bg-gray-300"></div>
         <div>
           <div className="text-sm font-medium">{name}</div>
-          <div className="text-xs text-gray-500">ID: USR-001847</div>
+          <div className="text-xs text-gray-500">uid: {uid}</div>
         </div>
       </div>
     </td>
@@ -157,7 +198,8 @@ const renderTableRow = (name, email, role, status) => (
       </span>
     </td>
     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-      {/* Actions */}
-    </td>
+  <button className="text-blue-600 hover:underline">Edit</button>
+  <button className="text-red-600 hover:underline ml-4">Delete</button>
+</td>
   </tr>
 );
