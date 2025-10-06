@@ -102,7 +102,7 @@ const renderStatCard = (title, value, change, icon) => (
       <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-700">{icon}</div>
     </div>
     <div className="flex items-end">
-      <div className="text-3xl font-bold">{value}</div>
+      <div className="text-3xl font-bold text-amber-50">{value}</div>
       <div
         className={`ml-2 text-sm font-medium ${
           change.startsWith("+")
