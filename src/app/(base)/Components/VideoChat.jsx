@@ -31,7 +31,7 @@ export default function VideoChat({ roomId }) {
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream;
       }
-
+ 
       // Subscribe to signaling messages
       channel.on("broadcast", { event: "signal" }, async ({ payload }) => {
         const { from, description, candidate } = payload;
