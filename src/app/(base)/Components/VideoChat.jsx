@@ -25,7 +25,7 @@ export default function VideoChat({ roomId }) {
     );
   }
 
- useEffect(() => {
+  useEffect(() => {
   if (!roomId) {
     setErrorMessage("roomId is required.");
     return;
