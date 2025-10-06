@@ -2,8 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-
-import AdditionalResources from "./Components/AditionalResources";
 import AiBot from "./Components/Ai";
 import ChatBot from "./Components/ChatBot";
 import FloatingChat from "./Components/FloatingChat";
@@ -12,6 +10,7 @@ import ImpactSection from "./Components/ImpactSection";
 import PricingSection from "./Components/PricingSection";
 import Testimonials from "./Components/Testimonial";
 import FaqSection from "./Components/FAQ";
+import AdditionalResources from "../Components/AditionalResources";
 
 export default function HomePage() {
   const { theme } = useTheme();
@@ -61,7 +60,7 @@ export default function HomePage() {
       <div className="pb-20">
         <FloatingChat />
         <ImpactSection />
-        <AdditionalResources />
+       <AdditionalResources></AdditionalResources>
         <AiBot />
         <PricingSection />
         <FaqSection/>
