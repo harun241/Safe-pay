@@ -22,7 +22,13 @@ export default function DashboardPage() {
     setMounted(true); 
   }, []);
 
-  if (loading) {
+   useEffect(() => {
+  if (user?.uid) {
+    handleGetUserRole();
+  }
+}, [user?.uid]);
+
+  if (loading || !mounted) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div
@@ -36,17 +42,20 @@ export default function DashboardPage() {
     );
   }
 
-  const handleGetUserRole = async()=>{
-    const checkRes = await fetch(`http://localhost:3000/api/users?uid=${user?.uid}`);
-    const data = await checkRes.json()
-
-    setUserRole(data.user?.role);
-    
+ const handleGetUserRole = async () => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/users?uid=${user?.uid}`);
+    const data = await res.json();
+    setUserRole(data.user?.role || "user");
+  } catch (err) {
+    console.error("Failed to fetch user role:", err);
+    setUserRole("user");
   }
+};
 
-  useEffect(()=>{
-    handleGetUserRole()
-  },[]);
+
+
+
 
   // user's role
   // const userRole = user?.role || "user"; 
