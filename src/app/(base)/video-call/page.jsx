@@ -5,7 +5,11 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import to prevent SSR issues
-const VideoChat = dynamic(() => import("../components/VideoChat"), { ssr: false });
+const VideoChat = dynamic(
+  () => import("@/app/(base)/Components/VideoChat"),
+  { ssr: false }
+);
+
 
 export default function VideoCallPage() {
   return (
