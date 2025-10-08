@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
 
-const VideoChat = dynamic(() => import("./VideoChat"), { ssr: false });
+const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), { ssr: false });
 
 const resources = [
   {
