@@ -9,7 +9,7 @@ import {
   Settings,
   AlertTriangle,
   TrendingUp,
-  LineChart,
+  
   ShieldCheck,
   Lock,
   UserCheck,
@@ -19,9 +19,59 @@ import {
   Upload,
 } from "lucide-react";
 
+
+import { LineChart,BarChart,Bar, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { useEffect, useState } from "react";
+
+
 export default function UserDashboard() {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const [transactions ,setTransactions ]=useState([]);
+  const [lastTransactionInfo ,setLastTransactionInfo ]=useState(null);
+
+  
+const localTime = new Date(lastTransactionInfo?.lastTransactionTime).toLocaleString("en-US", {
+  timeZone: "Asia/Kuwait", // or your preferred timezone
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: true
+});
+
+
+
+
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const res = await fetch(`/api/transactions/user?uid=${user?.uid}`);
+      const data = await res.json();
+      setTransactions(data?.recentTransactions)
+      setLastTransactionInfo(data?.lastTransactionInfo)
+      
+    };
+  
+    fetchStats();
+   
+  }, [user?.uid]);
+
+  
+
+  const dailyTotals = {};
+
+  transactions?.forEach(txn => {
+    const date = new Date(txn.timestamp).toLocaleDateString();
+    dailyTotals[date] = (dailyTotals[date] || 0) + txn.amount;
+  });
+
+  const data = Object.entries(dailyTotals)
+    .map(([date, amount]) => ({ date, amount }))
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
 
   return (
     <div className="flex-1 overflow-x-hidden overflow-y-auto">
@@ -100,8 +150,8 @@ export default function UserDashboard() {
               </div>
               <h2 className="text-lg font-semibold">Last Transaction</h2>
             </div>
-            <p className="text-3xl font-bold">$89.45</p>
-            <p className="text-sm text-gray-500 mt-1">Amazon - 2 hours ago</p>
+            <p className="text-3xl font-bold">tk {lastTransactionInfo?.lastTransactionAmount}</p>
+            <p className="text-sm text-gray-500 mt-1">Amazon - {localTime}</p>
           </div>
 
           {/* Active Alerts */}
@@ -130,20 +180,21 @@ export default function UserDashboard() {
                 theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
               }`}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Transaction Activity</h2>
-                <select
-                  className="text-sm border rounded-md px-2 py-1 bg-transparent dark:border-gray-600"
-                >
-                  <option>Last 30 days</option>
-                  <option>Last 7 days</option>
-                  <option>Last 90 days</option>
-                </select>
+              <div className="flex flex-col items-center justify-between mb-4">
+               <h2 className="text-xl mb-4">Transaction Trend (Last 30 Days)</h2>
+     <ResponsiveContainer width="100%" height={300}>
+  <BarChart data={data}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="date" />
+    <YAxis />
+    <Tooltip />
+    <Bar dataKey="amount" fill="#4ade80" barSize={40} />
+  </BarChart>
+</ResponsiveContainer>
+
+
               </div>
-              <div className="h-64 flex items-center justify-center text-gray-400">
-                <LineChart size={48} />
-                <span className="ml-4">Interactive chart showing spending patterns</span>
-              </div>
+              
             </div>
           </div>
 
