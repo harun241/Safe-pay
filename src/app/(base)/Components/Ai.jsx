@@ -10,10 +10,14 @@ export default function AiBot() {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom smoothly
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 50);
+    return () => clearTimeout(timer);
   }, [messages]);
 
   const sendMessage = async () => {
@@ -38,6 +42,7 @@ export default function AiBot() {
     }
 
     setLoading(false);
+    inputRef.current?.focus();
   };
 
   const handleKeyDown = (e) => {
@@ -50,7 +55,7 @@ export default function AiBot() {
       <div className="w-full max-w-3xl h-[80vh] flex flex-col bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden">
         {/* Header */}
         <div className="p-4 border-b bg-white flex items-center justify-center font-semibold text-gray-800 text-lg">
-          <Bot className="text-green-500 mr-2" /> Ai-Assitant
+          <Bot className="text-green-500 mr-2" /> Ai-Assistant
         </div>
 
         {/* Chat messages */}
@@ -108,6 +113,7 @@ export default function AiBot() {
         <div className="border-t p-4 bg-white flex items-center gap-3">
           <input
             type="text"
+            ref={inputRef}
             placeholder="Message ChatGPT..."
             className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
             value={userInput}
