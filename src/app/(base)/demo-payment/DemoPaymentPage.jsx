@@ -67,50 +67,84 @@ export default function DemoPaymentPage() {
   }, [paymentStatus, transactions]);
 
 
+  // the features the model expects
+  const MODEL_FEATURES = [
+    "avg_amount_30d",
+    "merchant_id",
+    "payment_method",
+    "card_type",
+    "city",
+    "device_browser",
+    "country",
+    "previous_txn_count_24h",
+    "status",
+    "location",
+    "device_os",
+    "user_id",
+    "amount",
+    "device_id",
+  ];
+
+
+  // Prepare the transaction object
+  function prepareTransaction(transaction) {
+    const flattenedTransaction = {
+      ...transaction,
+      device_os: transaction.devices?.os || "Unknown",
+      device_browser: transaction.devices?.browser || "Unknown",
+      device_id: transaction.devices?.deviceId || "Unknown",
+    };
+    delete flattenedTransaction.devices;
+
+    const finalTransaction = {};
+
+    MODEL_FEATURES.forEach((col) => {
+      finalTransaction[col] =
+        flattenedTransaction[col] !== undefined
+          ? flattenedTransaction[col]
+          : typeof flattenedTransaction[col] === "number"
+            ? 0
+            : "";
+    });
+
+    return finalTransaction;
+  }
+
   // ✅ Send only the latest transaction to backend CSV
   useEffect(() => {
-    if (latestTransaction && latestTransaction.transaction_id) {
-      const lastSavedId = localStorage.getItem("lastSavedTransactionId");
+    async function handleTransaction() {
+      if (latestTransaction && latestTransaction.transaction_id) {
+        const lastSavedId = localStorage.getItem("lastSavedTransactionId");
+        if (lastSavedId === latestTransaction.transaction_id) return;
 
-      if (lastSavedId === latestTransaction.transaction_id) {
-        console.log("Duplicate transaction detected — skipping save.");
-        return;
-      }
+        const preparedTransaction = prepareTransaction(latestTransaction);
 
-      // ✅ Flatten the nested devices object
-      const flattenedTransaction = {
-        ...latestTransaction,
-        device_os: latestTransaction.devices?.os || "Unknown",
-        device_browser: latestTransaction.devices?.browser || "Unknown",
-        device_id: latestTransaction.devices?.deviceId || "Unknown",
-      };
+        try {
+          const response = await fetch("http://localhost:8000/save-transaction", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(preparedTransaction),
+          });
 
-      // ✅ Remove the nested devices object to avoid [object Object]
-      delete flattenedTransaction.devices;
+          console.log(response)
 
-      console.log("Sending latest transaction:", flattenedTransaction);
+          const result = await response.json();
+          console.log(result)
+          console.log("Fraud Probability:", result.fraud_probability); // e.g., 0.87 = 87%
+          console.log("Message:", result.fraud_message);
 
-      fetch("http://localhost:8000/save-transaction", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([flattenedTransaction]), // Send full object
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("✅ Backend response:", data);
           localStorage.setItem(
             "lastSavedTransactionId",
-            flattenedTransaction.transaction_id
+            preparedTransaction.transaction_id
           );
-        })
-        .catch((err) => console.error("❌ Save error:", err));
-
-
+        } catch (err) {
+          console.error("❌ Error in fraud detection:", err);
+        }
+      }
     }
+
+    handleTransaction();
   }, [latestTransaction]);
-
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-16">
