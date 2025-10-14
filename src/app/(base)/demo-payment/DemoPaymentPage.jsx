@@ -13,7 +13,6 @@ export default function DemoPaymentPage() {
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
-  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
 
@@ -22,7 +21,14 @@ export default function DemoPaymentPage() {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  const handlePayment = async () => {
+
+  // payment event
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const amount = form.amount.value; // use the "name" attribute of your input
+    console.log("Amount entered:", amount);
+
     const deviceInfo = await getDeviceInfo();
 
     if (!amount || isNaN(amount)) {
@@ -60,11 +66,13 @@ export default function DemoPaymentPage() {
 
   // ✅ Only get the latest transaction after successful payment
   const latestTransaction = useMemo(() => {
-    if (paymentStatus === "success") {
-      return transactions?.items; // latest transaction
+    if (paymentStatus === "success" && transactions?.items?.length) {
+      return transactions.items[transactions.items.length - 1];
     }
     return null;
   }, [paymentStatus, transactions]);
+
+
 
 
   // ✅ Send only the latest transaction to backend CSV
@@ -138,21 +146,22 @@ export default function DemoPaymentPage() {
             🔒 Test Payment
           </h2>
 
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
-          />
+          <form onSubmit={handlePayment}>
+            <input
+              type="number"
+              name="amount"
+              placeholder="Enter amount"
+              className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
+            />
 
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
-          >
-            {loading ? "Redirecting..." : "Pay Now"}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {loading ? "Redirecting..." : "Pay Now"}
+            </button>
+          </form>
 
           <p className="text-sm text-gray-500 text-center mt-4">
             Test how our secure payment system works. No real charges applied in
