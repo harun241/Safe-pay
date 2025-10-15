@@ -46,7 +46,7 @@ export default function DemoPaymentPage() {
 
       console.log(res)
       const data = await res.json();
-      // console.log('this is the data', data.data)
+      console.log('this is the data', data.data)
       if (data.url) window.location.href = data.url; // redirect to payment
       else alert("Payment initiation failed");
     } catch (err) {
@@ -120,7 +120,7 @@ export default function DemoPaymentPage() {
         const preparedTransaction = prepareTransaction(latestTransaction);
 
         try {
-          const response = await fetch("http://localhost:8000/save-transaction", {
+          const response = await fetch("http://localhost:8000/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(preparedTransaction),
