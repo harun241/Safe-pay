@@ -25,7 +25,7 @@ const transactionSchema = new mongoose.Schema({
   country: { type: String },
   city: { type: String },
   location: { type: String },
-  is_fraud: { type: Number, default: null },
+  is_fraud: { type: Number, default: 0 },
 
 
 

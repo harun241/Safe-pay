@@ -9,33 +9,38 @@ import { getDeviceInfo } from "@/lib/getDeviceInfo";
 export default function DemoPaymentPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo);
-  const transactions = useSelector((state) => state.transactions);
+  const transactions = useSelector((state) => state?.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
-  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
-
-  // Fetch all transactions on mount
+  // ✅ Fetch transactions on mount
   useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  const handlePayment = async () => {
+
+  // payment event
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const amount = form.amount.value; // use the "name" attribute of your input
+    console.log("Amount entered:", amount);
+
     const deviceInfo = await getDeviceInfo();
 
     if (!amount || isNaN(amount)) {
       alert("Enter a valid amount");
       return;
     }
-    setLoading(true);
 
+    setLoading(true);
     const presentData = {
       user_id: user?.uid || "guest_demo",
       amount: Number(amount),
-      ...deviceInfo
-    }
+      ...deviceInfo,
+    };
 
     try {
       const res = await fetch("/api/payments/initiate", {
@@ -44,10 +49,8 @@ export default function DemoPaymentPage() {
         body: JSON.stringify(presentData),
       });
 
-      console.log(res)
       const data = await res.json();
-      // console.log('this is the data', data.data)
-      if (data.url) window.location.href = data.url; // redirect to payment
+      if (data.url) window.location.href = data.url;
       else alert("Payment initiation failed");
     } catch (err) {
       console.error("Payment error:", err);
@@ -121,8 +124,7 @@ export default function DemoPaymentPage() {
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto">
           See how <span className="font-semibold">SafePay</span> can help you
-          reduce fraud, stay compliant, and protect your bottom line with
-          confidence.
+          reduce fraud, stay compliant, and protect your bottom line.
         </p>
         {paymentStatus === "success" && (
           <div className="bg-green-100 text-green-800 p-4 rounded mt-6 max-w-md mx-auto">
@@ -138,25 +140,26 @@ export default function DemoPaymentPage() {
             🔒 Test Payment
           </h2>
 
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
-          />
+          <form onSubmit={handlePayment}>
+            <input
+              type="number"
+              name="amount"
+              placeholder="Enter amount"
+              className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
+            />
 
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
-          >
-            {loading ? "Redirecting..." : "Pay Now"}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {loading ? "Redirecting..." : "Pay Now"}
+            </button>
+          </form>
 
           <p className="text-sm text-gray-500 text-center mt-4">
-            Test how our secure payment system works. No real charges applied in
-            demo mode.
+            Test how our secure payment system works. No real charges in demo
+            mode.
           </p>
         </div>
       </section>
