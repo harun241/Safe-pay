@@ -13,7 +13,6 @@ export default function DemoPaymentPage() {
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
-  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
   // ✅ Fetch transactions on mount
@@ -21,7 +20,14 @@ export default function DemoPaymentPage() {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  const handlePayment = async () => {
+
+  // payment event
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const amount = form.amount.value; // use the "name" attribute of your input
+    console.log("Amount entered:", amount);
+
     const deviceInfo = await getDeviceInfo();
 
     if (!amount || isNaN(amount)) {
@@ -54,29 +60,57 @@ export default function DemoPaymentPage() {
     }
   };
 
-  if (paymentStatus === "success") {
-    // console.log(transactions?.items)
-    if (transactions?.status === "loading")
-      return <p className="h-screen flex items-center justify-center">Predictiong</p>
 
-    // const data = transactions?.items
-    // console.log(data)
-
-    // const predict = async () => {
-    //   const response = await fetch("http://localhost:8000/predict", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(data),
-    //   });
-    //   console.log(response)
+  // ✅ Only get the latest transaction after successful payment
+  const latestTransaction = useMemo(() => {
+    if (paymentStatus === "success") {
+      return transactions?.items; // latest transaction
+    }
+    return null;
+  }, [paymentStatus, transactions]);
 
 
-    // }
+  // ✅ Send only the latest transaction to backend CSV
+  useEffect(() => {
+    if (latestTransaction && latestTransaction.transaction_id) {
+      const lastSavedId = localStorage.getItem("lastSavedTransactionId");
 
-    // predict()
+      if (lastSavedId === latestTransaction.transaction_id) {
+        console.log("Duplicate transaction detected — skipping save.");
+        return;
+      }
 
-  }
+      // ✅ Flatten the nested devices object
+      const flattenedTransaction = {
+        ...latestTransaction,
+        device_os: latestTransaction.devices?.os || "Unknown",
+        device_browser: latestTransaction.devices?.browser || "Unknown",
+        device_id: latestTransaction.devices?.deviceId || "Unknown",
+      };
 
+      // ✅ Remove the nested devices object to avoid [object Object]
+      delete flattenedTransaction.devices;
+
+      console.log("Sending latest transaction:", flattenedTransaction);
+
+      fetch("http://localhost:8000/save-transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([flattenedTransaction]), // Send full object
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("✅ Backend response:", data);
+          localStorage.setItem(
+            "lastSavedTransactionId",
+            flattenedTransaction.transaction_id
+          );
+        })
+        .catch((err) => console.error("❌ Save error:", err));
+
+
+    }
+  }, [latestTransaction]);
 
 
 
@@ -106,21 +140,22 @@ export default function DemoPaymentPage() {
             🔒 Test Payment
           </h2>
 
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
-          />
+          <form onSubmit={handlePayment}>
+            <input
+              type="number"
+              name="amount"
+              placeholder="Enter amount"
+              className="border border-gray-300 rounded-md w-full px-4 py-2 mb-4"
+            />
 
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
-          >
-            {loading ? "Redirecting..." : "Pay Now"}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {loading ? "Redirecting..." : "Pay Now"}
+            </button>
+          </form>
 
           <p className="text-sm text-gray-500 text-center mt-4">
             Test how our secure payment system works. No real charges in demo
