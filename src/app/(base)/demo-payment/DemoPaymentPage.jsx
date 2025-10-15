@@ -59,21 +59,21 @@ export default function DemoPaymentPage() {
     if (transactions?.status === "loading")
       return <p className="h-screen flex items-center justify-center">Predictiong</p>
 
-    const data = transactions?.items
-    console.log(data)
+    // const data = transactions?.items
+    // console.log(data)
 
-    const predict = async () => {
-      const response = await fetch("http://localhost:8000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      console.log(response)
+    // const predict = async () => {
+    //   const response = await fetch("http://localhost:8000/predict", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(data),
+    //   });
+    //   console.log(response)
 
 
-    }
+    // }
 
-    predict()
+    // predict()
 
   }
 
