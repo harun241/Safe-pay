@@ -9,15 +9,14 @@ import { getDeviceInfo } from "@/lib/getDeviceInfo";
 export default function DemoPaymentPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo);
-  const transactions = useSelector((state) => state.transactions);
+  const transactions = useSelector((state) => state?.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
-
-  // Fetch all transactions on mount
+  // ✅ Fetch transactions on mount
   useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
@@ -29,13 +28,13 @@ export default function DemoPaymentPage() {
       alert("Enter a valid amount");
       return;
     }
-    setLoading(true);
 
+    setLoading(true);
     const presentData = {
       user_id: user?.uid || "guest_demo",
       amount: Number(amount),
-      ...deviceInfo
-    }
+      ...deviceInfo,
+    };
 
     try {
       const res = await fetch("/api/payments/initiate", {
@@ -44,10 +43,8 @@ export default function DemoPaymentPage() {
         body: JSON.stringify(presentData),
       });
 
-      console.log(res)
       const data = await res.json();
-      console.log('this is the data', data.data)
-      if (data.url) window.location.href = data.url; // redirect to payment
+      if (data.url) window.location.href = data.url;
       else alert("Payment initiation failed");
     } catch (err) {
       console.error("Payment error:", err);
@@ -57,94 +54,32 @@ export default function DemoPaymentPage() {
     }
   };
 
+  if (paymentStatus === "success") {
+    // console.log(transactions?.items)
+    if (transactions?.status === "loading")
+      return <p className="h-screen flex items-center justify-center">Predictiong</p>
 
-  // ✅ Only get the latest transaction after successful payment
-  const latestTransaction = useMemo(() => {
-    if (paymentStatus === "success") {
-      return transactions?.items; // latest transaction
+    const data = transactions?.items
+    console.log(data)
+
+    const predict = async () => {
+      const response = await fetch("http://localhost:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      console.log(response)
+
+
     }
-    return null;
-  }, [paymentStatus, transactions]);
 
+    predict()
 
-  // the features the model expects
-  const MODEL_FEATURES = [
-    "avg_amount_30d",
-    "merchant_id",
-    "payment_method",
-    "card_type",
-    "city",
-    "device_browser",
-    "country",
-    "previous_txn_count_24h",
-    "status",
-    "location",
-    "device_os",
-    "user_id",
-    "amount",
-    "device_id",
-  ];
-
-
-  // Prepare the transaction object
-  function prepareTransaction(transaction) {
-    const flattenedTransaction = {
-      ...transaction,
-      device_os: transaction.devices?.os || "Unknown",
-      device_browser: transaction.devices?.browser || "Unknown",
-      device_id: transaction.devices?.deviceId || "Unknown",
-    };
-    delete flattenedTransaction.devices;
-
-    const finalTransaction = {};
-
-    MODEL_FEATURES.forEach((col) => {
-      finalTransaction[col] =
-        flattenedTransaction[col] !== undefined
-          ? flattenedTransaction[col]
-          : typeof flattenedTransaction[col] === "number"
-            ? 0
-            : "";
-    });
-
-    return finalTransaction;
   }
 
-  // ✅ Send only the latest transaction to backend CSV
-  useEffect(() => {
-    async function handleTransaction() {
-      if (latestTransaction && latestTransaction.transaction_id) {
-        const lastSavedId = localStorage.getItem("lastSavedTransactionId");
-        if (lastSavedId === latestTransaction.transaction_id) return;
 
-        const preparedTransaction = prepareTransaction(latestTransaction);
 
-        try {
-          const response = await fetch("http://localhost:8000/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(preparedTransaction),
-          });
 
-          console.log(response)
-
-          const result = await response.json();
-          console.log(result)
-          console.log("Fraud Probability:", result.fraud_probability); // e.g., 0.87 = 87%
-          console.log("Message:", result.fraud_message);
-
-          localStorage.setItem(
-            "lastSavedTransactionId",
-            preparedTransaction.transaction_id
-          );
-        } catch (err) {
-          console.error("❌ Error in fraud detection:", err);
-        }
-      }
-    }
-
-    handleTransaction();
-  }, [latestTransaction]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-16">
@@ -155,8 +90,7 @@ export default function DemoPaymentPage() {
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto">
           See how <span className="font-semibold">SafePay</span> can help you
-          reduce fraud, stay compliant, and protect your bottom line with
-          confidence.
+          reduce fraud, stay compliant, and protect your bottom line.
         </p>
         {paymentStatus === "success" && (
           <div className="bg-green-100 text-green-800 p-4 rounded mt-6 max-w-md mx-auto">
@@ -189,8 +123,8 @@ export default function DemoPaymentPage() {
           </button>
 
           <p className="text-sm text-gray-500 text-center mt-4">
-            Test how our secure payment system works. No real charges applied in
-            demo mode.
+            Test how our secure payment system works. No real charges in demo
+            mode.
           </p>
         </div>
       </section>
