@@ -4,6 +4,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -11,4 +12,10 @@
 
 .animate-scroll {
   animation: scroll 25s linear infinite;
+}
+
+
+
+.card-bg {
+  @apply bg-gradient-to-r from-cyan-600 to-green-600 text-white;
 }
