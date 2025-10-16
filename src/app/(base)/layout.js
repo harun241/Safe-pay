@@ -11,12 +11,15 @@ export default function BaseLayout({ children }) {
     <>
       <div >
         <Navbar></Navbar>
-        <div className="md:px-3 lg:max-w-[1600px] mx-auto">
+        <div className={`md:px-3 lg:px-0 ${theme === "dark"
+            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
+            : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
+          }`}>
           {children}
         </div>
         <div className={`transition-colors duration-500 ${theme === "dark"
-          ? "bg-slate-900 text-slate-300"
-          : "bg-white text-slate-600"
+            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
+            : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
           }`}>
           <Footer></Footer> 
             <Script id="tawkto" strategy="afterInteractive">

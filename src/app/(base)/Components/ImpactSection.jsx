@@ -44,12 +44,7 @@ const ImpactSection = () => {
   return (
     <section
       ref={ref}
-      className={`relative w-full py-24 px-12 overflow-hidden transition-colors duration-500
-        ${
-          theme === "dark"
-            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-            : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
-        }`}
+
     >
       {/* Background radial accent */}
       <div
@@ -63,9 +58,8 @@ const ImpactSection = () => {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className={`text-5xl font-extrabold mb-4 ${
-            theme === "dark" ? "text-green-400" : "text-cyan-600"
-          }`}
+          className={`text-5xl font-extrabold mb-4 ${theme === "dark" ? "text-green-400" : "text-cyan-600"
+            }`}
         >
           Impact
         </motion.h2>
@@ -93,10 +87,9 @@ const ImpactSection = () => {
               transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
               className={`p-8 rounded-3xl shadow-2xl transition-all backdrop-blur-md hover:-translate-y-3
-                ${
-                  theme === "dark"
-                    ? "bg-gray-800/70 hover:shadow-green-400/40"
-                    : "bg-white/70 border border-slate-200 hover:shadow-cyan-400/30"
+                ${theme === "dark"
+                  ? "bg-gray-800/70 hover:shadow-green-400/40"
+                  : "bg-white/70 border border-slate-200 hover:shadow-cyan-400/30"
                 }`}
             >
               <h3
@@ -117,9 +110,8 @@ const ImpactSection = () => {
               </h3>
               <h4 className="text-2xl font-semibold mb-2">{item.label}</h4>
               <p
-                className={`text-sm ${
-                  theme === "dark" ? "text-gray-300" : "text-slate-600"
-                }`}
+                className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-slate-600"
+                  }`}
               >
                 {item.description}
               </p>
