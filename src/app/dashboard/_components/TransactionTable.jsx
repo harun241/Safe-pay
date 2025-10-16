@@ -1,17 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
-export default function TransactionTable({ transactions, theme }) {
+export default function TransactionTable({ theme }) {
+  const { user,loading } = useAuth();
   const [search, setSearch] = useState("");
 
-  const filtered = transactions.filter(
-    (t) =>
-      t.id.toLowerCase().includes(search.toLowerCase()) ||
-      t.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      t.status.toLowerCase().includes(search.toLowerCase())
-  );
+
+   const [transactions, setTransaction] = useState([]);
+   const [page, setPage] = useState(1);
+   const [totalPages, setTotalPages] = useState(1);
+ 
+  
+
+
+  if(loading){
+    return <h1>loading</h1>
+  }
+
+useEffect(() => {
+  if (!user?.uid) return;
+
+  const fetchUsers = async () => {
+    const res = await fetch(`/api/transactions/user-all-transactions?uid=${user.uid}&page=${page}&limit=10`);
+    const data = await res.json();
+    setTransaction(data?.tran || []);
+    setTotalPages(data?.totalPages || 1);
+  };
+
+  fetchUsers();
+}, [user?.uid, page]);
+
+
+
+
+
+
+
+
+
+  const filtered = transactions?.filter((t) =>
+  t?.transaction_id?.toLowerCase().includes(search.toLowerCase()) ||
+  t?.user_id?.toLowerCase().includes(search.toLowerCase()) ||
+  t?.status?.toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <div className={`overflow-x-auto rounded-lg shadow-md ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
@@ -52,10 +86,10 @@ export default function TransactionTable({ transactions, theme }) {
                 key={tx.id}
                 className={`hover:${theme === "dark" ? "bg-gray-800" : "bg-gray-50"}`}
               >
-                <td className="px-4 py-2 text-sm">{tx.id}</td>
-                <td className="px-4 py-2 text-sm">{tx.user?.name || "N/A"}</td>
+                <td className="px-4 py-2 text-sm">{tx.transaction_id}</td>
+                <td className="px-4 py-2 text-sm">{tx.user_id|| "N/A"}</td>
                 <td className="px-4 py-2 text-sm">${tx.amount}</td>
-                <td className="px-4 py-2 text-sm">{new Date(tx.date).toLocaleString()}</td>
+                <td className="px-4 py-2 text-sm">{new Date(tx.timestamp).toLocaleString()}</td>
                 <td className="px-4 py-2 text-sm">
                   {tx.status === "success" ? (
                     <span className="flex items-center gap-1 text-green-400 font-semibold">
@@ -78,6 +112,23 @@ export default function TransactionTable({ transactions, theme }) {
           )}
         </tbody>
       </table>
+      <div className="flex justify-center mt-4 space-x-2 p-4">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(page - 1)}
+    className="px-3 py-1 text-black bg-gray-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+  <span className="px-3 py-1">{page} / {totalPages}</span>
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(page + 1)}
+    className="px-3 py-1 text-black bg-gray-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
     </div>
   );
 }
