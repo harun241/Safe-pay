@@ -29,7 +29,7 @@ const faqs = [
     ),
   },
   {
-    q: "How quickly can we integrate SafePayinto our existing Fintech stack?",
+    q: "How quickly can we integrate SafePay into our existing Fintech stack?",
     a: "SafePay offers flexible deployment options, including API and SDK integrations, that allow Fintechs to get up and running in days—not months—without disrupting existing workflows.",
   },
   {
@@ -53,47 +53,59 @@ const faqs = [
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const toggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
 
   return (
     <section className="max-w-4xl mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center mb-8 ">
+      <h2 className="text-3xl font-bold text-center mb-8">
         Frequently Asked Questions (FAQs)
       </h2>
 
       <div className="space-y-4">
         {faqs.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            className="rounded-2xl border shadow-sm bg-white dark:bg-gray-900 dark:border-gray-700 transition-colors"
+            layout
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="rounded-2xl border shadow-sm bg-white dark:bg-gray-900 dark:border-gray-700 hover:shadow-md transition-all overflow-hidden"
           >
             <button
               onClick={() => toggle(index)}
-              className="w-full px-4 py-3 text-left text-lg font-medium text-gray-900 dark:text-white"
+              className="w-full px-5 py-4 text-left text-lg font-medium flex justify-between items-center text-gray-900 dark:text-white"
             >
-              {item.q}
+              <span>{item.q}</span>
+              <motion.span
+                animate={{ rotate: openIndex === index ? 180 : 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="text-xl"
+              >
+                ▼
+              </motion.span>
             </button>
 
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {openIndex === index && (
                 <motion.div
+                  layout
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="px-4 pb-4 text-gray-700 dark:text-gray-300"
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                  className="px-5 pb-5 text-gray-700 dark:text-gray-300 leading-relaxed"
                 >
                   {item.a}
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         ))}
       </div>
-
-  
     </section>
   );
 }

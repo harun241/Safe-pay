@@ -73,7 +73,7 @@ export default function AdditionalResources() {
   };
 
   return (
-    <section className="bg-gray-100 dark:bg-gray-900 py-16 px-6">
+    <section className="  py-16 px-6">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold mb-10">Additional Resources</h2>
 

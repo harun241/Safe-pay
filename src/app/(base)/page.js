@@ -2,8 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import AiBot from "./Components/Ai";
-import FloatingChat from "./Components/FloatingChat";
 import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
 import PricingSection from "./Components/PricingSection";
@@ -57,7 +55,7 @@ export default function HomePage() {
       {/* Floating Chat and Other Sections */}
       <div>
         <div>
-          <FloatingChat />
+        
         </div>
         <div className={`relative w-full py-24 px-12 overflow-hidden transition-colors duration-500
         ${theme === "dark"
@@ -76,7 +74,7 @@ export default function HomePage() {
           <FaqSection />
         </div>
         <div>
-          <AiBot />
+        
         </div>
       </div>
     </div>
