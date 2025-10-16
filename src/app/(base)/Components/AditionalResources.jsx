@@ -4,7 +4,9 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
 
-const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), { ssr: false });
+const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), {
+  ssr: false,
+});
 
 const resources = [
   {
@@ -73,37 +75,87 @@ export default function AdditionalResources() {
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-16 px-6">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-4">Additional Resources</h2>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {resources.map((res, idx) => {
+        <h2 className="text-3xl font-bold mb-10">Additional Resources</h2>
+
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {resources.map((res) => {
             const roomId = `room-${res.id}`;
             const isActive = activeRoom === roomId;
 
             return (
-              <div key={res.id} className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md transition hover:-translate-y-1">
-                {res.image && <img src={res.image} alt={res.title} className="w-full aspect-[4/3] object-cover rounded-xl mb-3" />}
-                <div className="text-left flex-1">
-                  <span className="text-sm font-semibold text-green-500">{res.type}</span>
-                  <h3 className="text-lg font-bold mt-1 mb-1">{res.title}</h3>
-                  <p className="text-sm text-gray-600">{res.desc}</p>
-                </div>
-
-                {res.type === "Webinar" ? (
-                  isActive ? (
-                    <div className="mt-4">
-                      <VideoChat roomId={roomId} />
-                      <div className="flex items-center gap-2 mt-2">
-                        <button onClick={() => setActiveRoom(null)} className="px-4 py-2 bg-red-500 text-white rounded">End Demo</button>
-                        <button onClick={() => handleCopyLink(roomId)} className="px-4 py-2 bg-blue-500 text-white rounded">Copy Invite Link</button>
-                        {copiedRoom === roomId && <span className="text-green-600 text-sm">✅ Copied!</span>}
-                      </div>
-                    </div>
-                  ) : (
-                    <button onClick={() => setActiveRoom(roomId)} className="mt-4 px-4 py-2 bg-green-600 text-white rounded">Request a Demo</button>
-                  )
-                ) : (
-                  <button onClick={() => window.open(res.link || "#", "_blank")} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">{res.type === "eBook" ? "Get eBook" : "Learn More"}</button>
+              <div
+                key={res.id}
+                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md transition hover:-translate-y-1 flex flex-col h-full"
+              >
+                {/* Image */}
+                {res.image && (
+                  <img
+                    src={res.image}
+                    alt={res.title}
+                    className="w-full h-56 object-cover rounded-xl mb-4"
+                  />
                 )}
+
+                {/* Content */}
+                <div className="flex flex-col flex-grow justify-between items-end text-left">
+                  <div>
+                    <span className="text-sm font-semibold text-green-500">
+                      {res.type}
+                    </span>
+                    <h3 className="text-lg font-bold mt-1 mb-2 line-clamp-2">
+                      {res.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-3">
+                      {res.desc}
+                    </p>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="mt-5">
+                    {res.type === "Webinar" ? (
+                      isActive ? (
+                        <div>
+                          <VideoChat roomId={roomId} />
+                          <div className="flex items-center gap-2 mt-2 flex-wrap">
+                            <button
+                              onClick={() => setActiveRoom(null)}
+                              className="px-4 py-2 bg-red-500 text-white rounded"
+                            >
+                              End Demo
+                            </button>
+                            <button
+                              onClick={() => handleCopyLink(roomId)}
+                              className="px-4 py-2 bg-blue-500 text-white rounded"
+                            >
+                              Copy Invite Link
+                            </button>
+                            {copiedRoom === roomId && (
+                              <span className="text-green-600 text-sm">
+                                ✅ Copied!
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setActiveRoom(roomId)}
+                          className="w-fit px-4 py-2 bg-green-600 text-white rounded"
+                        >
+                          Request a Demo
+                        </button>
+                      )
+                    ) : (
+                      <button
+                        onClick={() =>
+                          window.open(res.link || "#", "_blank")
+                        }
+                        className="w-fit px-4 py-2 bg-blue-600 text-white rounded"
+                      >
+                        {res.type === "eBook" ? "Get eBook" : "Learn More"}
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             );
           })}
