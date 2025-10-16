@@ -35,7 +35,8 @@ export default function TransactionForm() {
     setLoading(true);
     setResult(null);
     try {
-      const res = await axios.post("http://127.0.0.1:8000/predict", formData);
+      const res = await axios.post("http://localhost:8000/predict", formData);
+      console.log(res)
       setResult(res.data.prediction);
     } catch (err) {
       console.error(err);

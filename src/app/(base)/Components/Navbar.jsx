@@ -24,6 +24,7 @@ import {
   LogIn,
   UserPlus,
   UserPlus2,
+  Dock,
 } from "lucide-react";
 
 // --- Desktop Dropdown ---
@@ -288,7 +289,6 @@ export default function Navbar() {
   }, [isMobileMenuOpen, isMobileUserMenuOpen]);
 
   const navItems = [
-    { name: "Home", href: "/", icon: Home },
     {
       name: "Technology",
       href: "/features",
@@ -319,6 +319,11 @@ export default function Navbar() {
         { label: "Careers", href: "/careers" },
         { label: "Contact Us", href: "/contact" },
       ],
+    },
+    {
+      name: "Document",
+      href: "/documentation",
+      icon: Dock,
     },
   ];
 
@@ -405,6 +410,7 @@ export default function Navbar() {
             {/* Right Section */}
             <div className="flex items-center space-x-2">
               <div className="hidden lg:flex items-center space-x-2">
+                <h1>Doc</h1>
                 <ThemeSwitcher />
                 {user ? (
                   <div
