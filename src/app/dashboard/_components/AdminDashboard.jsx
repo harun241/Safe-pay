@@ -19,6 +19,8 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
 
 
@@ -42,13 +44,17 @@ useEffect(() => {
 useEffect(() => {
   const fetchUsers = async () => {
     setFetchLoading(true)
-    const res = await fetch("/api/admin/users");
+     const res = await fetch(`/api/admin/users?page=${page}&limit=10`);
     const data = await res.json();
-    setUsers(data);
+    setUsers(data?.users);
+    setTotalPages(data?.totalPages);
+
     setFetchLoading(false)
   };
   fetchUsers();
-}, []);
+}, [page]);
+
+
 
 
 
@@ -65,6 +71,8 @@ if ( fetchLoading) {
     </div>
   );
 }
+
+
 
 
   return (
@@ -122,14 +130,34 @@ if ( fetchLoading) {
               </tr>
             </thead>
             <tbody>
-  {users.map((u) =>
+  {users?.map((u) =>
     renderTableRow(u.name, u.email, u.role,u.uid, u.status)
   )}
 </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
+         </table>
+</div>
+
+{/* Pagination Controls */}
+<div className="flex justify-center mt-6 space-x-2">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(page - 1)}
+    className="px-3 py-1 text-black bg-gray-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+  <span className="px-3 py-1">{page} / {totalPages}</span>
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(page + 1)}
+    className="px-3 py-1 text-black bg-gray-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
+
+</div> {/* closes the styled container */}
+</main>
   );
 }
 
