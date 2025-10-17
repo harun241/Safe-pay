@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
+import { motion } from "framer-motion";
 
 const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), {
   ssr: false,
@@ -73,19 +74,26 @@ export default function AdditionalResources() {
   };
 
   return (
-    <section className="  py-16 px-6">
+    <section className="py-16 px-6">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-10">Additional Resources</h2>
+        <h2 className="text-3xl font-bold mb-10 text-cyan-500">
+          Additional Resources
+        </h2>
 
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {resources.map((res) => {
+          {resources.map((res, i) => {
             const roomId = `room-${res.id}`;
             const isActive = activeRoom === roomId;
 
             return (
-              <div
+              <motion.div
                 key={res.id}
-                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md transition hover:-translate-y-1 flex flex-col h-full"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, delay: i * 0.2 }}
+                whileHover={{ scale: 1.03 }}
+                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col h-full transition-all"
               >
                 {/* Image */}
                 {res.image && (
@@ -102,9 +110,10 @@ export default function AdditionalResources() {
                     <span className="text-sm font-semibold text-green-500">
                       {res.type}
                     </span>
-                    <h3 className="text-lg font-bold mt-1 mb-2 line-clamp-2">
-                      {res.title}
-                    </h3>
+                    <h3 className="text-lg font-bold mt-1 mb-2 line-clamp-2 text-gray-900 dark:text-white transition-colors duration-300">
+             {res.title}
+                                </h3>
+
                     <p className="text-sm text-gray-600 line-clamp-3">
                       {res.desc}
                     </p>
@@ -139,7 +148,7 @@ export default function AdditionalResources() {
                       ) : (
                         <button
                           onClick={() => setActiveRoom(roomId)}
-                          className="w-fit px-4 py-2 bg-green-600 text-white rounded"
+                          className="w-fit px-4 py-2 bg-cyan-500 text-black rounded"
                         >
                           Request a Demo
                         </button>
@@ -149,14 +158,14 @@ export default function AdditionalResources() {
                         onClick={() =>
                           window.open(res.link || "#", "_blank")
                         }
-                        className="w-fit px-4 py-2 bg-blue-600 text-white rounded"
+                        className="w-fit px-4 py-2 bg-cyan-500 text-black rounded"
                       >
                         {res.type === "eBook" ? "Get eBook" : "Learn More"}
                       </button>
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

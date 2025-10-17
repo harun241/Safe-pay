@@ -2,15 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  Shield,
-  Linkedin,
-  Twitter,
-  Youtube,
-  ArrowRight,
-  Loader2,
-  CheckCircle,
-} from "lucide-react";
+import { Shield, ArrowRight, Loader2, CheckCircle } from "lucide-react";
+import { FaLinkedin, FaYoutube } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { useTheme } from "next-themes";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,9 +28,9 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: <Twitter className="h-5 w-5" />, href: "#", name: "Twitter" },
-  { icon: <Linkedin className="h-5 w-5" />, href: "#", name: "LinkedIn" },
-  { icon: <Youtube className="h-5 w-5" />, href: "#", name: "YouTube" },
+   { icon: <FaXTwitter className="h-5 w-5" />, href: "https://x.com", name: "Twitter" },
+  { icon: <FaLinkedin className="h-5 w-5" />, href: "https://www.linkedin.com", name: "LinkedIn" },
+  { icon: <FaYoutube className="h-5 w-5" />, href: "https://www.youtube.com", name: "YouTube" },
 ];
 
 export default function Footer() {
@@ -104,20 +98,21 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16">
           {/* Logo & Social */}
           <div className="lg:col-span-3">
-            <Link href="/" className="inline-flex items-center space-x-2 mb-4">
+           <Link href="/" className="flex items-center space-x-2">
               <Shield
-                className={`h-8 w-8 ${
-                  theme === "dark" ? "text-emerald-400" : "text-cyan-600"
+                className={`h-7 w-7 transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
                 }`}
               />
               <span
-                className={`font-bold text-2xl ${
-                  theme === "dark" ? "text-white" : "text-slate-900"
+                className={`font-bold text-xl transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
                 }`}
               >
                 SafePay
               </span>
             </Link>
+
             <p className="text-sm max-w-sm mb-6">
               Empowering businesses with AI-driven fraud detection to secure
               every transaction and build digital trust.

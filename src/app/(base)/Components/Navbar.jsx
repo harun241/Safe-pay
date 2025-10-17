@@ -13,17 +13,12 @@ import {
   Menu,
   X,
   ChevronDown,
-  Home,
   Cpu,
   FileText,
   Building2,
-  User,
-  LogOut,
-  Settings,
   LayoutDashboard,
-  LogIn,
-  UserPlus,
-  UserPlus2,
+  Settings,
+  LogOut,
   Dock,
 } from "lucide-react";
 
@@ -38,20 +33,23 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
       onMouseLeave={onMouseLeave}
       className="relative"
     >
-      <button
-        className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200 ${
           theme === "dark"
             ? "text-gray-300 hover:text-white hover:bg-white/10"
-            : "text-gray-700 hover:text-white hover:bg-green-500/20"
+            : "text-gray-700 hover:text-black hover:bg-green-500/20"
         }`}
       >
-        <item.icon className={`w-4 h-4 mr-2 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`} />
+        <item.icon
+          className={`w-4 h-4 mr-2 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+        />
         {item.name}
         <ChevronDown
           size={16}
           className={`ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (
@@ -61,25 +59,24 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={`absolute top-full mt-2 w-64 rounded-xl shadow-xl border z-50 overflow-hidden backdrop-blur-md ${
-              theme === "dark"
-                ? "bg-gray-950/90 border-gray-700/50"
-                : "bg-white/90 border-gray-300/50"
+              theme === "dark" ? "bg-gray-950/90 border-gray-700/50" : "bg-white/90 border-gray-300/50"
             }`}
           >
             <div className="py-2">
               {item.dropdownItems.map((subItem) => (
-                <Link
-                  key={`desktop-sub-${subItem.href}`}
-                  href={subItem.href}
-                  onClick={subItem.onClick}
-                  className={`flex items-center w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                    theme === "dark"
-                      ? "text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
-                      : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                  }`}
-                >
-                  {subItem.label}
-                </Link>
+                <motion.div key={`desktop-sub-${subItem.href}`} whileHover={{ scale: 1.05 }}>
+                  <Link
+                    href={subItem.href}
+                    onClick={subItem.onClick}
+                    className={`flex items-center w-full text-left px-4 py-2.5 text-sm transition-transform duration-200 ${
+                      theme === "dark"
+                        ? "text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
+                        : "text-gray-700 hover:bg-green-500/20 hover:text-black"
+                    }`}
+                  >
+                    {subItem.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </motion.div>
@@ -91,13 +88,13 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
 
 // --- Mobile User Menu ---
 const MobileUserMenu = ({ isOpen, setIsOpen, user, logout, theme }) => {
-  const userDropdownItems = [
-    { label: "Dashboard", href: "/dashboard", key: "mobile-dashboard" },
-    { label: "Account Settings", href: "/settings", key: "mobile-settings" },
-    { label: "Logout", href: "#", onClick: logout, key: "mobile-logout" },
-  ];
-
   if (!isOpen) return null;
+
+  const userDropdownItems = [
+    { label: "Dashboard", href: "/dashboard", key: "mobile-dashboard", icon: LayoutDashboard },
+    { label: "Account Settings", href: "/settings", key: "mobile-settings", icon: Settings },
+    { label: "Logout", href: "#", key: "mobile-logout", icon: LogOut, onClick: logout },
+  ];
 
   return (
     <>
@@ -122,54 +119,51 @@ const MobileUserMenu = ({ isOpen, setIsOpen, user, logout, theme }) => {
       >
         <div className="p-5 pt-20">
           {user ? (
-            <div key="mobile-user-logged-in" className="border-b border-gray-800 pb-4">
+            <div className="border-b border-gray-800 pb-4">
               <div className="px-3 py-2 mb-2">
                 <p className="text-sm font-semibold truncate">{user.displayName || "User"}</p>
                 <p className="text-xs truncate text-gray-400">{user.email}</p>
               </div>
               <hr className="border-gray-700 my-1" />
               {userDropdownItems.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  onClick={() => {
-                    setIsOpen(false);
-                    if (item.onClick) item.onClick();
-                  }}
-                  className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
-                    item.label === "Logout"
-                      ? "text-red-400 hover:bg-red-500/10"
-                      : theme === "dark"
-                      ? "text-gray-300 hover:bg-white/10 hover:text-white"
-                      : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                  }`}
-                >
-                  {item.label === "Dashboard" && <LayoutDashboard size={16} className="mr-2" />}
-                  {item.label === "Account Settings" && <Settings size={16} className="mr-2" />}
-                  {item.label === "Logout" && <LogOut size={16} className="mr-2" />}
-                  {item.label}
-                </Link>
+                <motion.div key={item.key} whileHover={{ scale: 1.05 }}>
+                  <Link
+                    href={item.href}
+                    onClick={() => {
+                      setIsOpen(false);
+                      if (item.onClick) item.onClick();
+                    }}
+                    className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 ${
+                      item.label === "Logout"
+                        ? "text-red-400 hover:bg-red-500/10"
+                        : theme === "dark"
+                        ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                        : "text-gray-700 hover:bg-green-500/20 hover:text-white"
+                    }`}
+                  >
+                    {item.icon && <item.icon className="mr-2" size={16} />}
+                    {item.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           ) : (
-            <div key="mobile-user-logged-out">
+            <>
               <Link
-                key="mobile-login-link"
                 href="/login"
                 onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg border-b border-gray-800"
+                className="block py-4 text-lg transition-transform duration-200 hover:scale-105"
               >
                 Login
               </Link>
               <Link
-                key="mobile-register-link"
                 href="/register"
                 onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg border-b border-gray-800"
+                className="block py-4 text-lg transition-transform duration-200 hover:scale-105"
               >
                 Register
               </Link>
-            </div>
+            </>
           )}
         </div>
       </motion.div>
@@ -226,36 +220,45 @@ const MobileNav = ({ isOpen, setIsOpen, navItems, theme }) => {
                       }`}
                     />
                   </button>
-                  {openSubmenus[item.name] && (
-                    <div className="pl-4 pb-2 space-y-2">
-                      {item.dropdownItems.map((subItem) => (
-                        <Link
-                          key={`mobile-sub-${subItem.href}`}
-                          href={subItem.href}
-                          onClick={() => setIsOpen(false)}
-                          className={`block py-2 transition-colors ${
-                            theme === "dark"
-                              ? "text-gray-400 hover:text-cyan-400"
-                              : "text-gray-700 hover:text-cyan-600"
-                          }`}
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {openSubmenus[item.name] && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="pl-4 pb-2 space-y-2 overflow-hidden"
+                      >
+                        {item.dropdownItems.map((subItem) => (
+                          <motion.div key={`mobile-sub-${subItem.href}`} whileHover={{ scale: 1.05 }}>
+                            <Link
+                              href={subItem.href}
+                              onClick={() => setIsOpen(false)}
+                              className={`block py-2 transition-transform duration-200 ${
+                                theme === "dark"
+                                  ? "text-gray-400 hover:text-cyan-400"
+                                  : "text-gray-700 hover:text-cyan-600"
+                              }`}
+                            >
+                              {subItem.label}
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </>
               ) : (
-                <Link
-                  key={`mobile-nav-link-${item.href}`}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-4 text-lg ${
-                    theme === "dark" ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-green-600"
-                  }`}
-                >
-                  {item.name}
-                </Link>
+                <motion.div whileHover={{ scale: 1.05 }} key={`mobile-link-${item.href}`}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block py-4 text-lg transition-transform duration-200 ${
+                      theme === "dark" ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-green-600"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
               )}
             </div>
           ))}
@@ -327,23 +330,7 @@ export default function Navbar() {
     },
   ];
 
-  if (!mounted) {
-    return (
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 h-16">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div className="h-7 w-7 bg-cyan-400 rounded"></div>
-          <div className="hidden lg:flex space-x-2">
-            <div className="h-6 w-16 bg-gray-700 rounded"></div>
-            <div className="h-6 w-20 bg-gray-700 rounded"></div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="h-6 w-16 bg-gray-700 rounded lg:hidden"></div>
-            <div className="h-6 w-6 bg-gray-600 rounded lg:hidden"></div>
-          </div>
-        </div>
-      </header>
-    );
-  }
+  if (!mounted) return null;
 
   return (
     <>
@@ -387,22 +374,23 @@ export default function Navbar() {
                     theme={theme}
                   />
                 ) : (
-                  <Link
-                    key={`desktop-link-${item.href}`}
-                    href={item.href}
-                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                      theme === "dark"
-                        ? "text-gray-300 hover:text-white hover:bg-white/10"
-                        : "text-gray-700 hover:text-white hover:bg-green-500/20"
-                    }`}
-                  >
-                    <item.icon
-                      className={`w-4 h-4 mr-2 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  <motion.div whileHover={{ scale: 1.05 }} key={`desktop-link-${item.href}`}>
+                    <Link
+                      href={item.href}
+                      className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200 ${
+                        theme === "dark"
+                          ? "text-gray-300 hover:text-white hover:bg-white/10"
+                          : "text-gray-700 hover:text-black hover:bg-green-500/20"
                       }`}
-                    />
-                    {item.name}
-                  </Link>
+                    >
+                      <item.icon
+                        className={`w-4 h-4 mr-2 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        }`}
+                      />
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 )
               )}
             </nav>
@@ -422,16 +410,12 @@ export default function Navbar() {
                       <img
                         src={
                           user.photoURL ||
-                          `https://ui-avatars.com/api/?name=${
-                            encodeURIComponent(user.displayName || user.email)
-                          }&background=0ea5e9&color=fff`
+                          `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            user.displayName || user.email
+                          )}&background=0ea5e9&color=fff`
                         }
                         alt="User Avatar"
                         className="w-8 h-8 rounded-full"
-                        onError={(e) => {
-                          e.target.src =
-                            "https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff";
-                        }}
                       />
                     </button>
                     <AnimatePresence>
@@ -448,33 +432,36 @@ export default function Navbar() {
                         >
                           <div className="p-2">
                             <div className="px-3 py-2">
-                              <p className="text-sm font-semibold truncate">
-                                {user.displayName || "User"}
-                              </p>
+                              <p className="text-sm font-semibold truncate">{user.displayName || "User"}</p>
                               <p className="text-xs text-gray-400 truncate">{user.email}</p>
                             </div>
                             <hr className="border-gray-700 my-1" />
-                            {[
-                              { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-                              { label: "Account Settings", href: "/settings", icon: Settings },
-                              { label: "Logout", href: "#", onClick: logout, icon: LogOut },
-                            ].map((item) => (
-                              <Link
-                                key={`user-menu-${item.label}`}
-                                href={item.href}
-                                onClick={item.onClick}
-                                className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-colors ${
-                                  item.label === "Logout"
-                                    ? "text-red-400 hover:bg-red-500/10"
-                                    : theme === "dark"
-                                    ? "text-gray-300 hover:bg-white/10 hover:text-white"
-                                    : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                                }`}
-                              >
-                                {item.icon && <item.icon className="mr-2" size={16} />}
-                                {item.label}
-                              </Link>
-                            ))}
+                            <Link
+                              href="/dashboard"
+                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 hover:scale-105 ${
+                                theme === "dark"
+                                  ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                                  : "text-gray-700 hover:bg-green-500/20 hover:text-white"
+                              }`}
+                            >
+                              <LayoutDashboard className="mr-2" size={16} /> Dashboard
+                            </Link>
+                            <Link
+                              href="/settings"
+                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 hover:scale-105 ${
+                                theme === "dark"
+                                  ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                                  : "text-gray-700 hover:bg-green-500/20 hover:text-white"
+                              }`}
+                            >
+                              <Settings className="mr-2" size={16} /> Account Settings
+                            </Link>
+                            <button
+                              onClick={logout}
+                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm text-red-400 transition-transform duration-200 hover:scale-105 hover:bg-red-500/10`}
+                            >
+                              <LogOut className="mr-2" size={16} /> Logout
+                            </button>
                           </div>
                         </motion.div>
                       )}
@@ -484,15 +471,9 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/login"
-                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-green-500/20 hover:text-white"
+                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:scale-105 bg-green-500 text-black hover:bg-green-600"
                     >
                       Login
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600"
-                    >
-                      Register
                     </Link>
                   </>
                 )}
@@ -500,42 +481,25 @@ export default function Navbar() {
 
               {/* Mobile Menu Button */}
               <button
+                className="lg:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-md"
               >
                 <Menu size={24} />
               </button>
-
-              {/* Mobile User Button */}
-              {user && (
-                <button
-                  onClick={() => setIsMobileUserMenuOpen(true)}
-                  className="lg:hidden p-2 rounded-md"
-                >
-                  <img
-                    src={
-                      user.photoURL ||
-                      `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        user.displayName || user.email
-                      )}&background=0ea5e9&color=fff`
-                    }
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </button>
-              )}
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Panels */}
+      {/* Mobile Nav */}
       <MobileNav
         isOpen={isMobileMenuOpen}
         setIsOpen={setIsMobileMenuOpen}
         navItems={navItems}
         theme={theme}
       />
+
+      {/* Mobile User Menu */}
       <MobileUserMenu
         isOpen={isMobileUserMenuOpen}
         setIsOpen={setIsMobileUserMenuOpen}

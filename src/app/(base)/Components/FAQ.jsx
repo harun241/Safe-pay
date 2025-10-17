@@ -68,8 +68,9 @@ export default function FaqSection() {
             layout
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="rounded-2xl border shadow-sm bg-white dark:bg-gray-900 dark:border-gray-700 hover:shadow-md transition-all overflow-hidden"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileHover={{ scale: 1.02 }}
+            className="rounded-2xl border shadow-sm bg-white dark:bg-gray-900 dark:border-gray-700 hover:shadow-lg transition-all overflow-hidden"
           >
             <button
               onClick={() => toggle(index)}
@@ -78,7 +79,7 @@ export default function FaqSection() {
               <span>{item.q}</span>
               <motion.span
                 animate={{ rotate: openIndex === index ? 180 : 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 className="text-xl"
               >
                 ▼
@@ -90,12 +91,15 @@ export default function FaqSection() {
                 <motion.div
                   layout
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
+                  animate={{
+                    opacity: 1,
+                    height: "auto",
+                    transition: { type: "spring", stiffness: 500, damping: 35 }
+                  }}
+                  exit={{
+                    opacity: 0,
+                    height: 0,
+                    transition: { type: "spring", stiffness: 400, damping: 30 }
                   }}
                   className="px-5 pb-5 text-gray-700 dark:text-gray-300 leading-relaxed"
                 >
