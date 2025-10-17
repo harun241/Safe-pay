@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
 import PricingSection from "./Components/PricingSection";
-import Testimonials from "./Components/Testimonial";
+
 import FaqSection from "./Components/FAQ";
 import AdditionalResources from "./Components/AditionalResources";
+import OurMission from "./Components/OurMission";
 
 
 export default function HomePage() {
@@ -25,34 +26,14 @@ export default function HomePage() {
         <Hero />
       </div>
 
-      {/* Why SafePay Section */}
-      <div className="px-6 sm:px-10 lg:px-20 py-20 text-center max-w-[1400px] mx-auto">
-        {mounted && (
-          <>
-            <h2
-              className={`text-3xl sm:text-4xl font-bold mb-6 ${theme === "dark" ? "text-white" : "text-gray-900"
-                }`}
-            >
-              Why SafePay?
-            </h2>
-            <p
-              className={`max-w-3xl mx-auto text-lg sm:text-xl leading-relaxed ${theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
-            >
-              SafePay monitors all transactions using AI & ML models in
-              real-time, sending instant alerts and blocking suspicious
-              activities automatically.
-            </p>
-          </>
-        )}
-      </div>
+  
 
       {/* Testimonials Section */}
       <div className="px-6 sm:px-10 lg:px-20 max-w-[1400px] mx-auto">
-        <Testimonials />
+      
       </div>
 
-      {/* Floating Chat and Other Sections */}
+ 
       <div>
         <div>
         
@@ -62,6 +43,7 @@ export default function HomePage() {
             ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
             : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
           }`}>
+            <OurMission></OurMission>
           <ImpactSection />
         </div>
         <div>

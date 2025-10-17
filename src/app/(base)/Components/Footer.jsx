@@ -104,20 +104,21 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16">
           {/* Logo & Social */}
           <div className="lg:col-span-3">
-            <Link href="/" className="inline-flex items-center space-x-2 mb-4">
+ <Link href="/" className="flex items-center space-x-2">
               <Shield
-                className={`h-8 w-8 ${
-                  theme === "dark" ? "text-emerald-400" : "text-cyan-600"
+                className={`h-7 w-7 transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
                 }`}
               />
               <span
-                className={`font-bold text-2xl ${
-                  theme === "dark" ? "text-white" : "text-slate-900"
+                className={`font-bold text-xl transition-colors ${
+                  theme === "dark" ? "text-cyan-400" : "text-green-500"
                 }`}
               >
                 SafePay
               </span>
             </Link>
+
             <p className="text-sm max-w-sm mb-6">
               Empowering businesses with AI-driven fraud detection to secure
               every transaction and build digital trust.
