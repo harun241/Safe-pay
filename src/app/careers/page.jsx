@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navbar from "../(base)/Components/Navbar";
+import Spinner from "../(base)/Components/Spinner";
+
 
 const jobs = [
   {
@@ -75,7 +77,7 @@ const jobs = [
 export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const { theme } = useTheme();
-
+ const [loading, setLoading] = useState(false);
   // Dynamic classes based on theme
   const sectionBg =
     theme === "dark"
@@ -95,6 +97,7 @@ export default function CareersPage() {
     <section className={`relative w-full min-h-screen py-24 px-12 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
       <Navbar></Navbar>
+        {loading && <Spinner />}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>
 
       {!selectedJob ? (

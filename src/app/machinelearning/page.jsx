@@ -1,26 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { Info } from "lucide-react";
+import React, { useState, useEffect, useTransition } from "react";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
+import { Info } from "lucide-react";
 import Navbar from "../(base)/Components/Navbar";
+import Spinner from "../(base)/Components/Spinner";
 
 export default function FraudDetectionPage() {
   const [showDetails, setShowDetails] = useState(false);
   const { theme } = useTheme();
+  const pathname = usePathname();
 
-  // Theme-based colors
-  const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-800";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
+
+  // Show spinner when route changes
+  useEffect(() => {
+    setLoading(true);
+    startTransition(() => setLoading(false));
+  }, [pathname]);
+
+  // Theme classes
+  const pageBg = theme === "dark" ? "bg-gray-950 text-gray-100" : "bg-gray-50 text-gray-900";
+  const cardBg = theme === "dark" ? "bg-gray-800 shadow-gray-700/40" : "bg-white shadow-gray-200/50";
   const cardText = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const cardHeaderText = theme === "dark" ? "text-white" : "text-gray-800";
+  const cardHeaderText = theme === "dark" ? "text-white" : "text-gray-900";
   const detailBg = theme === "dark" ? "bg-gray-700" : "bg-gray-100";
-  const detailText = theme === "dark" ? "text-gray-200" : "text-gray-700";
+  const detailText = theme === "dark" ? "text-gray-200" : "text-gray-800";
   const iconColor = theme === "dark" ? "text-gray-300" : "text-gray-500";
 
   return (
-    <div className={`min-h-screen p-6 ${pageBg}`}>
+    <div className={`min-h-screen p-6 ${pageBg} transition-colors duration-500`}>
       <Navbar />
+      {loading && <Spinner />} {/* Spinner shows when page is loading */}
 
       <div className="max-w-4xl mx-auto text-center mt-10">
         <h1 className={`text-4xl font-bold mb-4 ${cardHeaderText}`}>
@@ -31,7 +44,7 @@ export default function FraudDetectionPage() {
           financial transactions, online payments, and other sensitive systems.
         </p>
 
-        <div className={`shadow-lg rounded-xl p-6 text-left ${cardBg}`}>
+        <div className={`rounded-xl p-6 text-left ${cardBg} shadow-lg transition-colors duration-500`}>
           <div className="flex justify-between items-center mb-4">
             <h2 className={`text-2xl font-semibold ${cardHeaderText}`}>
               How Fraud Detection Works
@@ -51,7 +64,7 @@ export default function FraudDetectionPage() {
           </ul>
 
           {showDetails && (
-            <div className={`mt-4 p-4 rounded-lg ${detailBg} ${detailText}`}>
+            <div className={`mt-4 p-4 rounded-lg ${detailBg} ${detailText} transition-colors duration-500`}>
               <p>
                 Common algorithms include Random Forest, Logistic Regression, Neural Networks, 
                 and clustering techniques. The model continuously learns from new transactions 
@@ -62,9 +75,9 @@ export default function FraudDetectionPage() {
 
           <div className="mt-6">
             <img
-              src="/images/machine.png" 
+              src="/images/machine.JPG" 
               alt="Fraud Detection Workflow"
-              className="mx-auto rounded-lg shadow-md"
+              className="mx-auto rounded-lg shadow-md transition-shadow duration-500"
             />
           </div>
         </div>

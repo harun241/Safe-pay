@@ -1,57 +1,21 @@
-// "use client";
-// import Link from "next/link";
-// import PaymentCardSlider from "./PaymentCardSlider";
-
-// export default function Hero() {
-//   return (
-//     <section className="bg-gradient-to-r from-green-500 to-blue-500 text-white  md:py-28 px-6 md:px-20 text-center w-11/12 rounded-2xl mx-auto">
-//       {/* Title */}
-//       <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-//         Protect Your Transactions with AI
-//       </h1>
-
-//       {/* Sub heading */}
-//       <p className="text-lg md:text-xl mb-6 md:mb-8">
-//         SafePay is an AI-powered fraud detection platform that keeps your online
-//         transactions safe in real-time.
-//       </p>
-
-//       {/* CTA buttons */}
-//       <div className="flex justify-center gap-4 flex-wrap">
-//         <Link
-//           href="/features"
-//           className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-//         >
-//           Explore Features
-//         </Link>
-//         <Link
-//           href="/contact"
-//           className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-//         >
-//           Contact Us
-//         </Link>
-//       </div>
-
-//       {/* Trusted message */}
-//       <p className="mt-6 md:mt-8 text-sm md:text-base text-white/80">
-//         Trusted by thousands of users worldwide.
-//       </p>
-
-//       {/* Payment Card Slider */}
-//       <div className="mt-8 md:mt-12">
-//         <PaymentCardSlider />
-//       </div>
-//     </section>
-//   );
-// }
-
 "use client";
 import Link from "next/link";
 import PaymentCardSlider from "./PaymentCardSlider";
+import { motion } from "framer-motion";
 
 export default function Hero() {
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.2 } },
+  };
+
+  const childVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   return (
-    <section className="relative w-11/12 rounded-2xl mx-auto overflow-hidden text-white text-center md:py-28 px-6 md:px-20">
+    <section className="relative w-full rounded-2xl mx-auto overflow-hidden text-white text-center md:py-28 px-6 md:px-20">
       {/* Background video */}
       <video
         autoPlay
@@ -65,47 +29,78 @@ export default function Hero() {
       </video>
 
       {/* Overlay (dark layer for readability) */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      <motion.div
+        className="absolute inset-0 bg-black/50"
+        initial={{ opacity: 0.6 }}
+        animate={{ opacity: [0.6, 0.55, 0.6] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      ></motion.div>
 
       {/* Content */}
-      <div className="relative z-10">
+      <motion.div
+        className="relative z-10 max-w-4xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6">
+        <motion.h1
+          variants={childVariants}
+          className="text-4xl md:text-5xl font-bold mb-4 md:mb-6"
+        >
           Protect Your Transactions with AI
-        </h1>
+        </motion.h1>
 
         {/* Sub heading */}
-        <p className="text-lg md:text-xl mb-6 md:mb-8">
+        <motion.p
+          variants={childVariants}
+          className="text-lg md:text-xl mb-6 md:mb-8"
+        >
           SafePay is an AI-powered fraud detection platform that keeps your
           online transactions safe in real-time.
-        </p>
+        </motion.p>
 
         {/* CTA buttons */}
-        <div className="flex justify-center gap-4 flex-wrap">
-          <Link
-            href="/features"
-            className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-          >
-            Explore Features
-          </Link>
-          <Link
-            href="/contact"
-            className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-green-600 transition"
-          >
-            Contact Us
-          </Link>
-        </div>
+        <motion.div
+          variants={childVariants}
+          className="flex justify-center gap-4 flex-wrap"
+        >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/features"
+              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
+            >
+              Explore Features
+            </Link>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/contact"
+              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
+            >
+              Contact Us
+            </Link>
+          </motion.div>
+        </motion.div>
 
         {/* Trusted message */}
-        <p className="mt-6 md:mt-8 text-sm md:text-base text-white/80">
+        <motion.p
+          variants={childVariants}
+          className="mt-6 md:mt-8 text-sm md:text-base text-white/80"
+        >
           Trusted by thousands of users worldwide.
-        </p>
+        </motion.p>
 
         {/* Payment Card Slider */}
-        <div className="mt-8 md:mt-12">
+        <motion.div
+          variants={childVariants}
+          className="mt-8 md:mt-12"
+        >
           <PaymentCardSlider />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

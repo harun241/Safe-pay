@@ -3,47 +3,65 @@
 import { motion } from "framer-motion";
 
 export default function OurMission() {
+  // Parent container animation for stagger
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  // Child animation for fade + slide-up
+  const childVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   return (
     <section
       className="py-24 px-6 lg:px-20 text-center transition-colors duration-500
        dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
     >
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
         className="max-w-4xl mx-auto"
       >
-        <h2
+        {/* Heading */}
+        <motion.h2
+          variants={childVariants}
           className="text-4xl md:text-5xl font-extrabold mb-8 
            bg-clip-text text-cyan-500"
         >
           Our Mission
-        </h2>
+        </motion.h2>
 
-        <p className="text-lg md:text-xl  dark:text-white leading-relaxed">
+        {/* First paragraph */}
+        <motion.p
+          variants={childVariants}
+          className="text-lg md:text-xl dark:text-white leading-relaxed"
+        >
           At{" "}
           <span className="font-semibold text-cyan-500 dark:text-white">
             SafePay
           </span>
           , our goal is to make every online transaction{" "}
-          <span className="font-semibold  dark:text-white">
-            secure
-          </span>
-          ,{" "}
-          <span className="font-semibold  dark:text-white">
-            transparent
-          </span>
-          , and{" "}
-          <span className="font-semibold dark:text-white">
-            fraud-free
-          </span>
-          . We combine advanced machine learning, behavioral analytics, and
-          risk scoring to detect suspicious activities before they cause damage.
-        </p>
+          <span className="font-semibold dark:text-white">secure</span>,{" "}
+          <span className="font-semibold dark:text-white">transparent</span>, and{" "}
+          <span className="font-semibold dark:text-white">fraud-free</span>. We
+          combine advanced machine learning, behavioral analytics, and risk
+          scoring to detect suspicious activities before they cause damage.
+        </motion.p>
 
-        <p className="mt-8 text-lg md:text-xl  dark:text-slate-300 leading-relaxed">
+        {/* Second paragraph */}
+        <motion.p
+          variants={childVariants}
+          className="mt-8 text-lg md:text-xl dark:text-slate-300 leading-relaxed"
+        >
           Our mission is simple —{" "}
           <span className="italic text-indigo-600 dark:text-indigo-400">
             to build trust in digital payments
@@ -51,9 +69,7 @@ export default function OurMission() {
           . Whether you’re a business or a customer, SafePay protects every
           transaction in real time, ensuring safety without compromising
           convenience.
-        </p>
-
-       
+        </motion.p>
       </motion.div>
     </section>
   );

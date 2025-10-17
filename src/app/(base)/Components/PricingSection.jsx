@@ -66,15 +66,14 @@ export default function PricingSection() {
       ></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.h2
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className={`text-4xl md:text-5xl font-extrabold text-center mb-4 tracking-wide
-            ${theme === "dark" ? "text-green-400" : "text-cyan-600"}`}
-        >
-          Subscription Plans
-        </motion.h2>
+           <motion.h2
+                  initial={{ opacity: 0, y: -50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-5xl text-center font-extrabold mb-6 text-cyan-500"
+                >
+                   Subscription Plans
+                </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -111,7 +110,7 @@ export default function PricingSection() {
               {plan.highlight && !plan.customGradient && (
                 <span
                   className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full shadow-md
-                    ${theme === "dark" ? "bg-green-400 text-gray-900" : "bg-cyan-500 text-white"}`}
+                    ${theme === "dark" ? "bg-cyan-500 text-white" : "bg-cyan-500 text-black"}`}
                 >
                   Most Popular
                 </span>
