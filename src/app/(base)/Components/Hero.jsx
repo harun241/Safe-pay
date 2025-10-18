@@ -9,6 +9,8 @@ export default function Hero() {
     visible: { transition: { staggerChildren: 0.2 } },
   };
 
+
+
   const childVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
@@ -45,12 +47,29 @@ export default function Hero() {
         viewport={{ once: true }}
       >
         {/* Title */}
-        <motion.h1
-          variants={childVariants}
-          className="text-4xl md:text-5xl font-bold mb-4 md:mb-6"
-        >
-          Protect Your Transactions with AI
-        </motion.h1>
+
+<motion.h1
+  className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 flex flex-wrap justify-center overflow-hidden"
+  initial="hidden"
+  animate="visible"
+  variants={{
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.05 } },
+  }}
+>
+  {"Protect Your Transactions with AI".split("").map((char, index) => (
+    <motion.span
+      key={index}
+      variants={{
+        hidden: { opacity: 30, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+      }}
+    >
+      {char === " " ? "\u00A0" : char}
+    </motion.span>
+  ))}
+</motion.h1>
+
 
         {/* Sub heading */}
         <motion.p

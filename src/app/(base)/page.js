@@ -9,6 +9,7 @@ import PricingSection from "./Components/PricingSection";
 import FaqSection from "./Components/FAQ";
 import AdditionalResources from "./Components/AditionalResources";
 import OurMission from "./Components/OurMission";
+import ScrollReveal from "./Components/ScrollReveal";
 
 
 export default function HomePage() {
@@ -23,7 +24,9 @@ export default function HomePage() {
     <div className="pt-16">
       {/* Hero Section */}
       <div className="max-w-[1400px] mx-auto">
+        <ScrollReveal>
         <Hero />
+        </ScrollReveal>
       </div>
 
   
@@ -43,17 +46,27 @@ export default function HomePage() {
             ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
             : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
           }`}>
+            <ScrollReveal>
             <OurMission></OurMission>
+            </ScrollReveal>
+             <ScrollReveal>
           <ImpactSection />
+          </ScrollReveal>
         </div>
         <div>
+           <ScrollReveal>
           <AdditionalResources />
+          </ScrollReveal>
         </div>
         <div>
+            <ScrollReveal>
           <PricingSection />
+          </ScrollReveal>
         </div>
         <div>
+           <ScrollReveal>
           <FaqSection />
+          </ScrollReveal>
         </div>
         <div>
         

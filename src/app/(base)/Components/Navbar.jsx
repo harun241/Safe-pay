@@ -404,9 +404,16 @@ export default function Navbar() {
                     key="desktop-user-menu"
                     onMouseEnter={() => setActiveDropdown("user-menu")}
                     onMouseLeave={() => setActiveDropdown(null)}
-                    className="relative"
+                    className="relative flex items-center justify-center"
                   >
-                    <button className="flex items-center p-2 rounded-full hover:bg-white/10">
+                    {/* Rotating Dashed Border */}
+                    <motion.div
+                      className="absolute -inset-1 rounded-full border-2 border-dashed border-green-500 dark:border-cyan-400"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    />
+                    {/* Profile Image */}
+                    <button className="relative z-10 flex items-center justify-center w-10 h-10 rounded-full overflow-hidden hover:scale-105 transition-transform">
                       <img
                         src={
                           user.photoURL ||
@@ -415,9 +422,10 @@ export default function Navbar() {
                           )}&background=0ea5e9&color=fff`
                         }
                         alt="User Avatar"
-                        className="w-8 h-8 rounded-full"
+                        className="w-full h-full rounded-full object-cover"
                       />
                     </button>
+
                     <AnimatePresence>
                       {activeDropdown === "user-menu" && (
                         <motion.div
@@ -468,14 +476,12 @@ export default function Navbar() {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:scale-105 bg-green-500 text-black hover:bg-green-600"
-                    >
-                      Login
-                    </Link>
-                  </>
+                  <Link
+                    href="/login"
+                    className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:scale-105 bg-green-500 text-black hover:bg-green-600"
+                  >
+                    Login
+                  </Link>
                 )}
               </div>
 

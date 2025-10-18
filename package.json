@@ -17,7 +17,7 @@
     "axios": "^1.12.2",
     "express": "^5.1.0",
     "firebase": "^12.2.1",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^12.23.24",
     "heroicons": "^2.2.0",
     "json2csv": "^6.0.0-alpha.2",
     "lucide-react": "^0.544.0",
