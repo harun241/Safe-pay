@@ -2,19 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-// import dynamic from "next/dynamic";
-import VideoChat from "../Components/VideoChat";
+import dynamic from "next/dynamic";
 
-// Dynamically import to prevent SSR issues
-<<<<<<< HEAD
-// const VideoChat = dynamic(() => import("../Components/VideoChat"), { ssr: false });
-=======
+// ✅ Use dynamic import to prevent SSR issues (works in localhost + production)
 const VideoChat = dynamic(
   () => import("@/app/(base)/Components/VideoChat"),
   { ssr: false }
 );
-
->>>>>>> main
 
 export default function VideoCallPage() {
   return (
