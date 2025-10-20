@@ -374,7 +374,9 @@ export default function VideoChat({ roomId }) {
   const localStreamRef = useRef(null);
   const channelRef = useRef(null);
   const peerConnections = useRef({});
+  const pendingCandidates = useRef({});
   const clientId = useRef(makeClientId());
+
   const [remoteParticipants, setRemoteParticipants] = useState([]);
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -393,25 +395,23 @@ export default function VideoChat({ roomId }) {
 
   // ---------- CREATE PEER CONNECTION ----------
   function createPeerConnection(peerId) {
-    const existing = peerConnections.current[peerId];
-    if (existing && existing.connectionState !== "closed") return existing;
+    if (peerConnections.current[peerId]?.connectionState !== "closed") {
+      return peerConnections.current[peerId];
+    }
 
     const urls = process.env.NEXT_PUBLIC_TURN_URLS?.split(",") ?? [];
     const pc = new RTCPeerConnection({
       iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         {
-          urls: [
-            ...urls.map((u) =>
-              u.includes("turn:") && !u.includes("?transport=")
-                ? `${u}?transport=tcp`
-                : u
-            ),
-          ],
+          urls: urls.map((u) =>
+            u.includes("turn:") && !u.includes("?transport=") ? `${u}?transport=tcp` : u
+          ),
           username: process.env.NEXT_PUBLIC_TURN_USERNAME,
           credential: process.env.NEXT_PUBLIC_TURN_CREDENTIAL,
         },
       ],
+      iceTransportPolicy: "all",
     });
 
     pc.ontrack = (event) => {
@@ -438,14 +438,9 @@ export default function VideoChat({ roomId }) {
     };
 
     pc.onconnectionstatechange = () => {
-      console.log(`🔗 ${peerId} connection:`, pc.connectionState);
       if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
         setRemoteParticipants((prev) => prev.filter((p) => p.id !== peerId));
       }
-    };
-
-    pc.oniceconnectionstatechange = () => {
-      console.log(`🧊 ICE(${peerId}):`, pc.iceConnectionState);
     };
 
     peerConnections.current[peerId] = pc;
@@ -459,7 +454,7 @@ export default function VideoChat({ roomId }) {
     stream.getTracks().forEach((track) => pc.addTrack(track, stream));
   }
 
-  // ---------- SIGNALING ACTIONS ----------
+  // ---------- SIGNALING ----------
   async function createAndSendOffer(targetPeerId) {
     try {
       const pc = createPeerConnection(targetPeerId);
@@ -476,7 +471,6 @@ export default function VideoChat({ roomId }) {
           description: offer,
         },
       });
-      console.log(`📤 Sent offer → ${targetPeerId}`);
     } catch (err) {
       console.error("❌ Offer error:", err);
     }
@@ -487,6 +481,14 @@ export default function VideoChat({ roomId }) {
       const pc = createPeerConnection(from);
       addLocalTracks(pc);
       await pc.setRemoteDescription(description);
+
+      if (pendingCandidates.current[from]) {
+        for (const c of pendingCandidates.current[from]) {
+          await pc.addIceCandidate(new RTCIceCandidate(c));
+        }
+        pendingCandidates.current[from] = [];
+      }
+
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
       await channelRef.current.send({
@@ -499,7 +501,6 @@ export default function VideoChat({ roomId }) {
           description: answer,
         },
       });
-      console.log(`📥 Offer from ${from} → answered`);
     } catch (err) {
       console.error("❌ Handle offer error:", err);
     }
@@ -508,8 +509,15 @@ export default function VideoChat({ roomId }) {
   async function handleAnswer(from, description) {
     try {
       const pc = peerConnections.current[from];
-      if (pc) await pc.setRemoteDescription(description);
-      console.log(`✅ Answer set from ${from}`);
+      if (pc) {
+        await pc.setRemoteDescription(description);
+        if (pendingCandidates.current[from]) {
+          for (const c of pendingCandidates.current[from]) {
+            await pc.addIceCandidate(new RTCIceCandidate(c));
+          }
+          pendingCandidates.current[from] = [];
+        }
+      }
     } catch (err) {
       console.error("❌ Handle answer error:", err);
     }
@@ -518,9 +526,16 @@ export default function VideoChat({ roomId }) {
   async function handleCandidate(from, candidate) {
     try {
       const pc = peerConnections.current[from];
-      if (pc && candidate) {
+      if (!pc) {
+        if (!pendingCandidates.current[from]) pendingCandidates.current[from] = [];
+        pendingCandidates.current[from].push(candidate);
+        return;
+      }
+      if (pc.remoteDescription) {
         await pc.addIceCandidate(new RTCIceCandidate(candidate));
-        console.log(`🧊  Added ICE from ${from}`);
+      } else {
+        if (!pendingCandidates.current[from]) pendingCandidates.current[from] = [];
+        pendingCandidates.current[from].push(candidate);
       }
     } catch (err) {
       console.error("❌ Candidate add error:", err);
@@ -548,7 +563,6 @@ export default function VideoChat({ roomId }) {
 
       switch (type) {
         case "join":
-          console.log(`📞 ${from} joined`);
           await createAndSendOffer(from);
           break;
         case "offer":
@@ -567,7 +581,6 @@ export default function VideoChat({ roomId }) {
 
     channel.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
-        console.log("✅ Joined room:", roomId);
         await channel.send({
           type: "broadcast",
           event: "signal",
@@ -581,9 +594,7 @@ export default function VideoChat({ roomId }) {
       channel.unsubscribe();
       Object.values(peerConnections.current).forEach((pc) => pc.close());
       peerConnections.current = {};
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((t) => t.stop());
-      }
+      if (localStreamRef.current) localStreamRef.current.getTracks().forEach((t) => t.stop());
     };
   }, [roomId]);
 
@@ -602,7 +613,6 @@ export default function VideoChat({ roomId }) {
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
         setStatus("joined");
       } catch (err) {
-        console.error("🎥 Media error:", err);
         setErrorMessage("Camera/mic access denied or unavailable.");
         setStatus("error");
       }
@@ -638,44 +648,31 @@ export default function VideoChat({ roomId }) {
   };
 
   // ---------- RENDER ----------
+  const allParticipants = [{ id: clientId.current, stream: localStreamRef.current }, ...remoteParticipants];
+
+  const gridCols = allParticipants.length <= 1 ? 1 : allParticipants.length <= 4 ? 2 : 3;
+
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Local */}
-        <div className="relative bg-black rounded-lg overflow-hidden">
-          <video
-            ref={localVideoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-64 object-cover"
-          />
-          <span className="absolute bottom-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
-            You
-          </span>
-        </div>
-
-        {/* Remote */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {remoteParticipants.map((p) => (
-            <div key={p.id} className="relative bg-black rounded-lg overflow-hidden">
-              <video
-                autoPlay
-                playsInline
-                ref={(el) => el && !el.srcObject && (el.srcObject = p.stream)}
-                className="w-full h-40 object-cover"
-              />
-              <span className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                Client
-              </span>
-            </div>
-          ))}
-          {remoteParticipants.length === 0 && (
-            <div className="flex items-center justify-center text-sm text-gray-400">
-              Waiting for another participant...
-            </div>
-          )}
-        </div>
+      <div className={`grid grid-cols-1 sm:grid-cols-${gridCols} gap-2`}>
+        {allParticipants.map((p) => (
+          <div key={p.id} className="relative bg-black rounded-lg overflow-hidden">
+            <video
+              autoPlay
+              playsInline
+              muted={p.id === clientId.current}
+              className="w-full h-48 object-cover"
+              ref={(el) => el && p.stream && !el.srcObject && (el.srcObject = p.stream)}
+            />
+            <span
+              className={`absolute bottom-2 left-2 text-white text-xs px-2 py-1 rounded ${
+                p.id === clientId.current ? "bg-green-600" : "bg-blue-600"
+              }`}
+            >
+              {p.id === clientId.current ? "You" : "Client"}
+            </span>
+          </div>
+        ))}
       </div>
 
       {/* Controls */}
@@ -685,25 +682,18 @@ export default function VideoChat({ roomId }) {
         <div className="flex gap-2 ml-auto">
           <button
             onClick={toggleCamera}
-            className={`px-4 py-2 rounded ${
-              cameraOn ? "bg-blue-600" : "bg-gray-400"
-            } text-white`}
+            className={`px-4 py-2 rounded ${cameraOn ? "bg-blue-600" : "bg-gray-400"} text-white`}
           >
             {cameraOn ? "Camera On" : "Camera Off"}
           </button>
           <button
             onClick={toggleMic}
-            className={`px-4 py-2 rounded ${
-              micOn ? "bg-blue-600" : "bg-gray-400"
-            } text-white`}
+            className={`px-4 py-2 rounded ${micOn ? "bg-blue-600" : "bg-gray-400"} text-white`}
           >
             {micOn ? "Mic On" : "Mic Off"}
           </button>
-          <button
-            onClick={endCall}
-            className="px-4 py-2 bg-red-500 text-white rounded"
-          >
-            End Demo
+          <button onClick={endCall} className="px-4 py-2 bg-red-500 text-white rounded">
+            End Call
           </button>
         </div>
       </div>
