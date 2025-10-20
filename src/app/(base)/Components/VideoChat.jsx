@@ -520,7 +520,7 @@ export default function VideoChat({ roomId }) {
       const pc = peerConnections.current[from];
       if (pc && candidate) {
         await pc.addIceCandidate(new RTCIceCandidate(candidate));
-        console.log(`🧊 Added ICE from ${from}`);
+        console.log(`🧊  Added ICE from ${from}`);
       }
     } catch (err) {
       console.error("❌ Candidate add error:", err);
