@@ -23,53 +23,46 @@ export default function HomePage() {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <div className="max-w-[1400px] mx-auto">
+      <div className="">
         <ScrollReveal>
-        <Hero />
+          <Hero />
         </ScrollReveal>
       </div>
 
-  
-
       {/* Testimonials Section */}
       <div className="px-6 sm:px-10 lg:px-20 max-w-[1400px] mx-auto">
-      
-      </div>
 
- 
+      </div>
       <div>
-        <div>
-        
-        </div>
         <div className={`relative w-full py-24 px-12 overflow-hidden transition-colors duration-500
         ${theme === "dark"
             ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
             : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
           }`}>
-            <ScrollReveal>
+          <ScrollReveal>
             <OurMission></OurMission>
-            </ScrollReveal>
-             <ScrollReveal>
-          <ImpactSection />
+          </ScrollReveal>
+          <ScrollReveal>
+            <ImpactSection />
           </ScrollReveal>
         </div>
         <div>
-           <ScrollReveal>
-          <AdditionalResources />
+          <ScrollReveal>
+            <AdditionalResources />
           </ScrollReveal>
         </div>
         <div>
-            <ScrollReveal>
-          <PricingSection />
+          <ScrollReveal>
+            <PricingSection />
           </ScrollReveal>
         </div>
         <div>
-           <ScrollReveal>
-          <FaqSection />
+          <ScrollReveal>
+            <FaqSection />
           </ScrollReveal>
         </div>
         <div>
-        
+
         </div>
       </div>
     </div>
