@@ -410,10 +410,10 @@ export default function Navbar() {
                               <LayoutDashboard className="mr-2" size={16} /> Dashboard
                             </Link>
                             <Link
-                              href="/profile"
+                              href="/manage_account"
                               className="flex items-center w-full rounded-md px-3 py-2 text-sm hover:scale-105 transition-transform"
                             >
-                              <Settings className="mr-2" size={16} /> Account Settings
+                              <Settings className="mr-2" size={16} /> Account Manager
                             </Link>
                             <button
                               onClick={logout}
