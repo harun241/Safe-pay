@@ -360,8 +360,6 @@
 //     </div>
 //   );
 // }
-
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -371,47 +369,41 @@ const makeClientId = () => `peer-${Math.random().toString(36).slice(2, 9)}`;
 
 export default function VideoChat({ roomId }) {
   const localVideoRef = useRef(null);
+  const [remoteParticipants, setRemoteParticipants] = useState([]);
+  const peerConnections = useRef({});
   const localStreamRef = useRef(null);
   const channelRef = useRef(null);
-  const peerConnections = useRef({});
-  const pendingCandidates = useRef({});
   const clientId = useRef(makeClientId());
-
-  const [remoteParticipants, setRemoteParticipants] = useState([]);
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [cameraOn, setCameraOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
 
+  // ✅ Safety check if Supabase client missing
   if (!supabase) {
     return (
       <div className="p-4 text-sm text-red-600 bg-red-50 rounded">
-        Supabase client missing.  
-        Check <strong>NEXT_PUBLIC_SUPABASE_URL</strong> &{" "}
+        Supabase client is not configured.<br />
+        Please set <strong>NEXT_PUBLIC_SUPABASE_URL</strong> and{" "}
         <strong>NEXT_PUBLIC_SUPABASE_ANON_KEY</strong>.
       </div>
     );
   }
 
-  // ---------- CREATE PEER CONNECTION ----------
-  function createPeerConnection(peerId) {
-    if (peerConnections.current[peerId]?.connectionState !== "closed") {
-      return peerConnections.current[peerId];
-    }
+  // ✅ Peer connection setup (with TURN/STUN)
+  const createPeerConnection = (peerId) => {
+    const existing = peerConnections.current[peerId];
+    if (existing && existing.connectionState !== "closed") return existing;
 
-    const urls = process.env.NEXT_PUBLIC_TURN_URLS?.split(",") ?? [];
     const pc = new RTCPeerConnection({
       iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         {
-          urls: urls.map((u) =>
-            u.includes("turn:") && !u.includes("?transport=") ? `${u}?transport=tcp` : u
-          ),
+          urls: process.env.NEXT_PUBLIC_TURN_URLS?.split(",") || [],
           username: process.env.NEXT_PUBLIC_TURN_USERNAME,
           credential: process.env.NEXT_PUBLIC_TURN_CREDENTIAL,
         },
       ],
-      iceTransportPolicy: "all",
     });
 
     pc.ontrack = (event) => {
@@ -437,28 +429,29 @@ export default function VideoChat({ roomId }) {
       }
     };
 
-    pc.onconnectionstatechange = () => {
-      if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
+    pc.oniceconnectionstatechange = () => {
+      if (["failed", "disconnected", "closed"].includes(pc.iceConnectionState)) {
         setRemoteParticipants((prev) => prev.filter((p) => p.id !== peerId));
       }
     };
 
     peerConnections.current[peerId] = pc;
     return pc;
-  }
+  };
 
-  // ---------- LOCAL TRACKS ----------
-  function addLocalTracks(pc) {
+  const addLocalTracksToPc = (pc) => {
     const stream = localStreamRef.current;
     if (!stream) return;
-    stream.getTracks().forEach((track) => pc.addTrack(track, stream));
-  }
+    const existingTracks = pc.getSenders().map((s) => s.track);
+    stream.getTracks().forEach((track) => {
+      if (!existingTracks.includes(track)) pc.addTrack(track, stream);
+    });
+  };
 
-  // ---------- SIGNALING ----------
-  async function createAndSendOffer(targetPeerId) {
+  const createAndSendOffer = async (targetPeerId) => {
     try {
       const pc = createPeerConnection(targetPeerId);
-      addLocalTracks(pc);
+      addLocalTracksToPc(pc);
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
       await channelRef.current.send({
@@ -468,27 +461,19 @@ export default function VideoChat({ roomId }) {
           from: clientId.current,
           to: targetPeerId,
           type: "offer",
-          description: offer,
+          description: pc.localDescription,
         },
       });
     } catch (err) {
-      console.error("❌ Offer error:", err);
+      console.error("❌ Error creating/sending offer:", err);
     }
-  }
+  };
 
-  async function handleOffer(from, description) {
+  const handleOffer = async (fromPeerId, description) => {
     try {
-      const pc = createPeerConnection(from);
-      addLocalTracks(pc);
+      const pc = createPeerConnection(fromPeerId);
+      addLocalTracksToPc(pc);
       await pc.setRemoteDescription(description);
-
-      if (pendingCandidates.current[from]) {
-        for (const c of pendingCandidates.current[from]) {
-          await pc.addIceCandidate(new RTCIceCandidate(c));
-        }
-        pendingCandidates.current[from] = [];
-      }
-
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
       await channelRef.current.send({
@@ -496,68 +481,58 @@ export default function VideoChat({ roomId }) {
         event: "signal",
         payload: {
           from: clientId.current,
-          to: from,
+          to: fromPeerId,
           type: "answer",
-          description: answer,
+          description: pc.localDescription,
         },
       });
     } catch (err) {
-      console.error("❌ Handle offer error:", err);
+      console.error("❌ Error handling offer:", err);
     }
-  }
+  };
 
-  async function handleAnswer(from, description) {
+  const handleAnswer = async (fromPeerId, description) => {
     try {
-      const pc = peerConnections.current[from];
-      if (pc) {
-        await pc.setRemoteDescription(description);
-        if (pendingCandidates.current[from]) {
-          for (const c of pendingCandidates.current[from]) {
-            await pc.addIceCandidate(new RTCIceCandidate(c));
-          }
-          pendingCandidates.current[from] = [];
-        }
-      }
+      const pc = peerConnections.current[fromPeerId];
+      if (pc) await pc.setRemoteDescription(description);
     } catch (err) {
-      console.error("❌ Handle answer error:", err);
+      console.error("❌ Error setting remote description:", err);
     }
-  }
+  };
 
-  async function handleCandidate(from, candidate) {
+  const handleCandidate = async (fromPeerId, candidate) => {
     try {
-      const pc = peerConnections.current[from];
-      if (!pc) {
-        if (!pendingCandidates.current[from]) pendingCandidates.current[from] = [];
-        pendingCandidates.current[from].push(candidate);
-        return;
-      }
-      if (pc.remoteDescription) {
-        await pc.addIceCandidate(new RTCIceCandidate(candidate));
-      } else {
-        if (!pendingCandidates.current[from]) pendingCandidates.current[from] = [];
-        pendingCandidates.current[from].push(candidate);
-      }
+      const pc = peerConnections.current[fromPeerId];
+      if (pc && candidate) await pc.addIceCandidate(candidate);
     } catch (err) {
-      console.error("❌ Candidate add error:", err);
+      console.error("❌ Error adding ICE candidate:", err);
     }
-  }
+  };
 
-  // ---------- SUPABASE CHANNEL ----------
+  // ✅ Realtime signaling
   useEffect(() => {
     if (!roomId) {
-      setErrorMessage("roomId required");
+      setErrorMessage("roomId is required.");
       return;
     }
 
     let mounted = true;
     const channel = supabase.channel(`webrtc:${roomId}`, {
-      config: { broadcast: { self: true } },
+      config: { broadcast: { self: false } },
     });
     channelRef.current = channel;
 
+    const sendSignal = async (payload) => {
+      try {
+        await channel.send({ type: "broadcast", event: "signal", payload });
+      } catch (err) {
+        console.warn("⚠️ Signal send failed", err);
+      }
+    };
+
     const onSignal = async ({ payload }) => {
       if (!mounted) return;
-      const { from, to, type, description, candidate } = payload;
+      const { from, to, type, description, candidate } = payload || {};
       if (!from || from === clientId.current) return;
       if (to && to !== clientId.current) return;
 
@@ -579,13 +554,10 @@ export default function VideoChat({ roomId }) {
 
     channel.on("broadcast", { event: "signal" }, onSignal);
 
-    channel.subscribe(async (status) => {
+    channel.subscribe((status) => {
       if (status === "SUBSCRIBED") {
-        await channel.send({
-          type: "broadcast",
-          event: "signal",
-          payload: { from: clientId.current, type: "join" },
-        });
+        console.log("✅ Joined room:", roomId);
+        sendSignal({ from: clientId.current, type: "join" });
       }
     });
 
@@ -594,106 +566,112 @@ export default function VideoChat({ roomId }) {
       channel.unsubscribe();
       Object.values(peerConnections.current).forEach((pc) => pc.close());
       peerConnections.current = {};
-      if (localStreamRef.current) localStreamRef.current.getTracks().forEach((t) => t.stop());
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((t) => t.stop());
+      }
     };
   }, [roomId]);
 
-  // ---------- LOCAL MEDIA ----------
+  // ✅ Start local media
   useEffect(() => {
     let active = true;
     const start = async () => {
       setStatus("joining");
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         if (!active) return;
         localStreamRef.current = stream;
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
         setStatus("joined");
       } catch (err) {
-        setErrorMessage("Camera/mic access denied or unavailable.");
+        console.error("🎥 Media access error:", err);
+        setErrorMessage("Camera/microphone access denied or unavailable.");
         setStatus("error");
       }
     };
     start();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [roomId]);
 
-  // ---------- CONTROLS ----------
+  // ✅ Controls
   const toggleCamera = () => {
-    const track = localStreamRef.current?.getVideoTracks()[0];
-    if (track) {
-      track.enabled = !track.enabled;
-      setCameraOn(track.enabled);
+    const stream = localStreamRef.current;
+    if (!stream) return;
+    const videoTrack = stream.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.enabled = !videoTrack.enabled;
+      setCameraOn(videoTrack.enabled);
     }
   };
+
   const toggleMic = () => {
-    const track = localStreamRef.current?.getAudioTracks()[0];
-    if (track) {
-      track.enabled = !track.enabled;
-      setMicOn(track.enabled);
+    const stream = localStreamRef.current;
+    if (!stream) return;
+    const audioTrack = stream.getAudioTracks()[0];
+    if (audioTrack) {
+      audioTrack.enabled = !audioTrack.enabled;
+      setMicOn(audioTrack.enabled);
     }
   };
+
   const endCall = () => {
     Object.values(peerConnections.current).forEach((pc) => pc.close());
     peerConnections.current = {};
     setRemoteParticipants([]);
-    localStreamRef.current?.getTracks().forEach((t) => t.stop());
-    localVideoRef.current.srcObject = null;
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((t) => t.stop());
+      localStreamRef.current = null;
+    }
+    if (localVideoRef.current) localVideoRef.current.srcObject = null;
     setStatus("idle");
+    setErrorMessage("");
   };
 
-  // ---------- RENDER ----------
-  const allParticipants = [{ id: clientId.current, stream: localStreamRef.current }, ...remoteParticipants];
-
-  const gridCols = allParticipants.length <= 1 ? 1 : allParticipants.length <= 4 ? 2 : 3;
-
+  // ✅ Render
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col gap-4">
-      <div className={`grid grid-cols-1 sm:grid-cols-${gridCols} gap-2`}>
-        {allParticipants.map((p) => (
-          <div key={p.id} className="relative bg-black rounded-lg overflow-hidden">
-            <video
-              autoPlay
-              playsInline
-              muted={p.id === clientId.current}
-              className="w-full h-48 object-cover"
-              ref={(el) => el && p.stream && !el.srcObject && (el.srcObject = p.stream)}
-            />
-            <span
-              className={`absolute bottom-2 left-2 text-white text-xs px-2 py-1 rounded ${
-                p.id === clientId.current ? "bg-green-600" : "bg-blue-600"
-              }`}
-            >
-              {p.id === clientId.current ? "You" : "Client"}
-            </span>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="relative rounded-lg overflow-hidden bg-black">
+          <video ref={localVideoRef} autoPlay playsInline muted className="w-full h-64 object-cover rounded-lg" />
+          <span className="absolute bottom-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
+            You
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {remoteParticipants.map((p) => (
+            <div key={p.id} className="relative rounded-lg overflow-hidden bg-black">
+              <video
+                autoPlay
+                playsInline
+                className="w-full h-40 object-cover rounded-lg"
+                ref={(el) => el && !el.srcObject && (el.srcObject = p.stream)}
+              />
+              <span className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                Client
+              </span>
+            </div>
+          ))}
+          {remoteParticipants.length === 0 && (
+            <div className="flex items-center justify-center text-sm text-gray-400">
+              Waiting for another participant...
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Controls */}
       <div className="flex flex-wrap gap-2 items-center justify-between">
         <div className="text-sm text-gray-600">Status: {status}</div>
         {errorMessage && <div className="text-sm text-red-600">{errorMessage}</div>}
         <div className="flex gap-2 ml-auto">
-          <button
-            onClick={toggleCamera}
-            className={`px-4 py-2 rounded ${cameraOn ? "bg-blue-600" : "bg-gray-400"} text-white`}
-          >
+          <button onClick={toggleCamera} className={`px-4 py-2 rounded ${cameraOn ? "bg-blue-600" : "bg-gray-400"} text-white`}>
             {cameraOn ? "Camera On" : "Camera Off"}
           </button>
-          <button
-            onClick={toggleMic}
-            className={`px-4 py-2 rounded ${micOn ? "bg-blue-600" : "bg-gray-400"} text-white`}
-          >
+          <button onClick={toggleMic} className={`px-4 py-2 rounded ${micOn ? "bg-blue-600" : "bg-gray-400"} text-white`}>
             {micOn ? "Mic On" : "Mic Off"}
           </button>
           <button onClick={endCall} className="px-4 py-2 bg-red-500 text-white rounded">
-            End Call
+            End Demo
           </button>
         </div>
       </div>
