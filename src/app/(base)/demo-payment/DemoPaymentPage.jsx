@@ -60,8 +60,37 @@ export default function DemoPaymentPage() {
     }
   };
 
+  if (paymentStatus === "success") {
+    const api = async () => {
+      const paymentData = transactions?.items;
+      console.log("Request body:", paymentData);
 
+      try {
+        const res = await fetch("https://freud-detection-ai-model.onrender.com/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(paymentData),
+        });
 
+        // ✅ Parse JSON response
+        const data = await res.json();
+        
+        console.log("Response Data:", data);
+
+        // You can now show the result in your UI
+        if (data.prediction) {
+          // alert(`🧠 Prediction: ${data.prediction}`);
+          console.log(data.prediction)
+        } else if (data.error) {
+          console.error("Model error:", data.error);
+        }
+      } catch (err) {
+        console.error("Request failed:", err);
+      }
+    };
+
+    api();
+  }
 
 
   return (
