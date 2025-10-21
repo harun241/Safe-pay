@@ -35,13 +35,12 @@ export default function ASidebar({ isSidebarOpen, setIsSidebarOpen }) {
   return (
     <>
       {/* Overlay for mobile */}
-      <div
+           <div 
         className={`fixed inset-0 z-30 bg-black/50 transition-opacity duration-300 lg:hidden ${
           isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsSidebarOpen(false)}
       ></div>
-
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-screen lg:top-16 z-40 flex flex-col w-64 border-r overflow-y-auto transform transition-transform duration-300 lg:translate-x-0 ${
