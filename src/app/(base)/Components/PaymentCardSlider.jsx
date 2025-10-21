@@ -20,7 +20,7 @@ export default function PaymentCardSlider() {
   ];
 
   return (
-    <div className="overflow-hidden w-full py-6">
+    <div className="overflow-hidden w-full py-6  rounded-full">
       <div className="flex w-max animate-scroll">
         {[...cards, ...cards].map((card, index) => (
           <div

@@ -17,7 +17,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full rounded-2xl mx-auto overflow-hidden text-white text-center md:py-28 px-6 md:px-20">
+    <section className="relative h-[70vh]  overflow-hidden text-white text-center md:py-28 px-6 md:px-20">
       {/* Background video */}
       <video
         autoPlay
@@ -30,6 +30,14 @@ export default function Hero() {
         Your browser does not support the video tag.
       </video>
 
+      {/* Ocean Waves */}
+      {/* <div className="wave-container">
+        <div className="wave wave-1"></div>
+        <div className="wave wave-2"></div>
+        <div className="wave wave-3"></div>
+      </div> */}
+
+
       {/* Overlay (dark layer for readability) */}
       <motion.div
         className="absolute inset-0 bg-black/50"
@@ -40,7 +48,7 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="relative z-10 max-w-4xl mx-auto"
+        className="relative z-10"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -48,74 +56,76 @@ export default function Hero() {
       >
         {/* Title */}
 
-        <motion.h1
-          className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 flex flex-wrap justify-center overflow-hidden"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.05 } },
-          }}
-        >
-          {"Protect Your Transactions with AI".split("").map((char, index) => (
-            <motion.span
-              key={index}
-              variants={{
-                hidden: { opacity: 30, y: 50 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
-        </motion.h1>
+        <div>
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 flex flex-wrap justify-center overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.05 } },
+            }}
+          >
+            {"Protect Your Transactions with AI".split("").map((char, index) => (
+              <motion.span
+                key={index}
+                variants={{
+                  hidden: { opacity: 30, y: 50 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            ))}
+          </motion.h1>
 
 
-        {/* Sub heading */}
-        <motion.p
-          variants={childVariants}
-          className="text-lg md:text-xl mb-6 md:mb-8"
-        >
-          SafePay is an AI-powered fraud detection platform that keeps your
-          online transactions safe in real-time.
-        </motion.p>
+          {/* Sub heading */}
+          <motion.p
+            variants={childVariants}
+            className="text-lg md:text-xl mb-6 md:mb-8"
+          >
+            SafePay is an AI-powered fraud detection platform that keeps your
+            online transactions safe in real-time.
+          </motion.p>
 
-        {/* CTA buttons */}
-        <motion.div
-          variants={childVariants}
-          className="flex justify-center gap-4 flex-wrap"
-        >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link
-              href="/features"
-              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
-            >
-              Explore Features
-            </Link>
+          {/* CTA buttons */}
+          <motion.div
+            variants={childVariants}
+            className="flex justify-center gap-4 flex-wrap"
+          >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href="/features"
+                className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
+              >
+                Explore Features
+              </Link>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href="/contact"
+                className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
+              >
+                Contact Us
+              </Link>
+            </motion.div>
           </motion.div>
 
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link
-              href="/contact"
-              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 hover:bg-white hover:text-green-600"
-            >
-              Contact Us
-            </Link>
-          </motion.div>
-        </motion.div>
+          {/* Trusted message */}
+          <motion.p
+            variants={childVariants}
+            className="mt-6 md:mt-8 text-sm md:text-base text-white/80"
+          >
+            Trusted by thousands of users worldwide.
+          </motion.p>
 
-        {/* Trusted message */}
-        <motion.p
-          variants={childVariants}
-          className="mt-6 md:mt-8 text-sm md:text-base text-white/80"
-        >
-          Trusted by thousands of users worldwide.
-        </motion.p>
-
+        </div>
         {/* Payment Card Slider */}
         <motion.div
           variants={childVariants}
-          className="mt-8 md:mt-12"
+          className="mt-8 md:mt-12 max-w-7xl mx-auto"
         >
           <PaymentCardSlider />
         </motion.div>
