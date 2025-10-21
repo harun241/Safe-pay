@@ -1,13 +1,14 @@
 "use client";
 
 // Import your components
-import FraudMap from "../components/FraudMap";
-import FraudStats from "../components/FraudStats";
-import FraudReports from "../components/FraudReports";
-import FraudFilters from "../components/FraudFilters";
-import ScrollReveal from "../components/ScrollReveal";
+
 
 import { useState } from "react";
+import FraudMap from "../Components/FraudMap";
+import FraudStats from "../Components/FraudStats";
+import FraudReports from "../Components/FraudReports";
+import ScrollReveal from "../Components/ScrollReveal";
+import FraudFilters from "../Components/FraudFilters";
 
 export default function GlobalAntiFraud() {
   const [filter, setFilter] = useState({
@@ -21,7 +22,8 @@ export default function GlobalAntiFraud() {
 
       {/* Filters */}
       <div className="bg-white p-4 rounded-xl shadow-md">
-        <FraudFilters filter={filter} setFilter={setFilter} />
+        <FraudFilters
+         filter={filter} setFilter={setFilter} />
       </div>
 
       {/* Map */}
