@@ -9,17 +9,20 @@ export default function FraudReports({ filter }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full table-auto border-collapse border border-gray-300 dark:border-gray-700">
-        <thead className="bg-gray-200 dark:bg-gray-800">
+        <thead className="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
           <tr>
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Country</th>
-            <th className="border p-2">Type</th>
-            <th className="border p-2">Date</th>
+            <th className="border p-2 text-left">ID</th>
+            <th className="border p-2 text-left">Country</th>
+            <th className="border p-2 text-left">Type</th>
+            <th className="border p-2 text-left">Date</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-gray-900 dark:text-gray-200">
           {reports.map((r) => (
-            <tr key={r.id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
+            <tr
+              key={r.id}
+              className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
               <td className="border p-2">{r.id}</td>
               <td className="border p-2">{r.country}</td>
               <td className="border p-2">{r.type}</td>

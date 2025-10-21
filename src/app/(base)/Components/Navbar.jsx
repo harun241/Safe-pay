@@ -263,7 +263,7 @@ export default function Navbar() {
       dropdownItems: [
         { label: "AI & Machine Learning", href: "/machinelearning" },
         { label: "Intelligent Risk Decisioning", href: "/risk" },
-        { label: "Global Anti-Fraud Network", href: "/global_anti_fraud" },
+        { label: "Global Anti-Fraud Network", href: "/globalfraud" },
         { label: "Data Hub", href: "/features/data-hub" },
       ],
     },
