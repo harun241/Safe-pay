@@ -44,7 +44,7 @@ const AboutSection = () => {
       : "shadow-md hover:shadow-green-200/40";
 
   return (
-    <section className={`relative py-20 px-6 overflow-hidden ${sectionBg}`}>
+    <section className={`relative min-h-screen py-20 px-6 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
       {loading && <Spinner />}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>

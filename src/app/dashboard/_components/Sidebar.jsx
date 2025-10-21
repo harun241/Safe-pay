@@ -28,7 +28,7 @@ export default function Sidebar({ userRole, isSidebarOpen, setIsSidebarOpen }) {
     { name: "Transactions", href: "/dashboard/transactions", icon: BarChart },
     { name: "Card Management", href: "/dashboard/cards", icon: CreditCard },
     { name: "Support", href: "/dashboard/support", icon: LifeBuoy },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
+    { name: "Settings", href: "/dashboard/setting", icon: Settings },
     { name: "Back to home", href: "/", icon: ArrowBigLeft }
   ];
 

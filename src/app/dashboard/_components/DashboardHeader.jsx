@@ -143,7 +143,7 @@ export default function DashboardHeader({ setIsSidebarOpen }) {
           Home
          </Link>
          <Link
-          href="/settings"
+          href="/dashboard/setting"
           onClick={closeDropdown}
           className={`flex items-center px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 ${
            theme === "dark" ? "text-gray-300" : "text-gray-700"

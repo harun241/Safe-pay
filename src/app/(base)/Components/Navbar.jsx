@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { useAuth } from "@/context/AuthContext";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
@@ -27,12 +26,7 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
   if (!item.dropdownItems) return null;
 
   return (
-    <div
-      key={`desktop-dropdown-${item.name}`}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      className="relative"
-    >
+    <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="relative">
       <motion.button
         whileHover={{ scale: 1.05 }}
         className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200 ${
@@ -64,10 +58,9 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
           >
             <div className="py-2">
               {item.dropdownItems.map((subItem) => (
-                <motion.div key={`desktop-sub-${subItem.href}`} whileHover={{ scale: 1.05 }}>
+                <motion.div key={subItem.href} whileHover={{ scale: 1.05 }}>
                   <Link
                     href={subItem.href}
-                    onClick={subItem.onClick}
                     className={`flex items-center w-full text-left px-4 py-2.5 text-sm transition-transform duration-200 ${
                       theme === "dark"
                         ? "text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400"
@@ -86,185 +79,158 @@ const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) =>
   );
 };
 
-// --- Mobile User Menu ---
-const MobileUserMenu = ({ isOpen, setIsOpen, user, logout, theme }) => {
-  if (!isOpen) return null;
-
-  const userDropdownItems = [
-    { label: "Dashboard", href: "/dashboard", key: "mobile-dashboard", icon: LayoutDashboard },
-    { label: "Account Settings", href: "/settings", key: "mobile-settings", icon: Settings },
-    { label: "Logout", href: "#", key: "mobile-logout", icon: LogOut, onClick: logout },
-  ];
-
-  return (
-    <>
-      <motion.div
-        key="mobile-user-backdrop"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="lg:hidden fixed inset-0 z-30 bg-black/50"
-        onClick={() => setIsOpen(false)}
-      />
-      <motion.div
-        key="mobile-user-panel"
-        initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto shadow-2xl ${
-          theme === "dark" ? "bg-gray-950 text-gray-300" : "bg-white text-gray-800"
-        }`}
-      >
-        <div className="p-5 pt-20">
-          {user ? (
-            <div className="border-b border-gray-800 pb-4">
-              <div className="px-3 py-2 mb-2">
-                <p className="text-sm font-semibold truncate">{user.displayName || "User"}</p>
-                <p className="text-xs truncate text-gray-400">{user.email}</p>
-              </div>
-              <hr className="border-gray-700 my-1" />
-              {userDropdownItems.map((item) => (
-                <motion.div key={item.key} whileHover={{ scale: 1.05 }}>
-                  <Link
-                    href={item.href}
-                    onClick={() => {
-                      setIsOpen(false);
-                      if (item.onClick) item.onClick();
-                    }}
-                    className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 ${
-                      item.label === "Logout"
-                        ? "text-red-400 hover:bg-red-500/10"
-                        : theme === "dark"
-                        ? "text-gray-300 hover:bg-white/10 hover:text-white"
-                        : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                    }`}
-                  >
-                    {item.icon && <item.icon className="mr-2" size={16} />}
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg transition-transform duration-200 hover:scale-105"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg transition-transform duration-200 hover:scale-105"
-              >
-                Register
-              </Link>
-            </>
-          )}
-        </div>
-      </motion.div>
-    </>
-  );
-};
-
-// --- Mobile Navigation ---
-const MobileNav = ({ isOpen, setIsOpen, navItems, theme }) => {
+// --- Mobile Menu ---
+const MobileMenu = ({ isOpen, setIsOpen, navItems, user, logout, theme }) => {
   const [openSubmenus, setOpenSubmenus] = useState({});
 
-  const handleSubMenuToggle = (e, itemName) => {
-    e.preventDefault();
-    setOpenSubmenus((prev) => ({ ...prev, [itemName]: !prev[itemName] }));
+  const toggleSubmenu = (name) => {
+    setOpenSubmenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      <motion.div
-        key="mobile-nav-backdrop"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="lg:hidden fixed inset-0 z-30 bg-black/50"
-        onClick={() => setIsOpen(false)}
-      />
-      <motion.div
-        key="mobile-nav-panel"
-        initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`lg:hidden fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto shadow-2xl ${
-          theme === "dark" ? "bg-gray-950 text-gray-300" : "bg-white text-gray-800"
-        }`}
-      >
-        <div className="p-5 pt-20">
-          {navItems.map((item) => (
-            <div key={`mobile-nav-item-${item.name}`} className="border-b border-gray-800">
-              {item.dropdownItems ? (
-                <>
-                  <button
-                    onClick={(e) => handleSubMenuToggle(e, item.name)}
-                    className="w-full flex items-center justify-between py-4 text-lg"
-                  >
-                    <span>{item.name}</span>
-                    <ChevronDown
-                      size={20}
-                      className={`transition-transform duration-300 ${
-                        openSubmenus[item.name] ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {openSubmenus[item.name] && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="pl-4 pb-2 space-y-2 overflow-hidden"
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-30 bg-black/50"
+            onClick={() => setIsOpen(false)}
+          />
+
+          {/* Panel */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className={`fixed top-0 right-0 w-full max-w-sm h-screen z-40 overflow-y-auto shadow-2xl ${
+              theme === "dark" ? "bg-gray-950 text-gray-300" : "bg-white text-gray-800"
+            }`}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="p-5 pt-20 space-y-4">
+              {/* Nav Items */}
+              {navItems.map((item) => (
+                <div key={item.name} className="border-b border-gray-800">
+                  {item.dropdownItems ? (
+                    <>
+                      <button
+                        onClick={() => toggleSubmenu(item.name)}
+                        className="w-full flex items-center justify-between py-4 text-lg"
                       >
-                        {item.dropdownItems.map((subItem) => (
-                          <motion.div key={`mobile-sub-${subItem.href}`} whileHover={{ scale: 1.05 }}>
-                            <Link
-                              href={subItem.href}
-                              onClick={() => setIsOpen(false)}
-                              className={`block py-2 transition-transform duration-200 ${
-                                theme === "dark"
-                                  ? "text-gray-400 hover:text-cyan-400"
-                                  : "text-gray-700 hover:text-cyan-600"
-                              }`}
-                            >
-                              {subItem.label}
-                            </Link>
+                        <span>{item.name}</span>
+                        <ChevronDown
+                          size={20}
+                          className={`transition-transform duration-300 ${
+                            openSubmenus[item.name] ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {openSubmenus[item.name] && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="pl-4 pb-2 space-y-2 overflow-hidden"
+                          >
+                            {item.dropdownItems.map((subItem) => (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => setIsOpen(false)}
+                                className={`block py-2 transition-transform duration-200 ${
+                                  theme === "dark"
+                                    ? "text-gray-400 hover:text-cyan-400"
+                                    : "text-gray-700 hover:text-cyan-600"
+                                }`}
+                              >
+                                {subItem.label}
+                              </Link>
+                            ))}
                           </motion.div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </>
-              ) : (
-                <motion.div whileHover={{ scale: 1.05 }} key={`mobile-link-${item.href}`}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`block py-4 text-lg transition-transform duration-200 ${
-                      theme === "dark" ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-green-600"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                </motion.div>
-              )}
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`block py-4 text-lg transition-transform duration-200 ${
+                        theme === "dark" ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-green-600"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+              ))}
+
+              {/* User Section */}
+              <div className="pt-4 border-t border-gray-800">
+                {user ? (
+                  <>
+                    <p className="text-sm font-semibold">{user.displayName || "User"}</p>
+                    <p className="text-xs text-gray-400">{user.email}</p>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="block py-2 text-sm hover:text-green-500"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/dashboard/profile"
+                      onClick={() => setIsOpen(false)}
+                      className="block py-2 text-sm hover:text-green-500"
+                    >
+                      Account Settings
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                      className="block py-2 text-sm text-red-500 hover:text-red-600"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setIsOpen(false)}
+                      className="block py-2 text-lg hover:text-green-500"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/register"
+                      onClick={() => setIsOpen(false)}
+                      className="block py-2 text-lg hover:text-green-500"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
-          ))}
-        </div>
-      </motion.div>
-    </>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -274,7 +240,6 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -286,10 +251,9 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow =
-      isMobileMenuOpen || isMobileUserMenuOpen ? "hidden" : "auto";
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
     return () => (document.body.style.overflow = "auto");
-  }, [isMobileMenuOpen, isMobileUserMenuOpen]);
+  }, [isMobileMenuOpen]);
 
   const navItems = [
     {
@@ -299,7 +263,7 @@ export default function Navbar() {
       dropdownItems: [
         { label: "AI & Machine Learning", href: "/machinelearning" },
         { label: "Intelligent Risk Decisioning", href: "/risk" },
-        { label: "Global Anti-Fraud Network", href: "/features/fraud-network" },
+        { label: "Global Anti-Fraud Network", href: "/global_anti_fraud" },
         { label: "Data Hub", href: "/features/data-hub" },
       ],
     },
@@ -336,7 +300,7 @@ export default function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled || isMobileMenuOpen || isMobileUserMenuOpen
+          isScrolled || isMobileMenuOpen
             ? theme === "dark"
               ? "bg-gray-950/80 backdrop-blur-lg border-b border-gray-700/50 shadow-lg"
               : "bg-white/80 backdrop-blur-lg border-b border-gray-300 shadow-md"
@@ -366,7 +330,7 @@ export default function Navbar() {
               {navItems.map((item) =>
                 item.dropdownItems ? (
                   <DesktopDropdown
-                    key={`desktop-item-${item.name}`}
+                    key={item.name}
                     item={item}
                     isOpen={activeDropdown === item.name}
                     onMouseEnter={() => setActiveDropdown(item.name)}
@@ -374,23 +338,22 @@ export default function Navbar() {
                     theme={theme}
                   />
                 ) : (
-                  <motion.div whileHover={{ scale: 1.05 }} key={`desktop-link-${item.href}`}>
-                    <Link
-                      href={item.href}
-                      className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200 ${
-                        theme === "dark"
-                          ? "text-gray-300 hover:text-white hover:bg-white/10"
-                          : "text-gray-700 hover:text-black hover:bg-green-500/20"
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200 ${
+                      theme === "dark"
+                        ? "text-gray-300 hover:text-white hover:bg-white/10"
+                        : "text-gray-700 hover:text-black hover:bg-green-500/20"
+                    }`}
+                  >
+                    <item.icon
+                      className={`w-4 h-4 mr-2 ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
-                    >
-                      <item.icon
-                        className={`w-4 h-4 mr-2 ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      />
-                      {item.name}
-                    </Link>
-                  </motion.div>
+                    />
+                    {item.name}
+                  </Link>
                 )
               )}
             </nav>
@@ -400,20 +363,16 @@ export default function Navbar() {
               <div className="hidden lg:flex items-center space-x-2">
                 <ThemeSwitcher />
                 {user ? (
-                  <div
-                    key="desktop-user-menu"
-                    onMouseEnter={() => setActiveDropdown("user-menu")}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                    className="relative flex items-center justify-center"
-                  >
-                    {/* Rotating Dashed Border */}
-                    <motion.div
-                      className="absolute -inset-1 rounded-full border-2 border-dashed border-green-500 dark:border-cyan-400"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    />
+                  <div className="relative">
                     {/* Profile Image */}
-                    <button className="relative z-10 flex items-center justify-center w-10 h-10 rounded-full overflow-hidden hover:scale-105 transition-transform">
+                    <button
+                      onClick={() =>
+                        setActiveDropdown((prev) =>
+                          prev === "user-menu" ? null : "user-menu"
+                        )
+                      }
+                      className="relative flex items-center justify-center w-10 h-10 rounded-full overflow-hidden hover:scale-105 transition-transform"
+                    >
                       <img
                         src={
                           user.photoURL ||
@@ -446,27 +405,19 @@ export default function Navbar() {
                             <hr className="border-gray-700 my-1" />
                             <Link
                               href="/dashboard"
-                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 hover:scale-105 ${
-                                theme === "dark"
-                                  ? "text-gray-300 hover:bg-white/10 hover:text-white"
-                                  : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                              }`}
+                              className="flex items-center w-full rounded-md px-3 py-2 text-sm hover:scale-105 transition-transform"
                             >
                               <LayoutDashboard className="mr-2" size={16} /> Dashboard
                             </Link>
                             <Link
-                              href="/settings"
-                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm transition-transform duration-200 hover:scale-105 ${
-                                theme === "dark"
-                                  ? "text-gray-300 hover:bg-white/10 hover:text-white"
-                                  : "text-gray-700 hover:bg-green-500/20 hover:text-white"
-                              }`}
+                              href="/profile"
+                              className="flex items-center w-full rounded-md px-3 py-2 text-sm hover:scale-105 transition-transform"
                             >
                               <Settings className="mr-2" size={16} /> Account Settings
                             </Link>
                             <button
                               onClick={logout}
-                              className={`flex items-center w-full rounded-md px-3 py-2 text-sm text-red-400 transition-transform duration-200 hover:scale-105 hover:bg-red-500/10`}
+                              className="flex items-center w-full rounded-md px-3 py-2 text-sm text-red-400 hover:scale-105 transition-transform hover:bg-red-500/10"
                             >
                               <LogOut className="mr-2" size={16} /> Logout
                             </button>
@@ -497,18 +448,11 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Nav */}
-      <MobileNav
+      {/* Mobile Menu */}
+      <MobileMenu
         isOpen={isMobileMenuOpen}
         setIsOpen={setIsMobileMenuOpen}
         navItems={navItems}
-        theme={theme}
-      />
-
-      {/* Mobile User Menu */}
-      <MobileUserMenu
-        isOpen={isMobileUserMenuOpen}
-        setIsOpen={setIsMobileUserMenuOpen}
         user={user}
         logout={logout}
         theme={theme}
