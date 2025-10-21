@@ -1,41 +1,27 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import {
     Bell,
     Search,
-    Settings,
-    LogOut,
-    LayoutDashboard,
     Shield,
     Menu,
-    Home,
-    ChevronDown,
+
 } from "lucide-react";
-import { useState } from "react";
 import { ThemeSwitcher } from "@/app/(base)/Components/ThemeSwitcher";
 
 export default function ProfileHeader({ setIsSidebarOpen }) {
-    const { user, logout } = useAuth();
     const { theme } = useTheme();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-    const closeDropdown = () => setIsDropdownOpen(false);
     const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
 
-    const userAvatar = user?.photoURL ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            user?.displayName || user?.email || "User"
-        )}&background=0ea5e9&color=fff`;
+
 
     return (
         <header
-            className={`fixed pl-0 pr-0 lg:pl-5 lg:pr-5 top-0 left-0 w-full z-40 flex-shrink-0 border-b ${theme === "dark" ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
+            className={`sticky pl-0 pr-0 lg:pl-5 lg:pr-5 top-0 left-0 w-full z-40 flex-shrink-0 border-b ${theme === "dark" ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
                 }`}
         >
             <div className="flex items-center justify-between h-16 px-4">
@@ -49,7 +35,7 @@ export default function ProfileHeader({ setIsSidebarOpen }) {
                         className={`font-bold text-xl transition-colors hidden sm:block ${theme === "dark" ? "text-cyan-400" : "text-green-500"
                             }`}
                     >
-                        SafePay
+                        Account Manager
                     </span>
                 </Link>
 
