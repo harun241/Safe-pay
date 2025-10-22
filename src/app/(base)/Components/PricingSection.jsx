@@ -52,6 +52,7 @@ export default function PricingSection() {
     },
   ];
 
+
   return (
     <section
       className={`relative py-24 px-6 overflow-hidden transition-colors duration-500
@@ -66,14 +67,14 @@ export default function PricingSection() {
       ></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-           <motion.h2
-                  initial={{ opacity: 0, y: -50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="text-5xl text-center font-extrabold mb-6 text-cyan-500"
-                >
-                   Subscription Plans
-                </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-5xl text-center font-extrabold mb-6 text-cyan-500"
+        >
+          Subscription Plans
+        </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -166,7 +167,7 @@ export default function PricingSection() {
                 ))}
               </ul>
 
-              <Link
+              {/* <Link
                 href={
                   plan.title === "Basic"
                     ? "/plans/basic"
@@ -184,7 +185,22 @@ export default function PricingSection() {
   `}
               >
                 {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
+              </Link> */}
+
+              <Link
+                href={`/plans/${plan.title.toLowerCase()}`} // ✅ Correct template literal
+                className={`border-2 rounded-lg font-semibold px-6 py-3 transition
+    ${plan.customGradient
+                    ? "border-white text-white hover:bg-white hover:text-gray-900"
+                    : theme === "dark"
+                      ? "border-white text-white hover:bg-white hover:text-gray-900"
+                      : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                  }
+  `}
+              >
+                {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
               </Link>
+
 
 
             </motion.div>
