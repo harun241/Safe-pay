@@ -6,12 +6,16 @@ import { CheckCircle, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "next/navigation";
+import parant from "../page";
 
 export default function DynamicPlanPage() {
-  const { plan } = useParams(); // ✅ dynamic param from URL
   const user = useSelector((state) => state.userInfo);
   const [loading, setLoading] = useState(false);
+
+  const plan = parant()
+
+
+  console.log(name)
 
   console.log(plan)
 
@@ -93,6 +97,8 @@ export default function DynamicPlanPage() {
       });
       const data = await res.json();
 
+
+
       if (data.url) window.location.href = data.url;
       else alert("Payment initiation failed");
     } catch (err) {
@@ -102,6 +108,9 @@ export default function DynamicPlanPage() {
       setLoading(false);
     }
   };
+
+
+
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white min-h-screen overflow-hidden">
