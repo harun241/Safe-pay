@@ -47,7 +47,7 @@ const AboutSection = () => {
     <section className={`relative min-h-screen py-20 px-6 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
       {loading && <Spinner />}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-500 via-transparent to-transparent"></div>
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         {/* Heading */}
@@ -55,7 +55,7 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl font-extrabold text-green-400 mb-6 tracking-wide"
+          className="text-4xl md:text-5xl font-extrabold text-cyan-500 mb-6 tracking-wide"
         >
           About SafePay
         </motion.h1>
@@ -85,10 +85,10 @@ const AboutSection = () => {
               className={`rounded-2xl p-8 ${cardBg} ${cardShadow} hover:-translate-y-2 transition-all duration-300`}
             >
               {/* Icon */}
-              <div className="text-5xl mb-5 bg-gradient-to-tr from-green-400 to-green-200 text-transparent bg-clip-text">
+              <div className="text-5xl mb-5 bg-gradient-to-tr from-cyan-400 to-green-200 text-transparent bg-clip-text">
                 {card.icon}
               </div>
-              <h2 className="text-2xl font-semibold text-green-400 mb-3">
+              <h2 className="text-2xl font-semibold text-cyan-700 mb-3">
                 {card.title}
               </h2>
               <p className={`${cardText} leading-relaxed`}>{card.description}</p>
