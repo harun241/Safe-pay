@@ -1,8 +1,11 @@
 "use client";
 
+import { getDeviceInfo } from "@/lib/getDeviceInfo";
 import { motion } from "framer-motion";
 import { CheckCircle, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function BasicPlan() {
   const features = [
@@ -11,6 +14,53 @@ export default function BasicPlan() {
     "Basic Analytics Reports",
     "Standard Support (24-48h)",
   ];
+
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.userInfo);
+    const [loading, setLoading] = useState(false);
+
+    
+    if(!user){
+      return <h1> please login</h1>
+    }
+
+
+     // payment event
+      const handlePayment = async (e) => {
+        const deviceInfo = await getDeviceInfo();
+    
+        setLoading(true);
+        const presentData = {
+          user_id: user?.uid || "guest_demo",
+          amount: 49,
+          subscriptionPlans:"BasicPlan",
+          ...deviceInfo,
+        };
+    
+        try {
+          const res = await fetch("/api/subscribe-plans/initiate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(presentData),
+          });
+    
+          const data = await res.json();
+          if (data.url) window.location.href = data.url;
+          else alert("Payment initiation failed");
+        } catch (err) {
+          console.error("Payment error:", err);
+          alert("Something went wrong");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+
+
+
+
+
+
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white min-h-screen">
@@ -55,12 +105,14 @@ export default function BasicPlan() {
               $49<span className="text-xl text-gray-300">/mo</span>
             </p>
             <p className="text-gray-300 mb-6">Essential protection for small businesses</p>
-            <Link
-              href="/checkout/basic"
+            <button
+              disabled={loading}
+              onClick={handlePayment}
               className="inline-block px-10 py-4 rounded-2xl bg-blue-400 text-gray-900 font-semibold text-lg shadow-lg hover:bg-blue-500 transition"
             >
-              Subscribe Now
-            </Link>
+              {loading ? "Redirecting..." : "Subscribe Now"}
+              
+            </button>
           </div>
         </motion.div>
 
