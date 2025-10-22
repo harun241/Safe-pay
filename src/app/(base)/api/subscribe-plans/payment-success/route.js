@@ -94,7 +94,7 @@ const devices = {
       </head>
       <body>
         <p>Payment processed. Redirecting...</p>
-        <script>window.location.href = "http://localhost:3000";</script>
+        <script>window.location.href = "http://localhost:3000/plans/success/?payment=success";</script>
       </body>
     </html>
   `;
