@@ -146,7 +146,7 @@ const Contact = () => {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-2 mb-4"
           >
-            Secure Your <span className={theme === 'dark' ? 'text-cyan-400' : 'text-emerald-600'}>Inquiry</span>
+            Secure Your <span className={theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}>Inquiry</span>
           </motion.h2>
           <motion.p
             variants={itemVariants}
@@ -167,7 +167,7 @@ const Contact = () => {
         >
             {stats.map((stat, index) => (
                 <motion.div key={index} variants={itemVariants} className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-slate-800/50' : 'bg-white/60'}`}>
-                    <p className={`text-4xl font-bold ${theme === 'dark' ? 'text-cyan-400' : 'text-emerald-600'}`}>{stat.value}</p>
+                    <p className={`text-4xl font-bold ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}`}>{stat.value}</p>
                     <p className={`mt-2 text-sm font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</p>
                 </motion.div>
             ))}
@@ -191,7 +191,7 @@ const Contact = () => {
                 } shadow-xl backdrop-blur-lg`}
             >
               <h3 className="text-3xl font-bold mb-8 flex items-center">
-                <ShieldCheck className={`mr-3 h-8 w-8 ${theme === 'dark' ? 'text-emerald-400' : 'text-cyan-600'}`}/>
+                <ShieldCheck className={`mr-3 h-8 w-8 ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}`}/>
                 Contact Information
               </h3>
               <div className="space-y-8">

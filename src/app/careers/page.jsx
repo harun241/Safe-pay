@@ -98,7 +98,7 @@ export default function CareersPage() {
       {/* Background Accent */}
       <Navbar></Navbar>
         {loading && <Spinner />}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"></div>
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-500 via-transparent to-transparent"></div>
 
       {!selectedJob ? (
         <div className="relative z-10 max-w-7xl mx-auto text-center">
@@ -106,7 +106,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-6xl font-extrabold text-green-400 mb-8 tracking-wide"
+            className="text-5xl md:text-6xl font-extrabold text-cyan-600 mb-8 tracking-wide"
           >
             Careers at SafePay
           </motion.h1>
@@ -132,7 +132,7 @@ export default function CareersPage() {
                 className={`p-10 min-h-[300px] ${cardBg} backdrop-blur-md rounded-3xl ${cardShadow} cursor-pointer hover:-translate-y-3 transition-all`}
                 onClick={() => setSelectedJob(job)}
               >
-                <h3 className="text-2xl font-semibold mb-3 text-green-400">
+                <h3 className="text-2xl font-semibold mb-3 text-cyan-600">
                   {job.title}
                 </h3>
                 <p className={cardText + " mb-5"}>{job.department}</p>
@@ -151,23 +151,23 @@ export default function CareersPage() {
         >
           <button
             onClick={() => setSelectedJob(null)}
-            className="flex items-center gap-2 text-green-400 hover:underline mb-6"
+            className="flex items-center gap-2 text-cyan-400 hover:underline mb-6"
           >
             <ArrowLeft size={18} /> Back to Careers
           </button>
-          <h2 className="text-4xl font-bold mb-4 text-green-400">
+          <h2 className="text-4xl font-bold mb-4 text-cyan-500">
             {selectedJob.title}
           </h2>
           <p className={cardText + " mb-6"}>{selectedJob.description}</p>
 
-          <h3 className="text-2xl font-semibold mb-2 text-green-400">Responsibilities:</h3>
+          <h3 className="text-2xl font-semibold mb-2 text-cyan-500">Responsibilities:</h3>
           <ul className={`list-disc list-inside mb-6 ${cardText}`}>
             {selectedJob.responsibilities.map((item, idx) => (
               <li key={idx}>{item}</li>
             ))}
           </ul>
 
-          <h3 className="text-2xl font-semibold mb-2 text-green-400">Qualifications:</h3>
+          <h3 className="text-2xl font-semibold mb-2 text-cyan-500">Qualifications:</h3>
           <ul className={`list-disc list-inside mb-6 ${cardText}`}>
             {selectedJob.qualifications.map((item, idx) => (
               <li key={idx}>{item}</li>
