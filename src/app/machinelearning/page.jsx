@@ -171,7 +171,7 @@ export default function FraudDetectionPage() {
           {/* ✅ Next.js Optimized Image */}
           <div className="mt-6 relative w-full max-w-4xl mx-auto aspect-[16/9]">
             <Image
-              src="/images/machine.JPG"
+              src="/images/machine.jpg"
               alt="Fraud Detection Workflow"
               fill
               className="rounded-lg shadow-md object-cover transition-shadow duration-500 hover:shadow-lg"

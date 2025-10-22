@@ -174,7 +174,7 @@ export default function RiskDecisioningPage() {
           {/* ✅ Optimized Next.js Image Section (same as previous page) */}
           <div className="mt-6 relative w-full max-w-4xl mx-auto aspect-[16/9]">
             <Image
-              src="/images/risk.JPG"
+              src="/images/risk.jpg"
               alt="Intelligent Risk Decisioning Workflow"
               fill
               className="rounded-lg shadow-md object-cover transition-shadow duration-500 hover:shadow-lg"
