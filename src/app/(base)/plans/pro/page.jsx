@@ -1,8 +1,11 @@
 "use client";
 
+import { getDeviceInfo } from "@/lib/getDeviceInfo";
 import { motion } from "framer-motion";
 import { CheckCircle, ShieldCheck, Zap, Cpu, BarChart } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProPlanPage() {
   const plan = {
@@ -19,6 +22,46 @@ export default function ProPlanPage() {
       "Priority support",
     ],
   };
+
+      const dispatch = useDispatch();
+      const user = useSelector((state) => state.userInfo);
+      const [loading, setLoading] = useState(false);
+  
+      
+      if(!user){
+        return <h1> please login</h1>
+      }
+  
+  
+       // payment event
+        const handlePayment = async (e) => {
+          const deviceInfo = await getDeviceInfo();
+      
+          setLoading(true);
+          const presentData = {
+            user_id: user?.uid || "guest_demo",
+            amount: 149,
+            subscriptionPlans:"ProPlan",
+            ...deviceInfo,
+          };
+      
+          try {
+            const res = await fetch("/api/subscribe-plans/initiate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(presentData),
+            });
+      
+            const data = await res.json();
+            if (data.url) window.location.href = data.url;
+            else alert("Payment initiation failed");
+          } catch (err) {
+            console.error("Payment error:", err);
+            alert("Something went wrong");
+          } finally {
+            setLoading(false);
+          }
+        };
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white">
@@ -68,12 +111,14 @@ export default function ProPlanPage() {
             <p className="text-blue-200 mb-6">
               Advanced protection for scaling businesses
             </p>
-            <Link
-              href="/checkout/pro"
+            <button
+              onClick={handlePayment}
+              disabled={loading}
               className="inline-block px-10 py-4 rounded-2xl bg-white text-blue-700 font-semibold text-lg shadow-lg hover:bg-gray-100 transition"
             >
-              Get Started with Pro
-            </Link>
+              {loading ? "Redirecting..." : "Get Started with Pro"}
+              
+            </button>
           </div>
         </motion.div>
 

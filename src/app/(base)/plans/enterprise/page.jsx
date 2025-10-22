@@ -1,5 +1,6 @@
 "use client";
 
+import { getDeviceInfo } from "@/lib/getDeviceInfo";
 import { motion } from "framer-motion";
 import {
   CheckCircle,
@@ -14,6 +15,8 @@ import {
   Server,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function EnterprisePlanPage() {
   const plan = {
@@ -31,6 +34,47 @@ export default function EnterprisePlanPage() {
       "Compliance & audit reports",
     ],
   };
+
+
+   const dispatch = useDispatch();
+    const user = useSelector((state) => state.userInfo);
+    const [loading, setLoading] = useState(false);
+
+    
+    if(!user){
+      return <h1> please login</h1>
+    }
+
+
+     // payment event
+      const handlePayment = async (e) => {
+        const deviceInfo = await getDeviceInfo();
+    
+        setLoading(true);
+        const presentData = {
+          user_id: user?.uid || "guest_demo",
+          amount: 499,
+          subscriptionPlans:"Enterprise Plan",
+          ...deviceInfo,
+        };
+    
+        try {
+          const res = await fetch("/api/subscribe-plans/initiate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(presentData),
+          });
+    
+          const data = await res.json();
+          if (data.url) window.location.href = data.url;
+          else alert("Payment initiation failed");
+        } catch (err) {
+          console.error("Payment error:", err);
+          alert("Something went wrong");
+        } finally {
+          setLoading(false);
+        }
+      };
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white">
@@ -80,12 +124,14 @@ export default function EnterprisePlanPage() {
             <p className="text-purple-200 mb-6">
               Enterprise-grade security, compliance, and scalability
             </p>
-            <Link
-              href="/checkout/enterprise"
+            <button
+              onClick={handlePayment}
+              disabled={loading}
               className="inline-block px-10 py-4 rounded-2xl bg-white text-purple-700 font-semibold text-lg shadow-lg hover:bg-gray-100 transition"
             >
-              Contact Sales
-            </Link>
+              {loading ? "Redirecting..." : "Contact Sales"}
+              
+            </button>
           </div>
         </motion.div>
               <h2 className="text-3xl font-bold text-center my-10">

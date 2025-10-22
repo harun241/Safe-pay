@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    subscriptionPlans:{
+      type: String,
+      default: null,
+    },
     
     role: {
       type: String,
