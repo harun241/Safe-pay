@@ -9,15 +9,17 @@ export default function Hero() {
     visible: { transition: { staggerChildren: 0.2 } },
   };
 
-
-
   const childVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: .9, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: "easeOut" } },
   };
 
   return (
-    <section className="relative h-[70vh] place-content-center  overflow-hidden text-white text-center md:py-18 px-6 md:px-20">
+    <section className="relative h-[70vh] place-content-center overflow-hidden text-white text-center md:py-18 px-6 md:px-20"
+      style={{
+        background: "linear-gradient(135deg, #1F2937 0%, #4B5563 50%, #111827 100%)", // dark gradient
+      }}
+    >
       {/* Background video */}
       <video
         autoPlay
@@ -30,17 +32,12 @@ export default function Hero() {
         Your browser does not support the video tag.
       </video>
 
-      {/* Ocean Waves */}
-      {/* <div className="wave-container">
-        <div className="wave wave-1"></div>
-        <div className="wave wave-2"></div>
-        <div className="wave wave-3"></div>
-      </div> */}
-
-
-      {/* Overlay (dark layer for readability) */}
+      {/* Overlay for readability */}
       <motion.div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.6))"
+        }}
         initial={{ opacity: 0.6 }}
         animate={{ opacity: [0.6, 0.55, 0.6] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -54,23 +51,16 @@ export default function Hero() {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        {/* Title */}
-
         <div className="flex flex-col gap-2">
+          {/* Title */}
           <motion.h1
-            className="text-4xl md:text-5xl font-bold mb-4  flex flex-wrap justify-center overflow-hidden"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.05 } },
-            }}
+            className="text-4xl md:text-5xl font-bold mb-4 flex flex-wrap justify-center overflow-hidden"
           >
             {"Protect Your Transactions with AI".split("").map((char, index) => (
               <motion.span
                 key={index}
                 variants={{
-                  hidden: { opacity: 30, y: 50 },
+                  hidden: { opacity: 0, y: 50 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
                 }}
               >
@@ -79,21 +69,14 @@ export default function Hero() {
             ))}
           </motion.h1>
 
-
-          {/* Sub heading */}
-          <motion.p
-            variants={childVariants}
-            className="text-lg md:text-xl mb-6 md:mb-8"
-          >
+          {/* Subheading */}
+          <motion.p variants={childVariants} className="text-lg md:text-xl mb-6 md:mb-8">
             SafePay is an AI-powered fraud detection platform that keeps your
             online transactions safe in real-time.
           </motion.p>
 
-          {/* CTA buttons */}
-          <motion.div
-            variants={childVariants}
-            className="flex justify-center gap-4 flex-wrap"
-          >
+          {/* CTA Buttons */}
+          <motion.div variants={childVariants} className="flex justify-center gap-4 flex-wrap">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/features"
@@ -114,17 +97,12 @@ export default function Hero() {
           </motion.div>
 
           {/* Trusted message */}
-          <motion.p
-            variants={childVariants}
-            className="mt-6 md:mt-8 text-sm md:text-base text-white/80"
-          >
+          <motion.p variants={childVariants} className="mt-6 md:mt-8 text-sm md:text-base text-white/80">
             Trusted by thousands of users worldwide.
           </motion.p>
-
         </div>
 
         <PaymentCardSlider />
-
       </motion.div>
     </section>
   );

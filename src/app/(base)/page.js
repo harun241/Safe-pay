@@ -30,6 +30,7 @@ export default function HomePage() {
         </ScrollReveal>
       </div>
 
+      
       {/* Testimonials Section */}
       <div className="px-6 sm:px-10 lg:px-20 max-w-[1400px] mx-auto">
 
@@ -53,6 +54,7 @@ export default function HomePage() {
             <PricingSection />
           </ScrollReveal>
         </div>
+  
         <div>
           <ScrollReveal>
             <SecurityCompliance />
