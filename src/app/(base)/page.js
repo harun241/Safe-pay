@@ -34,11 +34,7 @@ export default function HomePage() {
 
       </div>
       <div>
-        <div className={`relative w-full py-24 px-12 overflow-hidden transition-colors duration-500
-        ${theme === "dark"
-            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-            : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
-          }`}>
+        <div >
           <ScrollReveal>
             <OurMission></OurMission>
           </ScrollReveal>
