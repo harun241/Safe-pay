@@ -1,46 +1,55 @@
-import axiosSecure from '@/Hooks/AxiosSecure/AxiosSecure';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosSecure from "@/Hooks/AxiosSecure/AxiosSecure";
 
-// Async thunk to fetch subscrioption from your API
-export const fetchTransactions = createAsyncThunk(
-    'subscrioption/fetchTransactions',
-    async (_, { rejectWithValue }) => {
+// 🔹 Async thunk to fetch the user's latest subscription
+export const fetchSubscription = createAsyncThunk(
+    "subscription/fetchSubscription",
+    async (userEmail, { rejectWithValue }) => {
         try {
-            const res = await axiosSecure.get("/api/subscrioption"); // ✅ only .get()
-            return res.data; // ✅ Axios already parses JSON
+            if (!userEmail) throw new Error("User email is required");
+
+            const res = await axiosSecure.get(`/api/subscription?email=${userEmail}`);
+
+            // If backend returns error
+            if (!res.data?.success) {
+                throw new Error(res.data?.error || "No subscription found");
+            }
+
+            return res.data.subscription;
         } catch (error) {
-            // Properly extract error message
-            const message = error.response?.data?.error || error.message || "Failed to fetch transactions";
+            const message =
+                error.response?.data?.error ||
+                error.message ||
+                "Failed to fetch subscription";
             return rejectWithValue(message);
         }
     }
 );
 
-
+// 🔹 Slice definition
 const subscriptionSlice = createSlice({
-    name: 'subscrioption',
+    name: "subscription",
     initialState: {
-        items: [],
-        status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
-        error: null
+        latest: null, // store latest subscription
+        status: "idle", // idle | loading | succeeded | failed
+        error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTransactions.pending, (state) => {
-                state.status = 'loading';
+            .addCase(fetchSubscription.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
             })
-            .addCase(fetchTransactions.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.items = action.payload;
+            .addCase(fetchSubscription.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.latest = action.payload;
             })
-            .addCase(fetchTransactions.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
+            .addCase(fetchSubscription.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload;
             });
-    }
+    },
 });
-
-
 
 export default subscriptionSlice.reducer;

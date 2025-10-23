@@ -46,11 +46,13 @@ export default function HomePage() {
             <ImpactSection />
           </ScrollReveal>
         </div>
+
         <div>
           <ScrollReveal>
             <AdditionalResources />
           </ScrollReveal>
         </div>
+        
         <div>
           <ScrollReveal>
             <PricingSection />
