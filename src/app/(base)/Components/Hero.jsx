@@ -20,32 +20,12 @@ export default function Hero() {
   };
 
   return (
-<<<<<<< HEAD
-    <section className="relative h-screen place-content-center overflow-hidden text-white text-center md:py-18 px-6 md:px-20"
-      style={{
-        background: "linear-gradient(135deg, #1F2937 0%, #4B5563 50%, #111827 100%)", // dark gradient
-      }}
-    >
-      {/* Background video */}
-      {/* <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/videos/banner-bg.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video> */}
-      <div className="absolute inset-0 w-full h-full object-cover">
-=======
     <section className="relative w-11/12 mx-auto h-[80vh] rounded-4xl overflow-hidden text-white text-center flex flex-col justify-center px-6 md:px-20">
       {/* 🌊 Animated Wave Background */}
       <div className="absolute inset-0 bg-[#0f172a]">
         <div className="wave wave1"></div>
         <div className="wave wave2"></div>
         <div className="wave wave3"></div>
->>>>>>> 6462e20a64fa066c0f599cf091f258f4d5d89062
       </div>
 
       {/* Overlay */}
