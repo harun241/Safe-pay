@@ -12,7 +12,6 @@ import OurMission from "./Components/OurMission";
 import ScrollReveal from "./Components/ScrollReveal";
 import Revolutionary from "../dashboard/_components/Revolutionary";
 
-
 export default function HomePage() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -44,18 +43,17 @@ export default function HomePage() {
             <ImpactSection />
           </ScrollReveal>
         </div>
+
         <div>
           <ScrollReveal>
             <AdditionalResources />
           </ScrollReveal>
         </div>
+        
         <div>
           <ScrollReveal>
             <PricingSection />
           </ScrollReveal>
-        </div>
-        <div>
-          <Revolutionary/>
         </div>
   
         <div>
