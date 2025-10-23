@@ -1,5 +1,7 @@
 "use client";
 
+import Marquee from "react-fast-marquee";
+
 export default function PaymentCardSlider() {
   const cards = [
     { id: 1, img: "/images/mastercard.png" },
@@ -20,16 +22,19 @@ export default function PaymentCardSlider() {
   ];
 
   return (
-    <div className="overflow-hidden w-full py-6  rounded-full">
-      <div className="flex w-max animate-scroll">
-        {[...cards, ...cards].map((card, index) => (
-          <div
-            key={index}
-            className="mx-6 flex items-center justify-center w-32 h-16 bg-white object-cover  rounded-xl shadow-md"
-          >
-            <img src={card.img} alt="card" className="h-12 object-contain" />
-          </div>
-        ))}
+    <div className="flex items-center justify-center">
+
+      <div className="relative w-2/3 content-center py-6 overflow-hidden ">
+        <Marquee gradient={false} speed={50} pauseOnHover>
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="mx-6 flex items-center justify-center w-32 h-16 bg-white rounded-xl shadow-md"
+            >
+              <img src={card.img} alt={`card-${card.id}`} className="h-12 object-contain" />
+            </div>
+          ))}
+        </Marquee>
       </div>
     </div>
   );
