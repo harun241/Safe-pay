@@ -2,6 +2,7 @@
 import Link from "next/link";
 import PaymentCardSlider from "./PaymentCardSlider";
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
 
 export default function Hero() {
   const containerVariants = {
@@ -15,13 +16,13 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[70vh] place-content-center overflow-hidden text-white text-center md:py-18 px-6 md:px-20"
+    <section className="relative h-screen place-content-center overflow-hidden text-white text-center md:py-18 px-6 md:px-20"
       style={{
         background: "linear-gradient(135deg, #1F2937 0%, #4B5563 50%, #111827 100%)", // dark gradient
       }}
     >
       {/* Background video */}
-      <video
+      {/* <video
         autoPlay
         loop
         muted
@@ -30,7 +31,9 @@ export default function Hero() {
       >
         <source src="/videos/banner-bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video> */}
+      <div className="absolute inset-0 w-full h-full object-cover">
+      </div>
 
       {/* Overlay for readability */}
       <motion.div
