@@ -52,17 +52,19 @@ export default function PricingSection() {
     },
   ];
 
-
   return (
-    <section className="py-20" >
+    <section className="py-20 relative">
       {/* Background Accent */}
       <div
         className={`absolute inset-0 opacity-10 transition-colors duration-500
-          ${theme === "dark" ? "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"
-            : "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-400 via-transparent to-transparent"}`}
+          ${theme === "dark"
+            ? "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400 via-transparent to-transparent"
+            : "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-400 via-transparent to-transparent"
+          }`}
       ></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Heading */}
         <motion.h2
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -82,6 +84,7 @@ export default function PricingSection() {
           Scale your business confidently with AI-driven fraud detection.
         </motion.p>
 
+        {/* Cards Grid */}
         <div className="grid gap-10 md:grid-cols-3">
           {plans.map((plan, i) => (
             <motion.div
@@ -91,18 +94,17 @@ export default function PricingSection() {
               transition={{ duration: 0.6, delay: i * 0.2 }}
               viewport={{ once: true }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className={`relative p-10 rounded-2xl transition-all duration-300 ${plan.customGradient
-                ? theme === "dark"
-                  ? "card-bg text-white"
-                  : "card-bg text-white"
-                : theme === "dark"
+              className={`relative p-10 rounded-2xl transition-all duration-300 ${
+                plan.customGradient
+                  ? "card-bg text-white shadow-lg hover:shadow-cyan-400/50" // ✅ Enterprise/custom card original gradient
+                  : theme === "dark"
                   ? plan.highlight
-                    ? "bg-gray-900/80 backdrop-blur-md text-white shadow-2xl hover:shadow-green-400/50"
-                    : "bg-gray-800/70 backdrop-blur-md text-gray-100 shadow-lg hover:shadow-green-400/30"
+                    ? "bg-gray-900/80 border-cyan-500/30 text-white shadow-2xl hover:shadow-cyan-400/40"
+                    : "bg-gray-800/70 border-gray-700 text-gray-100 shadow-md hover:shadow-cyan-400/30"
                   : plan.highlight
-                    ? "bg-white border border-slate-300 shadow-xl hover:shadow-cyan-400/30 text-slate-900"
-                    : "bg-white border border-slate-100 shadow-md hover:shadow-cyan-300/20 text-slate-900"
-                }`}
+                  ? "bg-white border-cyan-400 text-slate-900 shadow-xl hover:shadow-cyan-400/30"
+                  : "bg-white border-slate-200 text-slate-900 shadow-md hover:shadow-cyan-300/20"
+              }`}
             >
               {plan.highlight && !plan.customGradient && (
                 <span
@@ -114,32 +116,46 @@ export default function PricingSection() {
               )}
 
               <h3
-                className={`text-2xl font-semibold mb-3 ${plan.customGradient
-                  ? "text-white" // Always white for custom gradient card
-                  : theme === "dark"
+                className={`text-2xl font-semibold mb-3 ${
+                  plan.customGradient
+                    ? "text-white"
+                    : theme === "dark"
                     ? "text-gray-300"
                     : "text-slate-800"
-                  }`}
+                }`}
               >
                 {plan.title}
               </h3>
 
-              <p className={`opacity-80 mb-8  ${plan.customGradient
-                ? "text-white" // Always white for custom gradient card
-                : theme === "dark"
-                  ? "text-gray-300"
-                  : "text-slate-800"
-                }`}>
+              <p
+                className={`opacity-80 mb-8 ${
+                  plan.customGradient
+                    ? "text-white"
+                    : theme === "dark"
+                    ? "text-gray-300"
+                    : "text-slate-800"
+                }`}
+              >
                 {plan.description}
               </p>
 
-              <p className={`text-5xl font-extrabold mb-8  ${plan.customGradient
-                ? "text-white" // Always white for custom gradient card
-                : theme === "dark"
-                  ? "text-gray-300"
-                  : "text-slate-800"
-                }`}>
-                {plan.price === "Custom" ? "Custom" : <>${plan.price}<span className="text-lg font-medium opacity-70">/mo</span></>}
+              <p
+                className={`text-5xl font-extrabold mb-8 ${
+                  plan.customGradient
+                    ? "text-white"
+                    : theme === "dark"
+                    ? "text-gray-300"
+                    : "text-slate-800"
+                }`}
+              >
+                {plan.price === "Custom" ? (
+                  "Custom"
+                ) : (
+                  <>
+                    ${plan.price}
+                    <span className="text-lg font-medium opacity-70">/mo</span>
+                  </>
+                )}
               </p>
 
               <div className={`border-t mb-8 ${theme === "dark" ? "border-white/20" : "border-slate-300"}`} />
@@ -147,62 +163,46 @@ export default function PricingSection() {
               <ul className={`space-y-4 mb-10 ${theme === "dark" ? "text-gray-300" : "text-slate-700"}`}>
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle className={`w-5 h-5 shrink-0 ${plan.customGradient
-                      ? "text-white" // Always white for custom gradient card
-                      : theme === "dark"
-                        ? "text-gray-300"
-                        : "text-slate-800"
-                      }`} />
-                    <span className={`${plan.customGradient
-                      ? "text-white" // Always white for custom gradient card
-                      : theme === "dark"
-                        ? "text-gray-300"
-                        : "text-slate-800"
-                      }`}>{feature}</span>
+                    <CheckCircle
+                      className={`w-5 h-5 shrink-0 ${
+                        plan.customGradient
+                          ? "text-white"
+                          : theme === "dark"
+                          ? "text-gray-300"
+                          : "text-slate-800"
+                      }`}
+                    />
+                    <span
+                      className={`${
+                        plan.customGradient
+                          ? "text-white"
+                          : theme === "dark"
+                          ? "text-gray-300"
+                          : "text-slate-800"
+                      }`}
+                    >
+                      {feature}
+                    </span>
                   </li>
                 ))}
               </ul>
 
-              {/* <Link
-                href={
-                  plan.title === "Basic"
-                    ? "/plans/basic"
-                    : plan.title === "Pro"
-                      ? "/plans/pro"
-                      : "/plans/enterprise"
-                }
-                className={`border-2 rounded-lg font-semibold px-6 py-3 transition
-    ${plan.customGradient
-                    ? "border-white text-white hover:bg-white hover:text-gray-900"
-                    : theme === "dark"
-                      ? "border-white text-white hover:bg-white hover:text-gray-900"
-                      : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
-                  }
-  `}
-              >
-                {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
-              </Link> */}
-
               <Link
-                href={`/plans/${plan.title.toLowerCase()}`} // ✅ Correct template literal
+                href={`/plans/${plan.title.toLowerCase()}`}
                 className={`border-2 rounded-lg font-semibold px-6 py-3 transition
-    ${plan.customGradient
+                  ${plan.customGradient
                     ? "border-white text-white hover:bg-white hover:text-gray-900"
                     : theme === "dark"
-                      ? "border-white text-white hover:bg-white hover:text-gray-900"
-                      : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
-                  }
-  `}
+                    ? "border-white text-white hover:bg-white hover:text-gray-900"
+                    : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                  }`}
               >
                 {plan.price === "Custom" ? "Contact Sales" : "Get Started"}
               </Link>
-
-
-
             </motion.div>
           ))}
         </div>
       </div>
-    </section >
+    </section>
   );
 }

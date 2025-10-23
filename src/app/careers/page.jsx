@@ -7,7 +7,6 @@ import { useTheme } from "next-themes";
 import Navbar from "../(base)/Components/Navbar";
 import Spinner from "../(base)/Components/Spinner";
 
-
 const jobs = [
   {
     slug: "ml-engineer",
@@ -77,27 +76,30 @@ const jobs = [
 export default function CareersPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const { theme } = useTheme();
- const [loading, setLoading] = useState(false);
-  // Dynamic classes based on theme
+  const [loading, setLoading] = useState(false);
+
+  // Theme-based classes
   const sectionBg =
     theme === "dark"
-      ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
+      ? "bg-gray-900 text-white"
       : "bg-gray-50 text-gray-900";
   const subtitleColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
   const cardBg = theme === "dark" ? "bg-gray-800/70" : "bg-white/80";
   const cardText = theme === "dark" ? "text-gray-300" : "text-gray-700";
   const cardShadow =
     theme === "dark"
-      ? "shadow-2xl hover:shadow-green-400/40"
-      : "shadow-md hover:shadow-green-200/40";
-  const buttonBg = theme === "dark" ? "bg-green-400 text-gray-900" : "bg-green-500 text-white";
-  const buttonHover = theme === "dark" ? "hover:bg-green-500" : "hover:bg-green-600";
+      ? "shadow-2xl hover:shadow-cyan-400/30"
+      : "shadow-md hover:shadow-cyan-200/40";
+  const buttonBg =
+    theme === "dark" ? "bg-cyan-500 text-gray-900" : "bg-cyan-600 text-white";
+  const buttonHover =
+    theme === "dark" ? "hover:bg-cyan-600" : "hover:bg-cyan-700";
 
   return (
-    <section className={`relative w-full min-h-screen py-24 px-12 overflow-hidden ${sectionBg}`}>
+    <section className={`relative w-full min-h-screen py-24 px-6 md:px-12 overflow-hidden ${sectionBg}`}>
       {/* Background Accent */}
-      <Navbar></Navbar>
-        {loading && <Spinner />}
+      <Navbar />
+      {loading && <Spinner />}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-500 via-transparent to-transparent"></div>
 
       {!selectedJob ? (
@@ -106,7 +108,7 @@ export default function CareersPage() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-6xl font-extrabold text-cyan-600 mb-8 tracking-wide"
+            className="text-5xl md:text-6xl font-extrabold text-cyan-500 mb-8 tracking-wide"
           >
             Careers at SafePay
           </motion.h1>
@@ -117,8 +119,7 @@ export default function CareersPage() {
             transition={{ duration: 1, delay: 0.2 }}
             className={`text-lg md:text-xl leading-relaxed max-w-4xl mx-auto mb-20 ${subtitleColor}`}
           >
-            Join us in building AI-powered fraud detection systems to secure the
-            future of online transactions. Explore our open positions below.
+            Join us in building AI-powered fraud detection systems to secure the future of online transactions. Explore our open positions below.
           </motion.p>
 
           <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-12">
@@ -126,13 +127,13 @@ export default function CareersPage() {
               <motion.div
                 key={job.slug}
                 initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -5, scale: 1.02 }}
                 className={`p-10 min-h-[300px] ${cardBg} backdrop-blur-md rounded-3xl ${cardShadow} cursor-pointer hover:-translate-y-3 transition-all`}
                 onClick={() => setSelectedJob(job)}
               >
-                <h3 className="text-2xl font-semibold mb-3 text-cyan-600">
+                <h3 className="text-2xl font-semibold mb-3 text-cyan-500">
                   {job.title}
                 </h3>
                 <p className={cardText + " mb-5"}>{job.department}</p>
@@ -155,9 +156,8 @@ export default function CareersPage() {
           >
             <ArrowLeft size={18} /> Back to Careers
           </button>
-          <h2 className="text-4xl font-bold mb-4 text-cyan-500">
-            {selectedJob.title}
-          </h2>
+
+          <h2 className="text-4xl font-bold mb-4 text-cyan-500">{selectedJob.title}</h2>
           <p className={cardText + " mb-6"}>{selectedJob.description}</p>
 
           <h3 className="text-2xl font-semibold mb-2 text-cyan-500">Responsibilities:</h3>
