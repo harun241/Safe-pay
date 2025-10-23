@@ -13,7 +13,7 @@ export default function Hero() {
 
   const childVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: .9, ease: "easeOut" } },
   };
 
   return (
@@ -122,13 +122,9 @@ export default function Hero() {
           </motion.p>
 
         </div>
-        {/* Payment Card Slider */}
-        <motion.div
-          variants={childVariants}
-          className="mt-8 md:mt-12 max-w-7xl mx-auto"
-        >
-          <PaymentCardSlider />
-        </motion.div>
+
+        <PaymentCardSlider />
+
       </motion.div>
     </section>
   );
