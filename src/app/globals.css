@@ -20,7 +20,10 @@
   @apply bg-gradient-to-r from-cyan-600 to-green-600 text-white;
 }
 
-
+:root {
+  --bg-color: #1a1a1a;
+  /* your root background */
+}
 
 /* ====== THEME COLORS ====== */
 :root {

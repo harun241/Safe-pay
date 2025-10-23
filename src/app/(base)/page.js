@@ -10,6 +10,7 @@ import FaqSection from "./Components/FAQ";
 import AdditionalResources from "./Components/AditionalResources";
 import OurMission from "./Components/OurMission";
 import ScrollReveal from "./Components/ScrollReveal";
+import Revolutionary from "../dashboard/_components/Revolutionary";
 
 
 export default function HomePage() {
@@ -29,6 +30,7 @@ export default function HomePage() {
         </ScrollReveal>
       </div>
 
+      
       {/* Testimonials Section */}
       <div className="px-6 sm:px-10 lg:px-20 max-w-[1400px] mx-auto">
 
@@ -50,6 +52,11 @@ export default function HomePage() {
         <div>
           <ScrollReveal>
             <PricingSection />
+          </ScrollReveal>
+        </div>
+        <div>
+          <ScrollReveal>
+            <Revolutionary/>
           </ScrollReveal>
         </div>
         <div>
