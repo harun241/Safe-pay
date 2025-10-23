@@ -10,7 +10,6 @@ import FaqSection from "./Components/FAQ";
 import AdditionalResources from "./Components/AditionalResources";
 import OurMission from "./Components/OurMission";
 import ScrollReveal from "./Components/ScrollReveal";
-import SecurityCompliance from "./Components/SecurityCompliance";
 
 
 export default function HomePage() {
@@ -44,11 +43,13 @@ export default function HomePage() {
             <ImpactSection />
           </ScrollReveal>
         </div>
+
         <div>
           <ScrollReveal>
             <AdditionalResources />
           </ScrollReveal>
         </div>
+        
         <div>
           <ScrollReveal>
             <PricingSection />
