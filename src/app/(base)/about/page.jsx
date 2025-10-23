@@ -1,103 +1,140 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import Spinner from "../Components/Spinner";
+import { Heart, Target, Gem } from "lucide-react";
 
-import { useState } from "react";
 const aboutCards = [
   {
+    icon: <Target className="w-10 h-10 text-cyan-400" />,
     title: "Mission",
     description:
-      "To provide a secure transaction environment for all users using AI-driven solutions.",
-    icon: "🎯",
+      "To provide a secure transaction environment for all users using AI-driven fraud detection and prevention systems.",
   },
   {
+    icon: <Heart className="w-10 h-10 text-cyan-400" />,
     title: "Vision",
     description:
-      "To become the most trusted AI-powered platform for fraud detection worldwide.",
-    icon: "🔮",
+      "To become the world’s most trusted AI-powered platform ensuring digital financial safety and transparency for everyone.",
   },
   {
+    icon: <Gem className="w-10 h-10 text-cyan-400" />,
     title: "Values",
     description:
-      "Trust, Security, Innovation, and Customer-first approach in all services.",
-    icon: "💎",
+      "Innovation, Trust, Security, and Customer-Centricity form the core of everything we do at SafePay.",
   },
 ];
 
-const AboutSection = () => {
+export default function AboutSection() {
   const { theme } = useTheme();
   const [loading, setLoading] = useState(false);
-  // Dynamic classes based on theme
-  const sectionBg =
-    theme === "dark"
-      ? "bg-gray-900 text-white"
-      : "bg-gray-50 text-gray-900";
-  const subtitleColor =
-    theme === "dark" ? "text-gray-300" : "text-gray-700";
-  const cardBg = theme === "dark" ? "bg-gray-800/70" : "bg-white/80";
-  const cardText = theme === "dark" ? "text-gray-400" : "text-gray-700";
-  const cardShadow =
-    theme === "dark"
-      ? "shadow-lg hover:shadow-green-400/30"
-      : "shadow-md hover:shadow-green-200/40";
+
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.3 } },
+  };
+
+  const childVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
 
   return (
-    <section className={`relative min-h-screen py-20 px-6 overflow-hidden ${sectionBg}`}>
-      {/* Background Accent */}
+    <section
+      className={`relative py-20 px-6 lg:px-20 text-center overflow-hidden 
+      ${theme === "dark"
+        ? "bg-gradient-to-br from-gray-950 via-gray-900 to-black"
+        : "bg-gradient-to-br from-cyan-50 via-white to-green-50"
+      } transition-colors duration-500`}
+    >
       {loading && <Spinner />}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-500 via-transparent to-transparent"></div>
 
-      <div className="max-w-6xl mx-auto text-center relative z-10">
+      {/* Animated Background Squares */}
+      <div className="absolute inset-0 -z-10 overflow-hidden opacity-20">
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+              opacity: [0.1, 0.3, 0.1],
+              scale: [0.8, 1.2, 0.8],
+              rotate: [0, 90, 180],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeInOut",
+            }}
+            className="absolute w-8 h-8 bg-cyan-400/10 rounded-lg"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+            }}
+          ></motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="max-w-6xl mx-auto relative z-10"
+      >
         {/* Heading */}
         <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          variants={childVariants}
           className="text-4xl md:text-5xl font-extrabold text-cyan-500 mb-6 tracking-wide"
         >
           About SafePay
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Description */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className={`text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-14 ${subtitleColor}`}
+          variants={childVariants}
+          className={`text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-14 
+            ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
         >
-          SafePay is an AI-powered platform dedicated to securing online
-          transactions. Our mission is to protect users from fraud using
-          cutting-edge technology, real-time monitoring, and intelligent AI
-          algorithms.
+          SafePay is an AI-driven platform that ensures secure and fraud-free
+          digital transactions. We combine artificial intelligence, advanced
+          encryption, and real-time monitoring to make your payments truly safe.
         </motion.p>
 
         {/* Cards */}
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
-          {aboutCards.map((card, idx) => (
+        <motion.div
+          variants={containerVariants}
+          className="grid sm:grid-cols-1 md:grid-cols-3 gap-10"
+        >
+          {aboutCards.map((card, i) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.2 }}
-              viewport={{ once: true }}
-              className={`rounded-2xl p-8 ${cardBg} ${cardShadow} hover:-translate-y-2 transition-all duration-300`}
+              key={i}
+              variants={childVariants}
+              className={`rounded-2xl p-8 text-left border border-gray-800/50 
+              shadow-lg transition-all duration-300 group 
+              hover:border-cyan-400 hover:shadow-cyan-500/20 hover:-translate-y-2
+              ${theme === "dark" ? "bg-gray-900/70" : "bg-white/70"}`}
             >
-              {/* Icon */}
-              <div className="text-5xl mb-5 bg-gradient-to-tr from-cyan-400 to-green-200 text-transparent bg-clip-text">
+              <div className="flex items-center justify-center mb-6">
                 {card.icon}
               </div>
-              <h2 className="text-2xl font-semibold text-cyan-700 mb-3">
+              <h3
+                className={`text-2xl font-semibold mb-3 
+                ${theme === "dark" ? "text-white" : "text-gray-900"}`}
+              >
                 {card.title}
-              </h2>
-              <p className={`${cardText} leading-relaxed`}>{card.description}</p>
+              </h3>
+              <p
+                className={`leading-relaxed 
+                ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+              >
+                {card.description}
+              </p>
             </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
-};
-
-export default AboutSection;
+}

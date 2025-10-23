@@ -12,10 +12,15 @@ export default function Hero() {
 
   const childVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: "easeOut" },
+    },
   };
 
   return (
+<<<<<<< HEAD
     <section className="relative h-screen place-content-center overflow-hidden text-white text-center md:py-18 px-6 md:px-20"
       style={{
         background: "linear-gradient(135deg, #1F2937 0%, #4B5563 50%, #111827 100%)", // dark gradient
@@ -33,18 +38,18 @@ export default function Hero() {
         Your browser does not support the video tag.
       </video> */}
       <div className="absolute inset-0 w-full h-full object-cover">
+=======
+    <section className="relative w-11/12 mx-auto h-[80vh] rounded-4xl overflow-hidden text-white text-center flex flex-col justify-center px-6 md:px-20">
+      {/* 🌊 Animated Wave Background */}
+      <div className="absolute inset-0 bg-[#0f172a]">
+        <div className="wave wave1"></div>
+        <div className="wave wave2"></div>
+        <div className="wave wave3"></div>
+>>>>>>> 6462e20a64fa066c0f599cf091f258f4d5d89062
       </div>
 
-      {/* Overlay for readability */}
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.6))"
-        }}
-        initial={{ opacity: 0.6 }}
-        animate={{ opacity: [0.6, 0.55, 0.6] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      ></motion.div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content */}
       <motion.div
@@ -55,7 +60,6 @@ export default function Hero() {
         viewport={{ once: true }}
       >
         <div className="flex flex-col gap-2">
-          {/* Title */}
           <motion.h1
             className="text-4xl md:text-5xl font-bold mb-4 flex flex-wrap justify-center overflow-hidden"
           >
@@ -64,7 +68,11 @@ export default function Hero() {
                 key={index}
                 variants={{
                   hidden: { opacity: 0, y: 50 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.6, ease: "easeOut" },
+                  },
                 }}
               >
                 {char === " " ? "\u00A0" : char}
@@ -72,13 +80,11 @@ export default function Hero() {
             ))}
           </motion.h1>
 
-          {/* Subheading */}
           <motion.p variants={childVariants} className="text-lg md:text-xl mb-6 md:mb-8">
             SafePay is an AI-powered fraud detection platform that keeps your
             online transactions safe in real-time.
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div variants={childVariants} className="flex justify-center gap-4 flex-wrap">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
@@ -99,7 +105,6 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Trusted message */}
           <motion.p variants={childVariants} className="mt-6 md:mt-8 text-sm md:text-base text-white/80">
             Trusted by thousands of users worldwide.
           </motion.p>

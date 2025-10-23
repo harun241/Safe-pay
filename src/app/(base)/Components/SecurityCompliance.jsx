@@ -6,7 +6,7 @@ import { ShieldCheck, Lock, FileCheck, Key, Eye, Server } from "lucide-react";
 export default function SecurityCompliance() {
   const items = [
     {
-      icon: <ShieldCheck className="w-10 h-10 text-cyan-400" />,
+      icon: <ShieldCheck className="w-10 h-10 text-cyan-500" />,
       title: "End-to-End Encryption",
       desc: "All sensitive data is encrypted in transit and at rest using AES-256 and TLS 1.3 standards, ensuring your transactions remain fully protected.",
     },
@@ -64,7 +64,7 @@ export default function SecurityCompliance() {
         <motion.h2
           variants={childVariants}
           className="text-4xl md:text-5xl font-extrabold mb-8
-          bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500"
+        text-cyan-500"
         >
           Security & Compliance
         </motion.h2>
