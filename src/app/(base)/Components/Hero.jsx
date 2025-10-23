@@ -2,6 +2,7 @@
 import Link from "next/link";
 import PaymentCardSlider from "./PaymentCardSlider";
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
 
 export default function Hero() {
   const containerVariants = {

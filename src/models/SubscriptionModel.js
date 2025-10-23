@@ -8,15 +8,16 @@ const SubscriptionSchema = new mongoose.Schema({
   card_type: { type: String },
   merchant_id: { type: String },
 
-  
 
-  devices:  {
+
+  devices: {
     _id: false,
     deviceId: String,
     browser: String,
-    os: String,
-    
+
   },
+
+  email: {type: String},
 
 
 

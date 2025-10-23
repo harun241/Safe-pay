@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 const is_live = false;
 
 export async function POST(request) {
-  const {  user_id, amount,platform,screen,subscriptionPlans,os,deviceId,browser  } =
+  const {  user_id, amount,platform,screen,subscriptionPlans,os,deviceId,browser,  value_a, value_b,  value_c,  value_d  } =
     await request.json();
   
   const tran_id = `txn_${new mongoose.Types.ObjectId().toString()}`;
@@ -34,10 +34,11 @@ export async function POST(request) {
     cus_phone: "01711111111",
     value_a: user_id,
     value_b: subscriptionPlans,
-    value_c: browser,
-    value_d: os,
+    value_c: value_c,
+    value_d: value_d,
     
   }; 
+
   
 
   const response = await fetch(
