@@ -54,11 +54,7 @@ export default function PricingSection() {
 
 
   return (
-    <section
-      className={`relative py-24 px-6 overflow-hidden transition-colors duration-500
-        ${theme === "dark" ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-          : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"}`}
-    >
+    <section className="py-20" >
       {/* Background Accent */}
       <div
         className={`absolute inset-0 opacity-10 transition-colors duration-500

@@ -17,7 +17,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[80vh]  overflow-hidden text-white text-center md:py-18 px-6 md:px-20">
+    <section className="relative h-[70vh] place-content-center  overflow-hidden text-white text-center md:py-18 px-6 md:px-20">
       {/* Background video */}
       <video
         autoPlay
@@ -48,7 +48,7 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="relative z-10"
+        className="relative z-10 space-y-25"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -56,7 +56,7 @@ export default function Hero() {
       >
         {/* Title */}
 
-        <div>
+        <div className="flex flex-col gap-2">
           <motion.h1
             className="text-4xl md:text-5xl font-bold mb-4  flex flex-wrap justify-center overflow-hidden"
             initial="hidden"
