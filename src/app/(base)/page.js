@@ -10,7 +10,6 @@ import FaqSection from "./Components/FAQ";
 import AdditionalResources from "./Components/AditionalResources";
 import OurMission from "./Components/OurMission";
 import ScrollReveal from "./Components/ScrollReveal";
-import Revolutionary from "../dashboard/_components/Revolutionary";
 
 
 export default function HomePage() {
@@ -54,11 +53,7 @@ export default function HomePage() {
             <PricingSection />
           </ScrollReveal>
         </div>
-        <div>
-          <ScrollReveal>
-            <Revolutionary/>
-          </ScrollReveal>
-        </div>
+  
         <div>
           <ScrollReveal>
             <FaqSection />
