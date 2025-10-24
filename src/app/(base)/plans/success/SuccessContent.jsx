@@ -5,7 +5,7 @@ import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllSubscriptions } from "@/Redux/Slices/subscriptions";
+import { fetchAllSubscriptions } from "@/Redux/Slices/subscriptionSlice";
 import { useEffect } from "react";
 
 export default function SuccessContent() {
