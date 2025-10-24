@@ -1,10 +1,22 @@
 @import "tailwindcss";
 
+@plugin "daisyui" {
+  themes: dark --default
+}
+
+.dark-bg-theme {
+  @apply bg-gradient-to-br from-[#072739] via-gray-900 to-[#272626] text-white
+}
+.light-bg-theme {
+  @apply bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900
+}
+
 /* ========== SCROLL ANIMATION (for marquee/slider) ========== */
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -22,15 +34,21 @@
 /* ========== ROOT COLORS (LIGHT + DARK THEMES) ========== */
 :root {
   --bg-color: #1a1a1a;
-  --wave-primary: #3b82f6; /* blue-500 */
-  --wave-secondary: #0ea5e9; /* sky-500 */
-  --wave-accent: #22d3ee; /* cyan-400 */
+  --wave-primary: #3b82f6;
+  /* blue-500 */
+  --wave-secondary: #0ea5e9;
+  /* sky-500 */
+  --wave-accent: #22d3ee;
+  /* cyan-400 */
 }
 
 .dark {
-  --wave-primary: #0ea5e9; /* sky-500 */
-  --wave-secondary: #0284c7; /* blue-600 */
-  --wave-accent: #38bdf8; /* sky-400 */
+  --wave-primary: #0ea5e9;
+  /* sky-500 */
+  --wave-secondary: #0284c7;
+  /* blue-600 */
+  --wave-accent: #38bdf8;
+  /* sky-400 */
 }
 
 /* ========== ANIMATED GRADIENT BACKGROUND ========== */
@@ -38,9 +56,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -100,16 +120,20 @@
     transform: translateX(0) translateY(0) rotate(0deg);
     border-radius: 45% 55% 50% 50%;
   }
+
   25% {
     border-radius: 50% 45% 55% 50%;
   }
+
   50% {
     transform: translateX(-50%) translateY(-5px) rotate(1deg);
     border-radius: 55% 50% 50% 45%;
   }
+
   75% {
     border-radius: 50% 55% 45% 50%;
   }
+
   100% {
     transform: translateX(0) translateY(0) rotate(0deg);
     border-radius: 45% 55% 50% 50%;

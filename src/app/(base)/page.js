@@ -24,7 +24,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="pt-16">
+    <div className="pt-16" >
       {/* Hero Section */}
       <div className="">
         <ScrollReveal>
