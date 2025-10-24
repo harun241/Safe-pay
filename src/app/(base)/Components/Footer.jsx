@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Shield, ArrowRight, Loader2, CheckCircle } from "lucide-react";
 import { FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { useTheme } from "next-themes";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "./ThemeProvider";
 
 const footerLinks = {
   Solutions: ["Fraud", "Entity Risk", "Compliance"],

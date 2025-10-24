@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import TransactionTable from "../_components/TransactionTable";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function TransactionsPage() {
   const { user } = useAuth();

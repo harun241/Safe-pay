@@ -89,12 +89,12 @@
 "use client";
 
 import React, { useState, useEffect, useTransition } from "react";
-import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { Info } from "lucide-react";
 import Image from "next/image";
 import Navbar from "../(base)/Components/Navbar";
 import Spinner from "../(base)/Components/Spinner";
+import { useTheme } from "../(base)/Components/ThemeProvider";
 
 export default function FraudDetectionPage() {
   const [showDetails, setShowDetails] = useState(false);

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DashboardHeader from "./_components/DashboardHeader";
 import Sidebar from "./_components/Sidebar";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
+import { useTheme } from "../(base)/Components/ThemeProvider";
 
 const DashboardLayout = ({ children }) => {
     const { user, loading } = useAuth();

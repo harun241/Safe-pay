@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import CardTable from "../_components/CardTable";
 import CardFormModal from "../_components/CardFormModal";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function CardsPage() {
     const { user } = useAuth();

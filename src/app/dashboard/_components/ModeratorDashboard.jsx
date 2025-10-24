@@ -1,6 +1,6 @@
 // src/app/dashboard/_components/ModeratorDashboard.jsx
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
 import {
   AlertTriangle,
   ClipboardCheck,

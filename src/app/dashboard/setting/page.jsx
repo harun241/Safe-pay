@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
 import { useTranslation } from "next-i18next";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function WebsiteSettingsPage() {
   const { theme, setTheme } = useTheme();

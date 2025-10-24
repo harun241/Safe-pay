@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react"; // Lucide spinner icon
-import { useTheme } from "next-themes";
+import { useTheme } from "./ThemeProvider";
 
 export default function Spinner({ size = 6 }) {
   const { theme } = useTheme();

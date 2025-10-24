@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
 import SupportTable from "../_components/SupportTable";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function SupportPage() {
   const { user } = useAuth();

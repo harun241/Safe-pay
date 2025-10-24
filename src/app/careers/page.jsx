@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { useTheme } from "next-themes";
 import Navbar from "../(base)/Components/Navbar";
 import Spinner from "../(base)/Components/Spinner";
+import { useTheme } from "../(base)/Components/ThemeProvider";
 
 const jobs = [
   {

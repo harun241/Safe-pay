@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import {
     Bell,
@@ -10,6 +9,7 @@ import {
 
 } from "lucide-react";
 import { ThemeSwitcher } from "@/app/(base)/Components/ThemeSwitcher";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function ProfileHeader({ setIsSidebarOpen }) {
     const { theme } = useTheme();

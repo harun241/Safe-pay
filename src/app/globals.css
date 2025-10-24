@@ -2,10 +2,12 @@
 
 
 .dark-bg-theme {
-  @apply bg-gradient-to-br from-[#072739] via-gray-900 to-[#272626] text-white
+  @apply bg-gradient-to-br from-[#061829] via-[#0b2540] to-[#0e1e35] text-white;
 }
+
+
 .light-bg-theme {
-  @apply bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900
+  @apply bg-gradient-to-br from-[#d6dbe3] via-[#e3e7ed] to-[#c7ccd5] text-slate-900;
 }
 
 /* ========== SCROLL ANIMATION (for marquee/slider) ========== */

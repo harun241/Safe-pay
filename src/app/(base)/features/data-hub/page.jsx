@@ -1,8 +1,8 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useState } from "react";
 import { Download, Search } from "lucide-react";
+import { useTheme } from "../../Components/ThemeProvider";
 
 export default function DataHubPage() {
   const { theme } = useTheme();
