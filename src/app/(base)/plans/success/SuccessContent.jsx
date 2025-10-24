@@ -7,15 +7,21 @@ import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllSubscriptions } from "@/Redux/Slices/subscriptionSlice";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function SuccessContent() {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const list = useSelector((state) => state.subscription);
+  const searchParams = useSearchParams();
+  const paymentStatus = searchParams.get("payment");
 
   useEffect(() => {
     dispatch(fetchAllSubscriptions());
   }, [dispatch]);
+
+
+  console.log(paymentStatus)
 
   console.log("All Subscriptions:", list);
 
