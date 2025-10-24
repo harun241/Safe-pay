@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userInfoReducer from './Slices/userInfoSlice'
 import transactionsReducer from './Slices/transactionsSlice'
-import subscriptionReducer from './Slices/subscriptions'
+import subscriptionReducer from './Slices/subscriptionSlice'
 
 export const store = configureStore({
   reducer: {
