@@ -112,7 +112,7 @@ export default function DynamicPlanPage() {
   };
 
   return (
-    <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white min-h-screen overflow-hidden">
+    <section className="relative py-20  min-h-screen overflow-hidden">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         {/* Header */}
         <motion.div
