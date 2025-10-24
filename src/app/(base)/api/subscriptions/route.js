@@ -7,17 +7,17 @@ export async function GET(request) {
         await connectDb();
 
         const { searchParams } = new URL(request.url);
-        const email = searchParams.get("email");
+        const userUID = searchParams.get("uid");
 
-        if (!email) {
+        if (!userUID) {
             return NextResponse.json(
-                { error: "User email is required." },
+                { error: "User userUID is required." },
                 { status: 400 }
             );
         }
 
         // Find the latest subscription (by createdAt)
-        const latestSubscription = await Subscription.findOne({ userEmail: email })
+        const latestSubscription = await Subscription.findOne({ userUID: userUID })
             .sort({ createdAt: -1 })
             .lean();
 

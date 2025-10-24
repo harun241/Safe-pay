@@ -1,13 +1,10 @@
-// ✅ File: src/app/plans/success/page.js
-"use client";
-
 import { Suspense } from "react";
 import SuccessContent from "./SuccessContent";
 
-export default function SuccessPage() {
+export default function Page() {
   return (
-    <Suspense fallback={<div className="text-center py-24">Loading...</div>}>
-      <SuccessContent />
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Payment Page...</div>}>
+        <SuccessContent />
     </Suspense>
   );
 }
