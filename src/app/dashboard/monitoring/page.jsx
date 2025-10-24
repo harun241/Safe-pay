@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import ModelCard from "../_components/ModelCard";
 import ModelTable from "../_components/ModelTable";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function ModelMonitoringPage() {
     const { theme } = useTheme();

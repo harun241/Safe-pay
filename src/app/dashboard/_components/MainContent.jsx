@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
 import {
   CreditCard,
   Scan,
@@ -22,6 +21,7 @@ import {
 
 import { LineChart,BarChart,Bar, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from "react";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 
 export default function UserDashboard() {

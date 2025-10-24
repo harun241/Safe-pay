@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import { fetchSubscription } from "@/Redux/Slices/subscriptions";
 import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 
 export default function SuccessPage() {
-  const { theme } = useTheme();
+  const { theme } = use();
   const dispatch = useDispatch()
   const user = useSelector((state) => state.userInfo);
   const searchParams = useSearchParams();

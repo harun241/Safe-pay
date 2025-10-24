@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import Spinner from "../Components/Spinner";
 import { Heart, Target, Gem } from "lucide-react";
+import { useTheme } from "../Components/ThemeProvider";
 
 const aboutCards = [
   {

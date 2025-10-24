@@ -3,8 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Send, CheckCircle, Loader2, ShieldCheck, Mail, Phone, Building } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import emailjs from '@emailjs/browser';
+import { useTheme } from '../Components/ThemeProvider';
 
 const contactMethods = [
   {
