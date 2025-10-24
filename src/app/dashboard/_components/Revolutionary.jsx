@@ -1,6 +1,7 @@
 'use client';
 
-import { useTheme } from "next-themes";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
+
 
 const features = [
     {
@@ -63,7 +64,7 @@ export default function Revolutionary() {
         <section className={`py-25 ${theme === "dark" ? "text-white" : "text-black"}`}>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
-                    <span className="py-1 px-4 bg-indigo-600/20 rounded-full text-xs font-medium text-indigo-400">
+                    <span className="py-1 px-4 bg-indigo-600/30 rounded-full text-md font-medium text-indigo-400">
                         Features
                     </span>
                     <h2 className={`text-4xl font-bold py-5 ${theme === "dark" ? "text-white" : "text-black"}`}>Revolutionary Features</h2>
