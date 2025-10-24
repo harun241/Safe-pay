@@ -42,7 +42,7 @@ export async function POST(request) {
   
 const devices = {
  
-  os: payload.value_d,
+
   browser: payload.value_c,
   
 };
@@ -52,6 +52,7 @@ const devices = {
   // 7. Create Subscription document
   const txnDoc = {
     transaction_id: payload.tran_id,
+    email:payload.value_d,
     user_id: userId,
     amount,
     devices,

@@ -86,7 +86,7 @@ export default function DynamicPlanPage() {
       value_a: user.uid,
       value_b: selectedPlan.title,
       value_c: deviceInfo.browser,
-      value_d: deviceInfo.os,
+      value_d: user?.email
     };
 
     try {

@@ -21,8 +21,8 @@ export default function RootLayout({ children }) {
       data-new-gr-c-s-check-loaded="14.1254.0"
       data-gr-ext-installed="">
         <ThemeProvider
-          attribute="class"J
-          defaultTheme="system"
+          attribute="class"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange={false}
         >
