@@ -17,7 +17,9 @@ export default function BaseLayout({ children }) {
           {children}
         </div>
 
-        <Footer />
+        <div className={`${theme==='dark'? "dark-bg-theme" : "light-bg-theme"}`}>
+          <Footer />
+        </div>
       </div>
 
       {/* ChatSupport should be outside of footer & main content to float properly */}
