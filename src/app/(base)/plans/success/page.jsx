@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic"; 
-
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
@@ -11,23 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 import { useEffect } from "react";
 
-export default function SuccessPage() {
+export default function SuccessContent() {
   const { theme } = useTheme();
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.userInfo);
   const transactions = useSelector((state) => state?.Subscription);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
-  // ✅ Fetch transactions on mount
   useEffect(() => {
     dispatch(fetchTransactions());
   }, [dispatch]);
-
-  console.log(user);
-  console.log(transactions);
-  console.log(paymentStatus);
 
   return (
     <section
