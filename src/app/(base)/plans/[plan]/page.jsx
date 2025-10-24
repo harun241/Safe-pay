@@ -6,24 +6,24 @@ import { CheckCircle, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import parant from "../page";
+import { useParams } from "next/navigation"; // ✅ URL parameter নেওয়ার জন্য
 
 export default function DynamicPlanPage() {
   const user = useSelector((state) => state.userInfo);
   const [loading, setLoading] = useState(false);
 
-  const plan = parant()
+  // ✅ URL parameter থেকে plan নাম নেওয়া
+  const { plan } = useParams();
 
-
-  console.log(name)
-
-  console.log(plan)
+  console.log("User Info:", user);
+  console.log("Selected Plan from URL:", plan);
 
   const plans = [
     {
       title: "Basic",
       price: "49",
-      description: "Perfect for startups or small businesses wanting fraud protection.",
+      description:
+        "Perfect for startups or small businesses wanting fraud protection.",
       features: [
         "Real-time fraud monitoring",
         "Basic anomaly detection",
@@ -36,7 +36,8 @@ export default function DynamicPlanPage() {
     {
       title: "Pro",
       price: "149",
-      description: "Ideal for growing businesses needing advanced AI protection.",
+      description:
+        "Ideal for growing businesses needing advanced AI protection.",
       features: [
         "Everything in Basic",
         "AI-powered risk scoring",
@@ -50,7 +51,8 @@ export default function DynamicPlanPage() {
     {
       title: "Enterprise",
       price: "Custom",
-      description: "Best for enterprises handling high-volume, high-risk transactions.",
+      description:
+        "Best for enterprises handling high-volume, high-risk transactions.",
       features: [
         "Everything in Pro",
         "Dedicated fraud analyst",
@@ -63,9 +65,10 @@ export default function DynamicPlanPage() {
     },
   ];
 
-  // ==== Find plan by URL param ====
+  // ✅ URL থেকে পাওয়া plan এর সাথে মিল খোঁজা
   const normalizedTitle = plan?.toLowerCase() || "basic";
-  const selectedPlan = plans.find(p => p.title.toLowerCase() === normalizedTitle) || plans[0];
+  const selectedPlan =
+    plans.find((p) => p.title.toLowerCase() === normalizedTitle) || plans[0];
 
   if (!user) {
     return (
@@ -75,6 +78,7 @@ export default function DynamicPlanPage() {
     );
   }
 
+  // ✅ Payment initiation handler
   const handlePayment = async () => {
     const deviceInfo = await getDeviceInfo();
     setLoading(true);
@@ -86,7 +90,7 @@ export default function DynamicPlanPage() {
       value_a: user.uid,
       value_b: selectedPlan.title,
       value_c: deviceInfo.browser,
-      value_d: user?.email
+      value_d: user?.email,
     };
 
     try {
@@ -96,8 +100,6 @@ export default function DynamicPlanPage() {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-
-
 
       if (data.url) window.location.href = data.url;
       else alert("Payment initiation failed");
@@ -109,20 +111,44 @@ export default function DynamicPlanPage() {
     }
   };
 
-
-
-
   return (
     <section className="relative py-20 bg-gradient-to-b from-gray-900 to-black text-white min-h-screen overflow-hidden">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <h1 className={`text-5xl font-extrabold mb-4 ${selectedPlan.customGradient ? "text-white" : selectedPlan.highlight ? "text-cyan-400" : "text-blue-400"}`}>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h1
+            className={`text-5xl font-extrabold mb-4 ${
+              selectedPlan.customGradient
+                ? "text-white"
+                : selectedPlan.highlight
+                ? "text-cyan-400"
+                : "text-blue-400"
+            }`}
+          >
             {selectedPlan.title} Plan
           </h1>
-          <p className="text-gray-300 max-w-3xl mx-auto text-lg">{selectedPlan.description}</p>
+          <p className="text-gray-300 max-w-3xl mx-auto text-lg">
+            {selectedPlan.description}
+          </p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className={`${selectedPlan.customGradient ? "bg-gradient-to-r from-yellow-500 to-orange-400 text-white" : "bg-gray-800/50 backdrop-blur-md text-white"} rounded-3xl shadow-2xl p-10 md:p-14 border border-gray-700 grid md:grid-cols-2 gap-10`}>
+        {/* Plan Details */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className={`${
+            selectedPlan.customGradient
+              ? "bg-gradient-to-r from-yellow-500 to-orange-400 text-white"
+              : "bg-gray-800/50 backdrop-blur-md text-white"
+          } rounded-3xl shadow-2xl p-10 md:p-14 border border-gray-700 grid md:grid-cols-2 gap-10`}
+        >
+          {/* Features */}
           <div>
             <h2 className="text-2xl font-semibold mb-6">Features Included</h2>
             <ul className="space-y-4">
@@ -135,40 +161,82 @@ export default function DynamicPlanPage() {
             </ul>
           </div>
 
+          {/* Payment Card */}
           <div className="flex flex-col items-center justify-center text-center">
             <p className="text-6xl font-bold mb-2">
-              {selectedPlan.price === "Custom" ? "Custom" : <>${selectedPlan.price}<span className="text-xl text-gray-300">/mo</span></>}
+              {selectedPlan.price === "Custom" ? (
+                "Custom"
+              ) : (
+                <>
+                  ${selectedPlan.price}
+                  <span className="text-xl text-gray-300">/mo</span>
+                </>
+              )}
             </p>
             <p className="text-gray-300 mb-6">
-              {selectedPlan.title === "Basic" ? "Essential protection for small businesses" : selectedPlan.title === "Pro" ? "Advanced AI protection for high-volume transactions" : "Tailored protection for enterprise-grade needs"}
+              {selectedPlan.title === "Basic"
+                ? "Essential protection for small businesses"
+                : selectedPlan.title === "Pro"
+                ? "Advanced AI protection for high-volume transactions"
+                : "Tailored protection for enterprise-grade needs"}
             </p>
 
-            <button disabled={loading} onClick={handlePayment} className={`inline-block px-10 py-4 rounded-2xl font-semibold text-lg shadow-lg transition ${selectedPlan.customGradient ? "bg-white text-gray-900 hover:opacity-90" : "bg-cyan-400 text-gray-900 hover:opacity-90"}`}>
-              {loading ? "Redirecting..." : selectedPlan.price === "Custom" ? "Contact Sales" : "Subscribe Now"}
+            <button
+              disabled={loading}
+              onClick={handlePayment}
+              className={`inline-block px-10 py-4 rounded-2xl font-semibold text-lg shadow-lg transition ${
+                selectedPlan.customGradient
+                  ? "bg-white text-gray-900 hover:opacity-90"
+                  : "bg-cyan-400 text-gray-900 hover:opacity-90"
+              }`}
+            >
+              {loading
+                ? "Redirecting..."
+                : selectedPlan.price === "Custom"
+                ? "Contact Sales"
+                : "Subscribe Now"}
             </button>
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="mt-20 grid md:grid-cols-3 gap-8 text-center">
+        {/* Extra Info Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-20 grid md:grid-cols-3 gap-8 text-center"
+        >
           <div className="p-6 bg-gray-800/60 rounded-2xl border border-gray-700">
             <ShieldCheck className="w-10 h-10 text-blue-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Secure Transactions</h3>
-            <p className="text-gray-300 text-sm">AI-driven monitoring ensures safe and reliable transactions for your business.</p>
+            <p className="text-gray-300 text-sm">
+              AI-driven monitoring ensures safe and reliable transactions for
+              your business.
+            </p>
           </div>
           <div className="p-6 bg-gray-800/60 rounded-2xl border border-gray-700">
             <Zap className="w-10 h-10 text-yellow-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Quick Setup</h3>
-            <p className="text-gray-300 text-sm">Get started in minutes and start monitoring transactions immediately.</p>
+            <p className="text-gray-300 text-sm">
+              Get started in minutes and start monitoring transactions
+              immediately.
+            </p>
           </div>
           <div className="p-6 bg-gray-800/60 rounded-2xl border border-gray-700">
             <CheckCircle className="w-10 h-10 text-green-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">AI-Powered Accuracy</h3>
-            <p className="text-gray-300 text-sm">Our model continuously improves to detect new patterns of fraud behavior.</p>
+            <p className="text-gray-300 text-sm">
+              Our model continuously improves to detect new patterns of fraud
+              behavior.
+            </p>
           </div>
         </motion.div>
 
+        {/* Back to Plans */}
         <div className="text-center mt-12">
-          <Link href="/plans" className="text-blue-400 hover:underline text-sm">← Back to Pricing Plans</Link>
+          <Link href="/plans" className="text-blue-400 hover:underline text-sm">
+            ← Back to Pricing Plans
+          </Link>
         </div>
       </div>
     </section>
