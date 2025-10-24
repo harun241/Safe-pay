@@ -1,55 +1,51 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosSecure from "@/Hooks/AxiosSecure/AxiosSecure";
 
-// 🔹 Async thunk to fetch the user's latest subscription
-export const fetchSubscription = createAsyncThunk(
-    "subscription/fetchSubscription",
-    async (userUID, { rejectWithValue }) => {
-        try {
-            if (!userUID) throw new Error("User email is required");
+// 🔹 Async thunk to fetch all subscriptions
+export const fetchAllSubscriptions = createAsyncThunk(
+  "subscription/fetchAllSubscriptions",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosSecure.get(`/api/subscriptions`);
 
-            const res = await axiosSecure.get(`/api/subscriptions?email=${userUID}`);
+      if (!res.data?.success) {
+        throw new Error(res.data?.error || "No subscriptions found");
+      }
 
-            // If backend returns error
-            if (!res.data?.success) {
-                throw new Error(res.data?.error || "No subscription found");
-            }
-
-            return res.data.subscription;
-        } catch (error) {
-            const message =
-                error.response?.data?.error ||
-                error.message ||
-                "Failed to fetch subscription";
-            return rejectWithValue(message);
-        }
+      return res.data.subscriptions;
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.message ||
+        "Failed to fetch subscriptions";
+      return rejectWithValue(message);
     }
+  }
 );
 
-// 🔹 Slice definition
 const subscriptionSlice = createSlice({
-    name: "subscription",
-    initialState: {
-        latest: null, // store latest subscription
-        status: "idle", // idle | loading | succeeded | failed
-        error: null,
-    },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchSubscription.pending, (state) => {
-                state.status = "loading";
-                state.error = null;
-            })
-            .addCase(fetchSubscription.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.latest = action.payload;
-            })
-            .addCase(fetchSubscription.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload;
-            });
-    },
+  name: "subscription",
+  initialState: {
+    list: [], // ✅ now stores all subscriptions
+    status: "idle",
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAllSubscriptions.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchAllSubscriptions.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.list = action.payload;
+      })
+      .addCase(fetchAllSubscriptions.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+  },
 });
 
 export default subscriptionSlice.reducer;
