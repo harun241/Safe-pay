@@ -17,14 +17,14 @@ export default function GlobalAntiFraud() {
   });
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-8 mt-20">
       <h1 className="text-3xl font-bold">Global Anti-Fraud Dashboard</h1>
 
       <div className="bg-white p-4 rounded-xl shadow-md">
         <FraudFilters filter={filter} setFilter={setFilter} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-md h-[500px]">
+      <div className="bg-white rounded-xl shadow-md h-[500px] z-20">
         <FraudMap filter={filter} />
       </div>
 

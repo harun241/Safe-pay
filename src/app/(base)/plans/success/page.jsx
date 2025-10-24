@@ -6,30 +6,31 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchSubscription } from "@/Redux/Slices/subscriptions";
 import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 
 export default function SuccessPage() {
   const { theme } = useTheme();
-
   const dispatch = useDispatch()
-
   const user = useSelector((state) => state.userInfo);
-  const Subscription = useSelector((state) => state?.Subscriptions);
-  const transactions = useSelector((state) => state?.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
+  const [subscription,setSubscription] = useState(null);
 
   // ✅ Fetch transactions on mount
   useEffect(() => {
-    dispatch(fetchSubscription());
-    dispatch(fetchTransactions());
-  }, [dispatch]);
+
+    const fetchData = async()=>{
+      const res = await fetch(`http://localhost:3000/`)
+    }
+
+    
+  }, []);
 
   console.log(user)
-  console.log(Subscription)
-  console.log(transactions)
+  console.log(subscription)
+ 
 
   // const paymentData = async () => {
   //   const res = await fetch('')

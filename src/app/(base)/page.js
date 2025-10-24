@@ -11,6 +11,8 @@ import AdditionalResources from "./Components/AditionalResources";
 import OurMission from "./Components/OurMission";
 import ScrollReveal from "./Components/ScrollReveal";
 import SecurityCompliance from "./Components/SecurityCompliance";
+import OurExpertsSection from "./Components/OurExperts";
+import Revolutionary from "../dashboard/_components/Revolutionary";
 
 
 export default function HomePage() {
@@ -60,6 +62,18 @@ export default function HomePage() {
         <div>
           <ScrollReveal>
             <SecurityCompliance />
+          </ScrollReveal>
+        </div>
+      
+
+         <div>
+          <ScrollReveal>
+           <Revolutionary/>
+          </ScrollReveal>
+        </div>
+          <div>
+          <ScrollReveal>
+           <OurExpertsSection/>
           </ScrollReveal>
         </div>
         <div>

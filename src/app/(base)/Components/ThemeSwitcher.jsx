@@ -1,7 +1,7 @@
 'use client';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { Sun, Moon, Star } from 'lucide-react'; // Sun for light, Moon crescent for dark, Star for sparkle
+import { Sun, Moon, Star } from 'lucide-react'; 
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);

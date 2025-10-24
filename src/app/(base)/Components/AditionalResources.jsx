@@ -76,7 +76,7 @@ export default function AdditionalResources() {
   return (
     <section className="py-16 px-6">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-10 text-cyan-500">
+        <h2 className="text-5xl font-bold mb-10 text-cyan-500">
           Additional Resources
         </h2>
 

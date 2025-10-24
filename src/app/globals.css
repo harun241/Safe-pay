@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
+/* ========== SCROLL ANIMATION (for marquee/slider) ========== */
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
-
   100% {
     transform: translateX(-50%);
   }
@@ -14,93 +14,102 @@
   animation: scroll 25s linear infinite;
 }
 
-
-
+/* ========== CARD BACKGROUND ========== */
 .card-bg {
   @apply bg-gradient-to-r from-cyan-600 to-green-600 text-white;
 }
 
+/* ========== ROOT COLORS (LIGHT + DARK THEMES) ========== */
 :root {
   --bg-color: #1a1a1a;
-  /* your root background */
+  --wave-primary: #3b82f6; /* blue-500 */
+  --wave-secondary: #0ea5e9; /* sky-500 */
+  --wave-accent: #22d3ee; /* cyan-400 */
 }
 
-/* ====== THEME COLORS ====== */
-:root {
-  --wave-primary: #3b82f6;
-  /* Tailwind blue-500 */
-  --wave-secondary: #0ea5e9;
-  /* Tailwind sky-500 */
-  --wave-accent: #22d3ee;
-  /* Tailwind cyan-400 */
-}
-
-/* Dark mode */
 .dark {
-  --wave-primary: #0ea5e9;
-  --wave-secondary: #0284c7;
-  --wave-accent: #38bdf8;
+  --wave-primary: #0ea5e9; /* sky-500 */
+  --wave-secondary: #0284c7; /* blue-600 */
+  --wave-accent: #38bdf8; /* sky-400 */
 }
 
-/* ====== Wave container ====== */
+/* ========== ANIMATED GRADIENT BACKGROUND ========== */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animate {
+  background: linear-gradient(-45deg, #1F2937, #4B5563, #16a34a, #111827);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+/* ========== WAVE CONTAINER ========== */
 .wave-container {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
   z-index: 0;
 }
 
-/* ====== Wave layers ====== */
+/* ========== WAVE LAYERS ========== */
 .wave {
   position: absolute;
   bottom: 0;
   width: 200%;
   height: 100%;
-  background: radial-gradient(circle at 50% 100%, var(--wave-primary) 35%, transparent 70%);
-  border-radius: 50% 50% 0 0;
+  background-repeat: repeat-x;
   opacity: 0.5;
-  animation: waveMove 8s linear infinite;
-  transform: translateX(0);
+  animation: waveMove 10s linear infinite;
+  border-radius: 45% 55% 50% 50%;
 }
 
-/* Layer variations for depth */
-.wave.wave-2 {
-  background: radial-gradient(circle at 50% 100%, var(--wave-secondary) 35%, transparent 70%);
-  opacity: 0.35;
+/* Each layer for depth */
+.wave1 {
+  background: radial-gradient(circle at 50% 80%, var(--wave-primary) 40%, transparent 70%);
   animation-duration: 12s;
-  bottom: 10px;
+  opacity: 0.4;
 }
 
-.wave.wave-3 {
-  background: radial-gradient(circle at 50% 100%, var(--wave-accent) 35%, transparent 70%);
-  opacity: 0.25;
+.wave2 {
+  background: radial-gradient(circle at 60% 80%, var(--wave-secondary) 40%, transparent 70%);
   animation-duration: 16s;
-  bottom: 20px;
+  opacity: 0.3;
 }
 
-/* Infinite loop keyframes */
+.wave3 {
+  background: radial-gradient(circle at 40% 80%, var(--wave-accent) 40%, transparent 70%);
+  animation-duration: 20s;
+  opacity: 0.25;
+}
+
+/* ========== WAVE MOTION ========== */
 @keyframes waveMove {
   0% {
     transform: translateX(0) translateY(0) rotate(0deg);
     border-radius: 45% 55% 50% 50%;
   }
-
   25% {
     border-radius: 50% 45% 55% 50%;
   }
-
   50% {
     transform: translateX(-50%) translateY(-5px) rotate(1deg);
     border-radius: 55% 50% 50% 45%;
   }
-
   75% {
     border-radius: 50% 55% 45% 50%;
   }
-
   100% {
     transform: translateX(0) translateY(0) rotate(0deg);
     border-radius: 45% 55% 50% 50%;
