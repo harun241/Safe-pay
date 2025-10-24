@@ -11,8 +11,8 @@ export default function BaseLayout({ children }) {
       <div>
         <Navbar />
         <div className={`md:px-3 lg:px-0 ${theme === "dark"
-            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-            : "bg-gradient-to-br from-slate-100 via-white to-slate-100 text-slate-900"
+            ? "dark-bg-theme "
+            : " light-bg-theme"
           }`}>
           {children}
         </div>
