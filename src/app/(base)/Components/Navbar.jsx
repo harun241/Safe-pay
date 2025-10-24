@@ -2,10 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { ThemeSwitcher } from "./ThemeSwitcher";
 
 import {
   Shield,
@@ -20,6 +18,8 @@ import {
   LogOut,
   Dock,
 } from "lucide-react";
+import ThemeSwitcher from "./ThemeSwitcher";
+import { useTheme } from "./ThemeProvider";
 
 // --- Desktop Dropdown ---
 const DesktopDropdown = ({ item, isOpen, onMouseEnter, onMouseLeave, theme }) => {

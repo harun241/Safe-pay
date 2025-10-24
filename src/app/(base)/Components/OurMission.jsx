@@ -20,9 +20,9 @@ export default function OurMission() {
   };
 
   return (
+
     <section
-      className="py-14 px-6 lg:px-20 text-center transition-colors duration-500
-       dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
+      className="py-14 px-6 lg:px-20 text-center transition-colors duration-500"
     >
       <motion.div
         variants={containerVariants}
@@ -43,16 +43,16 @@ export default function OurMission() {
         {/* First paragraph */}
         <motion.p
           variants={childVariants}
-          className="text-lg md:text-xl dark:text-white leading-relaxed"
+          className="text-lg md:text-xl  leading-relaxed"
         >
           At{" "}
-          <span className="font-semibold text-cyan-500 dark:text-white">
+          <span className="font-semibold text-cyan-500">
             SafePay
           </span>
           , our goal is to make every online transaction{" "}
-          <span className="font-semibold dark:text-white">secure</span>,{" "}
-          <span className="font-semibold dark:text-white">transparent</span>, and{" "}
-          <span className="font-semibold dark:text-white">fraud-free</span>. We
+          <span className="font-semibold  text-cyan-500">secure</span>,{" "}
+          <span className="font-semibold  text-cyan-500">transparent</span>, and{" "}
+          <span className="font-semibold  text-cyan-500">fraud-free</span>. We
           combine advanced machine learning, behavioral analytics, and risk
           scoring to detect suspicious activities before they cause damage.
         </motion.p>
@@ -60,10 +60,10 @@ export default function OurMission() {
         {/* Second paragraph */}
         <motion.p
           variants={childVariants}
-          className="mt-8 text-lg md:text-xl dark:text-slate-300 leading-relaxed"
+          className="mt-8 text-lg md:text-xl  leading-relaxed"
         >
           Our mission is simple —{" "}
-          <span className="italic text-cyan-500 dark:text-cyan-400">
+          <span className="italic text-cyan-500 ">
             to build trust in digital payments
           </span>
           . Whether you’re a business or a customer, SafePay protects every

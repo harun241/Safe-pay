@@ -1,8 +1,8 @@
 'use client'
-import { useTheme } from "next-themes";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
 import ChatSupport from "./Components/ChatBot";
+import { useTheme } from "./Components/ThemeProvider";
 
 export default function BaseLayout({ children }) {
   const { theme } = useTheme()
@@ -11,8 +11,8 @@ export default function BaseLayout({ children }) {
       <div>
         <Navbar />
         <div className={`md:px-3 lg:px-0 ${theme === "dark"
-            ? "dark-bg-theme "
-            : " light-bg-theme"
+          ? "dark-bg-theme "
+          : " light-bg-theme"
           }`}>
           {children}
         </div>
@@ -23,5 +23,5 @@ export default function BaseLayout({ children }) {
       {/* ChatSupport should be outside of footer & main content to float properly */}
       <ChatSupport />
     </>
-  ); 
+  );
 }

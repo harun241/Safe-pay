@@ -1,17 +1,34 @@
-"use client";
+'use client';
+import { createContext, useState, useEffect, useContext } from 'react';
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+const ThemeContext = createContext();
 
-export function ThemeProvider({ children, ...props }) {
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('dark');
+  const [mounted, setMounted] = useState(false); // To prevent SSR mismatch
+
+  useEffect(() => {
+    
+    setMounted(true);
+
+    // Load theme from localStorage or default to dark
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(storedTheme);
+    document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="dark"
-      enableSystem={true}
-      disableTransitionOnChange
-      {...props}
-    >
+    <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
       {children}
-    </NextThemesProvider>
+    </ThemeContext.Provider>
   );
-}
+};
+
+export const useTheme = () => useContext(ThemeContext);

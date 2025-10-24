@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
 import { motion } from "framer-motion";
+import { useTheme } from "./ThemeProvider";
 
 const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), {
   ssr: false,
@@ -41,6 +42,8 @@ const resources = [
 export default function AdditionalResources() {
   const [activeRoom, setActiveRoom] = useState(null);
   const [copiedRoom, setCopiedRoom] = useState(null);
+
+  const { theme } = useTheme()
 
   const handleCopyLink = (roomId) => {
     const link = `${window.location.origin}/video-call?room=${roomId}`;
@@ -93,7 +96,7 @@ export default function AdditionalResources() {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: i * 0.2 }}
                 whileHover={{ scale: 1.03 }}
-                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col h-full transition-all"
+                className={`${theme === 'dark' ? "bg-gray-700/30 " : "bg-gray-100 "} p-4 rounded-xl shadow-md flex flex-col h-full transition-all`}
               >
                 {/* Image */}
                 {res.image && (
@@ -110,11 +113,11 @@ export default function AdditionalResources() {
                     <span className="text-sm font-semibold text-green-500">
                       {res.type}
                     </span>
-                    <h3 className="text-lg font-bold mt-1 mb-2 line-clamp-2 text-gray-900 dark:text-white transition-colors duration-300">
-             {res.title}
-                                </h3>
+                    <h3 className={`text-lg font-bold mt-1 mb-2 line-clamp-2  transition-colors duration-300 ${theme === 'dark' ? "text-white" : "text-gray-900"}`}>
+                      {res.title}
+                    </h3>
 
-                    <p className="text-sm text-gray-600 line-clamp-3">
+                    <p className={`${theme === 'dark' ? " text-gray-400" : " text-gray-600"} text-sm line-clamp-3`}>
                       {res.desc}
                     </p>
                   </div>
@@ -148,7 +151,7 @@ export default function AdditionalResources() {
                       ) : (
                         <button
                           onClick={() => setActiveRoom(roomId)}
-                          className="w-fit px-4 py-2 bg-cyan-500 text-black rounded"
+                          className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
                         >
                           Request a Demo
                         </button>
@@ -158,7 +161,7 @@ export default function AdditionalResources() {
                         onClick={() =>
                           window.open(res.link || "#", "_blank")
                         }
-                        className="w-fit px-4 py-2 bg-cyan-500 text-black rounded"
+                        className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
                       >
                         {res.type === "eBook" ? "Get eBook" : "Learn More"}
                       </button>
