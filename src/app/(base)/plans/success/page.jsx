@@ -6,8 +6,9 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 import { useEffect } from "react";
+import { fetchSubscription } from "@/Redux/Slices/subscriptions";
+import { fetchTransactions } from "@/Redux/Slices/transactionsSlice";
 
 export default function SuccessPage() {
   const { theme } = useTheme();
@@ -15,16 +16,19 @@ export default function SuccessPage() {
   const dispatch = useDispatch()
 
   const user = useSelector((state) => state.userInfo);
-  const transactions = useSelector((state) => state?.Subscription);
+  const Subscription = useSelector((state) => state?.Subscriptions);
+  const transactions = useSelector((state) => state?.transactions);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
   // ✅ Fetch transactions on mount
   useEffect(() => {
+    dispatch(fetchSubscription());
     dispatch(fetchTransactions());
   }, [dispatch]);
 
   console.log(user)
+  console.log(Subscription)
   console.log(transactions)
 
   // const paymentData = async () => {

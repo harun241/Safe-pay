@@ -4,11 +4,11 @@ import axiosSecure from "@/Hooks/AxiosSecure/AxiosSecure";
 // 🔹 Async thunk to fetch the user's latest subscription
 export const fetchSubscription = createAsyncThunk(
     "subscription/fetchSubscription",
-    async (userEmail, { rejectWithValue }) => {
+    async (uid, { rejectWithValue }) => {
         try {
-            if (!userEmail) throw new Error("User email is required");
+            if (!uid) throw new Error("User email is required");
 
-            const res = await axiosSecure.get(`/api/subscription?email=${userEmail}`);
+            const res = await axiosSecure.get(`/api/subscriptions?user_id=${uid}`);
 
             // If backend returns error
             if (!res.data?.success) {
