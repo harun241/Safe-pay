@@ -17,24 +17,42 @@ export default function SuccessPage() {
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
   const [subscription,setSubscription] = useState(null);
+  
+
+
 
   // ✅ Fetch transactions on mount
+ const uid = user?.uid;
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!uid) return;
 
-    const fetchData = async()=>{
-      const res = await fetch(`http://localhost:3000/`)
-    }
+        const res = await fetch(`/api/subscriptions?user_id=${uid}`);
+        const data = await res.json();
 
-    
-  }, []);
+        if (!res.ok) {
+          console.error("Error:", data.error || data.message);
+        } else {
+          // console.log("Subscription data:", data.subscriptions);
+          setSubscription(data.subscriptions)
+        }
+      } catch (error) {
+        console.error("Fetch failed:", error.message);
+      }
+    };
+
+    fetchData();
+  }, [uid]);
+
 
   console.log(user)
   console.log(subscription)
- 
 
-  // const paymentData = async () => {
-  //   const res = await fetch('')
-  // }
+
+
+  
 
   console.log(paymentStatus)
 

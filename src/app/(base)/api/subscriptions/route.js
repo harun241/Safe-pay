@@ -2,24 +2,35 @@ import { NextResponse } from "next/server";
 import { connectDb } from "@/lib/connectDb";
 import Subscription from "@/models/SubscriptionModel";
 
-export async function GET() {
+export async function GET(request) {
   try {
     await connectDb();
 
-    // ✅ Fetch all subscriptions, newest first
-    const allSubscriptions = await Subscription.find({})
-      .sort({ timestamp: -1 }) // sort by latest first
+    // 🔹 Extract uid from query string
+    const { searchParams } = new URL(request.url);
+    const uid = searchParams.get("user_id");
+
+    if (!uid) {
+      return NextResponse.json(
+        { error: "User ID is required." },
+        { status: 400 }
+      );
+    }
+
+    // 🔹 Find subscriptions for this user, newest first
+    const userSubscriptions = await Subscription.find({ user_id: uid })
+      .sort({ timestamp: -1 }) // or createdAt if that's your field
       .lean();
 
-    if (!allSubscriptions.length) {
+    if (!userSubscriptions.length) {
       return NextResponse.json(
-        { message: "No subscriptions found." },
+        { message: "No subscriptions found for this user." },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { success: true, subscriptions: allSubscriptions },
+      { success: true, subscriptions: userSubscriptions },
       { status: 200 }
     );
   } catch (error) {
