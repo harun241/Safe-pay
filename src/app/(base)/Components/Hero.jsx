@@ -7,7 +7,7 @@ import Navbar from "./Navbar";
 export default function Hero() {
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.2 } },
+    visible: { transition: { staggerChildren: 0.03} },
   };
 
   const childVariants = {
@@ -15,7 +15,7 @@ export default function Hero() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.9, ease: "easeOut" },
+      transition: { duration: 0.4, ease: "easeOut" },
     },
   };
 
@@ -51,7 +51,7 @@ export default function Hero() {
                   visible: {
                     opacity: 1,
                     y: 0,
-                    transition: { duration: 0.6, ease: "easeOut" },
+                    transition: { duration: 0.4, ease: "easeOut" },
                   },
                 }}
               >
