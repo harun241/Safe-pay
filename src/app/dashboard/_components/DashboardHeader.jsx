@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { ThemeSwitcher } from "@/app/(base)/Components/ThemeSwitcher";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 export default function DashboardHeader({ setIsSidebarOpen }) {
  const { user, logout } = useAuth();

@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -16,6 +15,7 @@ import {
   ClipboardList,
   ArrowBigLeft,
 } from "lucide-react";
+import { useTheme } from "@/app/(base)/Components/ThemeProvider";
 
 
 export default function Sidebar({ userRole, isSidebarOpen, setIsSidebarOpen }) {

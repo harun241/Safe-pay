@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, Lock, FileCheck, Key, Eye, Server } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
+import { ShieldCheck, Lock, FileCheck, Key, Eye, Server, Sun, Moon } from "lucide-react";
 
 export default function SecurityCompliance() {
+  const { theme, toggleTheme } = useTheme(); // 🌙 use the global theme
+
   const items = [
     {
       icon: <ShieldCheck className="w-10 h-10 text-cyan-500" />,
@@ -49,10 +52,9 @@ export default function SecurityCompliance() {
 
   return (
     <section
-      className="py-20 px-6 lg:px-20 text-center 
-      
-      dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-500"
+      className={`py-20 px-6 lg:px-20 text-center transition-colors duration-500 `}
     >
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -61,55 +63,43 @@ export default function SecurityCompliance() {
         className="max-w-7xl mx-auto"
       >
         {/* Heading */}
-        <motion.h2
-          variants={childVariants}
-          className="text-4xl md:text-5xl font-extrabold mb-8
-        text-cyan-500"
-        >
+        <motion.h2 variants={childVariants} className="text-4xl md:text-5xl font-extrabold mb-8 text-cyan-500">
           Security & Compliance
         </motion.h2>
 
         {/* Description */}
         <motion.p
           variants={childVariants}
-          className="text-lg md:text-xl  dark:text-white max-w-3xl mx-auto mb-16 leading-relaxed"
+          className={`text-lg md:text-xl max-w-3xl mx-auto mb-16 leading-relaxed`}
         >
-          At{" "}
-          <span className="font-semibold text-cyan-400">SafePay</span>, security isn’t
-          just a feature — it’s our foundation. Every transaction is protected by
-          enterprise-grade encryption, AI-based fraud detection, and strict compliance
-          standards.
+          At <span className="font-semibold text-cyan-400">SafePay</span>, security isn’t just a feature — it’s our
+          foundation. Every transaction is protected by enterprise-grade encryption, AI-based fraud detection, and
+          strict compliance standards.
         </motion.p>
 
         {/* Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10"
-        >
+        <motion.div variants={containerVariants} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {items.map((item, i) => (
             <motion.div
               key={i}
               variants={childVariants}
-              className="border border-gray-800 rounded-2xl p-8 text-left 
-              shadow-lg transition-all duration-300 group
-              hover:border-cyan-400 hover:shadow-cyan-500/20 hover:-translate-y-2"
+              className={`border rounded-2xl p-8 text-left shadow-lg transition-all duration-300 group
+                hover:shadow-cyan-500/20 hover:-translate-y-2 ${theme ? "border-gray-500" : " border-gray-800"
+                }`}
             >
               <div className="flex items-center justify-center mb-6">{item.icon}</div>
-              <h3 className="text-xl font-semibold mb-3 dark:text-white  leading-relaxed">
+              <h3 className={`text-xl font-semibold mb-3 leading-relaxed $`}>
                 {item.title}
               </h3>
-              <p className="dark:text-white text-sm leading-relaxed ">
-                {item.desc}
-              </p>
+              <p className={` text-sm leading-relaxed`}>{item.desc}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Compliance Footer */}
-        <motion.div variants={childVariants} className=" text-center mt-16">
-          <p className= "dark:text-white  leading-relaxed text-sm">
-            Certified for{" "}
-            <span className="text-cyan-400 font-medium">PCI DSS</span>,{" "}
+        {/* Footer */}
+        <motion.div variants={childVariants} className="text-center mt-16">
+          <p className={` leading-relaxed text-sm`}>
+            Certified for <span className="text-cyan-400 font-medium">PCI DSS</span>,{" "}
             <span className="text-cyan-400 font-medium">GDPR</span>, and{" "}
             <span className="text-cyan-400 font-medium">ISO/IEC 27001</span> standards.
           </p>

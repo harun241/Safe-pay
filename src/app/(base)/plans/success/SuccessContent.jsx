@@ -1,96 +1,181 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllSubscriptions } from "@/Redux/Slices/subscriptionSlice";
-import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
+import { useTheme } from "../../Components/ThemeProvider";
 
-export default function SuccessContent() {
+export default function SuccessPage() {
   const { theme } = useTheme();
-  const dispatch = useDispatch();
-  const list = useSelector((state) => state.subscription);
+  const user = useSelector((state) => state.userInfo);
   const searchParams = useSearchParams();
   const paymentStatus = searchParams.get("payment");
 
+  const [subscription, setSubscription] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [prediction, setPrediction] = useState(null);
+
+  const uid = user?.uid;
+
   useEffect(() => {
-    dispatch(fetchAllSubscriptions());
-  }, [dispatch]);
+    if (paymentStatus !== "success" || !uid) return;
+
+    const fetchLatestSubscription = async () => {
+      try {
+        // 🔹 Get latest transaction
+        const res = await fetch(`/api/subscriptions?user_id=${uid}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.error("Error:", data.error || data.message);
+          setLoading(false);
+          return;
+        }
+
+        const latest = data.subscriptions
+          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+        setSubscription(latest);
+
+        // 🔹 Call prediction API
+        const predictionRes = await fetch(
+          "https://freud-detection-ai-model.onrender.com/predict",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(latest),
+          }
+        );
+
+        const predictionData = await predictionRes.json();
+        setPrediction(predictionData.prediction || "unknown");
+        setLoading(false);
+
+        // 🔹 Show toast
+        if (predictionData.prediction === "Real") {
+          toast.success("✅ Transaction verified as REAL");
+        } else if (predictionData.prediction === "Fraud") {
+          toast.error("⚠️ Transaction flagged as FRAUD");
+        }
+      } catch (err) {
+        console.error("Request failed:", err);
+        setLoading(false);
+        toast.error("Prediction request failed!");
+      }
+    };
+
+    fetchLatestSubscription();
+  }, [uid, paymentStatus]);
 
 
-  console.log(paymentStatus)
 
-  console.log("All Subscriptions:", list);
+  if (loading) {
+    return (
+      <section
+        className={`flex items-center justify-center min-h-screen transition-colors duration-500
+          ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1 }}
+          className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full"
+        />
+      </section>
+    );
+  }
 
   return (
-    <section
-      className={`flex flex-col items-center justify-center min-h-screen px-6 py-24 transition-colors duration-500
-        ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-3xl w-full text-center bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-12 border border-gray-200 dark:border-gray-700"
+    <>
+      <Toaster position="top-right" />
+      <section
+        className={`flex items-center justify-center min-h-screen px-6 py-24 transition-colors duration-500
+          ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}
       >
-        <CheckCircle
-          className={`w-16 h-16 mx-auto mb-6 ${theme === "dark" ? "text-green-400" : "text-green-500"
-            }`}
-        />
-        <h1 className="text-4xl font-extrabold mb-4">
-          Subscriptions Overview
-        </h1>
-
-        {status === "loading" && <p>Loading subscriptions...</p>}
-        {status === "failed" && <p className="text-red-500">{error}</p>}
-
-        {status === "succeeded" && list.length > 0 ? (
-          <div className="overflow-x-auto mt-6">
-            <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 text-left">
-              <thead className="bg-gray-200 dark:bg-gray-700">
-                <tr>
-                  <th className="p-3 border">Transaction ID</th>
-                  <th className="p-3 border">User ID</th>
-                  <th className="p-3 border">Amount</th>
-                  <th className="p-3 border">Payment Method</th>
-                  <th className="p-3 border">Status</th>
-                  <th className="p-3 border">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((sub) => (
-                  <tr key={sub.transaction_id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td className="p-3 border">{sub.transaction_id}</td>
-                    <td className="p-3 border">{sub.user_id}</td>
-                    <td className="p-3 border">${sub.amount}</td>
-                    <td className="p-3 border">{sub.payment_method}</td>
-                    <td className="p-3 border">{sub.status}</td>
-                    <td className="p-3 border">
-                      {new Date(sub.timestamp).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          status === "succeeded" && <p>No subscriptions found.</p>
-        )}
-
-        <Link
-          href="/plans"
-          className={`inline-block px-8 py-4 mt-8 rounded-2xl font-semibold text-lg transition
-            ${theme === "dark"
-              ? "bg-green-400 text-gray-900 hover:bg-green-500"
-              : "bg-green-500 text-white hover:bg-green-600"
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className={`max-w-lg w-full text-center rounded-3xl shadow-2xl p-12 border transition-all ${prediction === "Real"
+              ? theme === "dark"
+                ? "bg-gray-800 border-green-400"
+                : "bg-white border-green-500"
+              : theme === "dark"
+                ? "bg-gray-800 border-red-400"
+                : "bg-white border-red-500"
             }`}
         >
-          Back to Plans
-        </Link>
-      </motion.div>
-    </section>
+          {prediction === "Real" ? (
+            <CheckCircle
+              className={`w-16 h-16 mx-auto mb-6 ${theme === "dark" ? "text-green-400" : "text-green-500"
+                }`}
+            />
+          ) : (
+            <AlertCircle
+              className={`w-16 h-16 mx-auto mb-6 ${theme === "dark" ? "text-red-400" : "text-red-500"
+                }`}
+            />
+          )}
+
+          <h1 className="text-4xl font-extrabold mb-4">
+            {prediction === "Real" ? "Transaction Verified!" : "⚠️ Potential Fraud Detected"}
+          </h1>
+
+          <p
+            className={`text-lg mb-8 ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+              }`}
+          >
+            {prediction === "Real"
+              ? "Your transaction is authentic. Enjoy all premium features securely."
+              : "This transaction may be fraudulent. Please contact support immediately."}
+          </p>
+
+          {subscription && (
+            <div
+              className={`text-left mb-6 p-4 rounded-lg border ${prediction === "Real"
+                  ? theme === "dark"
+                    ? "border-green-400 bg-gray-700"
+                    : "border-green-500 bg-green-50"
+                  : theme === "dark"
+                    ? "border-red-400 bg-gray-700"
+                    : "border-red-500 bg-red-50"
+                }`}
+            >
+              <p>
+                <strong>Transaction ID:</strong> {subscription.transaction_id}
+              </p>
+              <p>
+                <strong>Transacton Statement:</strong> {prediction || "N/A"} Trasactons
+              </p>
+              <p>
+                <strong>Amount:</strong> ${subscription.amount || "0"}
+              </p>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(subscription.timestamp).toLocaleString()}
+              </p>
+            </div>
+          )}
+
+          <Link
+            href="/"
+            className={`inline-block px-8 py-4 rounded-2xl font-semibold text-lg transition
+              ${prediction === "Real"
+                ? theme === "dark"
+                  ? "bg-green-400 text-gray-900 hover:bg-green-500"
+                  : "bg-green-500 text-white hover:bg-green-600"
+                : theme === "dark"
+                  ? "bg-red-400 text-gray-900 hover:bg-red-500"
+                  : "bg-red-500 text-white hover:bg-red-600"
+              }`}
+          >
+            Back to Home
+          </Link>
+        </motion.div>
+      </section>
+    </>
   );
 }

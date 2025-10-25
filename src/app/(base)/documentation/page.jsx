@@ -1,10 +1,10 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialLight, materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useState } from "react";
 import { ClipboardIcon, CheckIcon } from "lucide-react";
+import { useTheme } from "../Components/ThemeProvider";
 
 export default function DocumentationPage() {
   const { theme } = useTheme();

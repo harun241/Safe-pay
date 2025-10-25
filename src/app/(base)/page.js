@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import Hero from "./Components/Hero";
 import ImpactSection from "./Components/ImpactSection";
@@ -16,7 +15,6 @@ import Revolutionary from "../dashboard/_components/Revolutionary";
 
 
 export default function HomePage() {
-  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -32,16 +30,24 @@ export default function HomePage() {
         </ScrollReveal>
       </div>
 
-      
+
       {/* Testimonials Section */}
       <div className="px-6 sm:px-10 lg:px-20 max-w-[1400px] mx-auto">
-
       </div>
       <div>
         <div >
           <ScrollReveal>
             <OurMission></OurMission>
           </ScrollReveal>
+        </div>
+
+        <div>
+          <ScrollReveal>
+            <SecurityCompliance />
+          </ScrollReveal>
+        </div>
+
+        <div>
           <ScrollReveal>
             <ImpactSection />
           </ScrollReveal>
@@ -49,31 +55,26 @@ export default function HomePage() {
 
         <div>
           <ScrollReveal>
-            <AdditionalResources />
-          </ScrollReveal>
-        </div>
-        
-        <div>
-          <ScrollReveal>
             <PricingSection />
           </ScrollReveal>
         </div>
-  
+
+
+
         <div>
           <ScrollReveal>
-            <SecurityCompliance />
+            <AdditionalResources />
           </ScrollReveal>
         </div>
-      
 
-         <div>
+        <div>
           <ScrollReveal>
-           <Revolutionary/>
+            <Revolutionary />
           </ScrollReveal>
         </div>
-          <div>
+        <div>
           <ScrollReveal>
-           <OurExpertsSection/>
+            <OurExpertsSection />
           </ScrollReveal>
         </div>
         <div>
@@ -81,7 +82,7 @@ export default function HomePage() {
             <FaqSection />
           </ScrollReveal>
         </div>
-        
+
         <div>
 
         </div>

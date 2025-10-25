@@ -25,7 +25,7 @@ export default function PaymentCardSlider() {
     <div className="flex items-center justify-center">
 
       <div className="relative w-2/3 content-center py-6 overflow-hidden ">
-        <Marquee gradient={false} speed={50} pauseOnHover>
+        <Marquee gradient={false} speed={50}>
           {cards.map((card) => (
             <div
               key={card.id}

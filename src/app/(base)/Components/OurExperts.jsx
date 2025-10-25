@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import { useTheme } from "./ThemeProvider";
 
 const experts = [
   {
@@ -30,7 +30,7 @@ const experts = [
 export default function OurExpertsSection() {
   const { theme } = useTheme();
 
-  const sectionBg = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-50 text-gray-800";
+  const sectionBg = theme === "dark" ? "" : "";
   const subtitleColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
   const cardBg = theme === "dark" ? "bg-gray-800/70" : "bg-white/80";
   const cardShadow = theme === "dark" ? "shadow-2xl hover:shadow-cyan-400/30" : "shadow-md hover:shadow-cyan-200/40";

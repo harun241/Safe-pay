@@ -4,7 +4,7 @@ import React from "react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
+import { useTheme } from "./ThemeProvider";
 
 const stats = [
   {

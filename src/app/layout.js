@@ -31,7 +31,8 @@
 
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import ReduxProvider from "../Redux/ReduxProvider";
+// redux provider ================
+import ReduxProvider from '../Redux/ReduxProvider'
 import { ThemeProvider } from "./(base)/Components/ThemeProvider";
 
 // ✅ Import Google Fonts (Next.js Optimized)
@@ -53,6 +54,7 @@ export const metadata = {
   description: "AI powered fraud transaction detection system",
 };
 
+// Root Layout
 export default function RootLayout({ children }) {
   return (
     <html
@@ -69,7 +71,7 @@ export default function RootLayout({ children }) {
         >
           <ReduxProvider>
             <AuthProvider>
-              <main className="flex-1">{children}</main>
+              <main className="flex-1 ">{children}</main>
             </AuthProvider>
           </ReduxProvider>
         </ThemeProvider>
