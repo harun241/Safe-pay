@@ -365,7 +365,7 @@ export default function AdditionalResources() {
                 </button>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="px-3 py-2 bg-red-500 text-white rounded"
+                  className="px-3 py-2  bg-red-500 text-white rounded"
                 >
                   End Call
                 </button>
