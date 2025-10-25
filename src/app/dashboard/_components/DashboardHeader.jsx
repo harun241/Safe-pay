@@ -15,8 +15,8 @@ import {
  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
-import { ThemeSwitcher } from "@/app/(base)/Components/ThemeSwitcher";
 import { useTheme } from "@/app/(base)/Components/ThemeProvider";
+import ThemeSwitcher from "@/app/(base)/Components/ThemeSwitcher";
 
 export default function DashboardHeader({ setIsSidebarOpen }) {
  const { user, logout } = useAuth();
