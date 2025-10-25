@@ -1,3 +1,184 @@
+// "use client";
+
+// import { useState } from "react";
+// import dynamic from "next/dynamic";
+// import { v4 as uuidv4 } from "uuid";
+// import { motion } from "framer-motion";
+// import { useTheme } from "./ThemeProvider";
+
+
+
+// const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), {
+//   ssr: false,
+// });
+
+// const resources = [
+//   {
+//     id: uuidv4(),
+//     type: "Webinar",
+//     title:
+//       "Beyond Transaction Monitoring - The Strategic Shift to Entity Intelligence Fraud Prevention",
+//     desc:
+//       "Join fraud leaders from Planet & Brains Capital to learn why entity intelligence is giving forward-thinking companies a competitive edge.",
+//     image: "/images/webinar1.jpg",
+//   },
+//   {
+//     id: uuidv4(),
+//     type: "eBook",
+//     title: "Real-Time Payments - The Definitive Guide for Payments Leaders",
+//     desc:
+//       "Explore how payments leaders are tackling real-time fraud risks with AI, analytics, and modern RTP strategies.",
+//     image: "/images/ebook1.jpg",
+//   },
+//   {
+//     id: uuidv4(),
+//     type: "eBook",
+//     title:
+//       "Transforming Fraud Management - The Case for AI in Fraud Prevention",
+//     desc:
+//       "Discover how AI-powered fraud prevention transforms reactive security into proactive protection. Learn implementation strategies, cost benefits, and future trends.",
+//     image: "/images/ebook2.jpg",
+//   },
+// ];
+
+// export default function AdditionalResources() {
+//   const [activeRoom, setActiveRoom] = useState(null);
+//   const [copiedRoom, setCopiedRoom] = useState(null);
+
+//   const { theme } = useTheme()
+
+//   const handleCopyLink = (roomId) => {
+//     const link = `${window.location.origin}/video-call?room=${roomId}`;
+//     if (navigator.clipboard?.writeText) {
+//       navigator.clipboard
+//         .writeText(link)
+//         .then(() => {
+//           setCopiedRoom(roomId);
+//           setTimeout(() => setCopiedRoom(null), 2000);
+//         })
+//         .catch(() => fallbackCopy(link, roomId));
+//     } else {
+//       fallbackCopy(link, roomId);
+//     }
+//   };
+
+//   const fallbackCopy = (link, roomId) => {
+//     const ta = document.createElement("textarea");
+//     ta.value = link;
+//     document.body.appendChild(ta);
+//     ta.select();
+//     try {
+//       document.execCommand("copy");
+//       setCopiedRoom(roomId);
+//       setTimeout(() => setCopiedRoom(null), 2000);
+//     } catch {
+//       alert("Copy failed — please copy this link manually:\n\n" + link);
+//     } finally {
+//       document.body.removeChild(ta);
+//     }
+//   };
+
+//   return (
+//     <section className="py-16 px-6">
+//       <div className="max-w-7xl mx-auto text-center">
+//         <h2 className="text-5xl font-bold mb-10 text-cyan-500">
+//           Additional Resources
+//         </h2>
+
+//         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+//           {resources.map((res, i) => {
+//             const roomId = `room-${res.id}`;
+//             const isActive = activeRoom === roomId;
+
+//             return (
+//               <motion.div
+//                 key={res.id}
+//                 initial={{ opacity: 0, y: 50 }}
+//                 whileInView={{ opacity: 1, y: 0 }}
+//                 viewport={{ once: true, amount: 0.3 }}
+//                 transition={{ duration: 0.6, delay: i * 0.2 }}
+//                 whileHover={{ scale: 1.03 }}
+//                 className={`${theme === 'dark' ? "bg-gray-700/30 " : "bg-gray-100 "} p-4 rounded-xl shadow-md flex flex-col h-full transition-all`}
+//               >
+//                 {/* Image */}
+//                 {res.image && (
+//                   <img
+//                     src={res.image}
+//                     alt={res.title}
+//                     className="w-full h-56 object-cover rounded-xl mb-4"
+//                   />
+//                 )}
+
+//                 {/* Content */}
+//                 <div className="flex flex-col flex-grow justify-between items-end text-left">
+//                   <div>
+//                     <span className="text-sm font-semibold text-green-500">
+//                       {res.type}
+//                     </span>
+//                     <h3 className={`text-lg font-bold mt-1 mb-2 line-clamp-2  transition-colors duration-300 ${theme === 'dark' ? "text-white" : "text-gray-900"}`}>
+//                       {res.title}
+//                     </h3>
+
+//                     <p className={`${theme === 'dark' ? " text-gray-400" : " text-gray-600"} text-sm line-clamp-3`}>
+//                       {res.desc}
+//                     </p>
+//                   </div>
+
+//                   {/* Buttons */}
+//                   <div className="mt-5">
+//                     {res.type === "Webinar" ? (
+//                       isActive ? (
+//                         <div>
+//                           <VideoChat roomId={roomId} />
+//                           <div className="flex items-center gap-2 mt-2 flex-wrap">
+//                             <button
+//                               onClick={() => setActiveRoom(null)}
+//                               className="px-4 py-2 bg-red-500 text-white rounded"
+//                             >
+//                               End Demo
+//                             </button>
+//                             <button
+//                               onClick={() => handleCopyLink(roomId)}
+//                               className="px-4 py-2 bg-blue-500 text-white rounded"
+//                             >
+//                               Copy Invite Link
+//                             </button>
+//                             {copiedRoom === roomId && (
+//                               <span className="text-green-600 text-sm">
+//                                 ✅ Copied!
+//                               </span>
+//                             )}
+//                           </div>
+//                         </div>
+//                       ) : (
+//                         <button
+//                           onClick={() => setActiveRoom(roomId)}
+//                           className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
+//                         >
+//                           Request a Demo
+//                         </button>
+//                       )
+//                     ) : (
+//                       <button
+//                         onClick={() =>
+//                           window.open(res.link || "#", "_blank")
+//                         }
+//                         className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
+//                       >
+//                         {res.type === "eBook" ? "Get eBook" : "Learn More"}
+//                       </button>
+//                     )}
+//                   </div>
+//                 </div>
+//               </motion.div>
+//             );
+//           })}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
 "use client";
 
 import { useState } from "react";
@@ -6,9 +187,7 @@ import { v4 as uuidv4 } from "uuid";
 import { motion } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
 
-const VideoChat = dynamic(() => import("@/app/(base)/Components/VideoChat"), {
-  ssr: false,
-});
+const VideoChat = dynamic(() => import("./VideoChat"), { ssr: false });
 
 const resources = [
   {
@@ -40,41 +219,22 @@ const resources = [
 ];
 
 export default function AdditionalResources() {
-  const [activeRoom, setActiveRoom] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [copiedRoom, setCopiedRoom] = useState(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [waiting, setWaiting] = useState(true);
 
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   const handleCopyLink = (roomId) => {
     const link = `${window.location.origin}/video-call?room=${roomId}`;
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard
-        .writeText(link)
-        .then(() => {
-          setCopiedRoom(roomId);
-          setTimeout(() => setCopiedRoom(null), 2000);
-        })
-        .catch(() => fallbackCopy(link, roomId));
-    } else {
-      fallbackCopy(link, roomId);
-    }
+    navigator.clipboard.writeText(link);
+    setCopiedRoom(roomId);
+    setTimeout(() => setCopiedRoom(null), 2000);
   };
 
-  const fallbackCopy = (link, roomId) => {
-    const ta = document.createElement("textarea");
-    ta.value = link;
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand("copy");
-      setCopiedRoom(roomId);
-      setTimeout(() => setCopiedRoom(null), 2000);
-    } catch {
-      alert("Copy failed — please copy this link manually:\n\n" + link);
-    } finally {
-      document.body.removeChild(ta);
-    }
-  };
+  const toggleFullScreen = () => setIsFullScreen((prev) => !prev);
 
   return (
     <section className="py-16 px-6">
@@ -86,8 +246,6 @@ export default function AdditionalResources() {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {resources.map((res, i) => {
             const roomId = `room-${res.id}`;
-            const isActive = activeRoom === roomId;
-
             return (
               <motion.div
                 key={res.id}
@@ -96,9 +254,10 @@ export default function AdditionalResources() {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: i * 0.2 }}
                 whileHover={{ scale: 1.03 }}
-                className={`${theme === 'dark' ? "bg-gray-700/30 " : "bg-gray-100 "} p-4 rounded-xl shadow-md flex flex-col h-full transition-all`}
+                className={`${
+                  theme === "dark" ? "bg-gray-700/30" : "bg-gray-100"
+                } p-4 rounded-xl shadow-md flex flex-col h-full transition-all`}
               >
-                {/* Image */}
                 {res.image && (
                   <img
                     src={res.image}
@@ -106,61 +265,43 @@ export default function AdditionalResources() {
                     className="w-full h-56 object-cover rounded-xl mb-4"
                   />
                 )}
-
-                {/* Content */}
                 <div className="flex flex-col flex-grow justify-between items-end text-left">
                   <div>
                     <span className="text-sm font-semibold text-green-500">
                       {res.type}
                     </span>
-                    <h3 className={`text-lg font-bold mt-1 mb-2 line-clamp-2  transition-colors duration-300 ${theme === 'dark' ? "text-white" : "text-gray-900"}`}>
+                    <h3
+                      className={`text-lg font-bold mt-1 mb-2 line-clamp-2  transition-colors duration-300 ${
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       {res.title}
                     </h3>
 
-                    <p className={`${theme === 'dark' ? " text-gray-400" : " text-gray-600"} text-sm line-clamp-3`}>
+                    <p
+                      className={`${
+                        theme === "dark" ? " text-gray-400" : " text-gray-600"
+                      } text-sm line-clamp-3`}
+                    >
                       {res.desc}
                     </p>
                   </div>
 
-                  {/* Buttons */}
                   <div className="mt-5">
                     {res.type === "Webinar" ? (
-                      isActive ? (
-                        <div>
-                          <VideoChat roomId={roomId} />
-                          <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <button
-                              onClick={() => setActiveRoom(null)}
-                              className="px-4 py-2 bg-red-500 text-white rounded"
-                            >
-                              End Demo
-                            </button>
-                            <button
-                              onClick={() => handleCopyLink(roomId)}
-                              className="px-4 py-2 bg-blue-500 text-white rounded"
-                            >
-                              Copy Invite Link
-                            </button>
-                            {copiedRoom === roomId && (
-                              <span className="text-green-600 text-sm">
-                                ✅ Copied!
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setActiveRoom(roomId)}
-                          className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
-                        >
-                          Request a Demo
-                        </button>
-                      )
+                      <button
+                        onClick={() => {
+                          setSelectedRoom(roomId);
+                          setWaiting(true);
+                          setShowModal(true);
+                        }}
+                        className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
+                      >
+                        Request a Demo
+                      </button>
                     ) : (
                       <button
-                        onClick={() =>
-                          window.open(res.link || "#", "_blank")
-                        }
+                        onClick={() => window.open(res.link || "#", "_blank")}
                         className="w-fit px-4 py-2 bg-cyan-500 text-white font-semibold rounded"
                       >
                         {res.type === "eBook" ? "Get eBook" : "Learn More"}
@@ -173,6 +314,67 @@ export default function AdditionalResources() {
           })}
         </div>
       </div>
+
+      {/* Video Chat Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] flex justify-center items-center p-4">
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.25 }}
+            className={`relative ${
+              isFullScreen ? "w-[98vw] h-[98vh]" : "w-[80%] max-w-3xl"
+            } bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-5`}
+          >
+            {waiting && (
+              <div className="text-center py-6 text-gray-400">
+                <p className="text-lg">⏳ Waiting for other participant...</p>
+                <p className="text-sm mt-2">
+                  Share the invite link to start the call.
+                </p>
+              </div>
+            )}
+
+            {selectedRoom && (
+              <VideoChat
+                roomId={selectedRoom}
+                onConnected={() => setWaiting(false)}
+                onEnd={() => setShowModal(false)}
+              />
+            )}
+
+            <div className="flex justify-between items-center pt-4">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleCopyLink(selectedRoom)}
+                  className="px-3 py-2 bg-blue-500 text-white rounded"
+                >
+                  Copy Invite Link
+                </button>
+                {copiedRoom === selectedRoom && (
+                  <span className="text-green-600 text-sm">✅ Copied!</span>
+                )}
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => toggleFullScreen()}
+                  className="px-3 py-2 bg-gray-600 text-white rounded"
+                >
+                  {isFullScreen ? "Exit Full Screen" : "Full Screen"}
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-3 py-2 bg-red-500 text-white rounded"
+                >
+                  End Call
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </section>
   );
 }
+
