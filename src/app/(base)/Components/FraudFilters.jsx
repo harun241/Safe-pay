@@ -1,13 +1,17 @@
 // components/FraudFilters.jsx
 "use client";
 
+import { useTheme } from "./ThemeProvider";
+
 export default function FraudFilters({ filter, setFilter }) {
   // Example options
   const severityOptions = ["All", "High", "Medium", "Low"];
   const countryOptions = ["All", "USA", "UK", "Canada", "Germany"];
 
+  const { theme } = useTheme()
+
   return (
-    <div className="p-4 border rounded-xl shadow-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div className={`p-4 border rounded-xl shadow-md ${theme === 'dark'? "text-white": ""}`}  >
       <h2 className="font-bold text-lg mb-4">Fraud Filters</h2>
 
       <div className="flex flex-wrap gap-4">
