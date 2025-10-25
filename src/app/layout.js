@@ -37,7 +37,7 @@ import { ThemeProvider } from "./(base)/Components/ThemeProvider";
 // ✅ Import Google Fonts (Next.js Optimized)
 import { Inter, Montserrat } from "next/font/google";
 
-const inter = Inter({
+const inter =  Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
