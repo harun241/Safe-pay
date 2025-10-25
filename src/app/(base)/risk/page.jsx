@@ -5,9 +5,8 @@ import React, { useState, useEffect, useTransition } from "react";
 import { usePathname } from "next/navigation";
 import { Info } from "lucide-react";
 import Image from "next/image";
-import Navbar from "../(base)/Components/Navbar";
-import Spinner from "../(base)/Components/Spinner";
-import { useTheme } from "../(base)/Components/ThemeProvider";
+import Spinner from "../Components/Spinner";
+import { useTheme } from "../Components/ThemeProvider";
 
 export default function RiskDecisioningPage() {
   const [showDetails, setShowDetails] = useState(false);
@@ -23,47 +22,34 @@ export default function RiskDecisioningPage() {
     startTransition(() => setLoading(false));
   }, [pathname]);
 
-  // Theme classes
-  const pageBg =
-    theme === "dark" ? "bg-gray-950 text-gray-100" : "bg-gray-50 text-gray-900";
-  const cardBg =
-    theme === "dark"
-      ? "bg-gray-800 shadow-gray-700/40"
-      : "bg-white shadow-gray-200/50";
-  const cardText = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const cardHeaderText = theme === "dark" ? "text-white" : "text-gray-900";
-  const detailBg = theme === "dark" ? "bg-gray-700" : "bg-gray-100";
-  const detailText = theme === "dark" ? "text-gray-200" : "text-gray-800";
-  const iconColor = theme === "dark" ? "text-gray-300" : "text-gray-500";
 
   return (
-    <div className={`min-h-screen p-6 ${pageBg} transition-colors duration-500`}>
-      <Navbar />
+    <div className={`min-h-screen p-6  transition-colors duration-500`}>
       {loading && <Spinner />}
 
       <div className="max-w-4xl mx-auto text-center mt-24">
-        <h1 className={`text-4xl font-bold mb-4 ${cardHeaderText}`}>
+        <h1 className={`text-4xl font-bold mb-4 `}>
           Intelligent Risk Decisioning
         </h1>
-        <p className={`mb-10 ${cardText}`}>
+        <p className={`mb-10 `}>
           AI & Machine Learning help organizations make smarter, data-driven risk
           decisions by analyzing historical data, patterns, and anomalies in real time.
         </p>
 
         <div
-          className={`rounded-xl p-6 text-left ${cardBg} shadow-lg transition-colors duration-500`}
+          className={`rounded-xl p-6 text-left  shadow-lg transition-colors duration-500`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className={`text-2xl font-semibold ${cardHeaderText}`}>
+            <h2 className={`text-2xl font-semibold `}>
               How Intelligent Risk Decisioning Works
             </h2>
             <Info
-              className={`w-6 h-6 cursor-pointer ${iconColor}`}
+              className={`w-6 h-6 cursor-pointer `}
               onClick={() => setShowDetails(!showDetails)}
             />
           </div>
 
-          <ul className={`list-disc list-inside space-y-2 ${cardText}`}>
+          <ul className={`list-disc list-inside space-y-2 `}>
             <li>Data Collection: Financial, operational, market, and behavioral data.</li>
             <li>Data Preprocessing: Clean, normalize, and enrich the data for analysis.</li>
             <li>Feature Engineering: Identify indicators of risk and vulnerability.</li>
@@ -73,7 +59,7 @@ export default function RiskDecisioningPage() {
 
           {showDetails && (
             <div
-              className={`mt-4 p-4 rounded-lg ${detailBg} ${detailText} transition-colors duration-500`}
+              className={`mt-4 p-4 rounded-lg transition-colors duration-500`}
             >
               <p>
                 Algorithms used may include Random Forest, Gradient Boosting,
