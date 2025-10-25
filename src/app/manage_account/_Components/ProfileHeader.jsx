@@ -8,8 +8,8 @@ import {
     Menu,
 
 } from "lucide-react";
-import { ThemeSwitcher } from "@/app/(base)/Components/ThemeSwitcher";
 import { useTheme } from "@/app/(base)/Components/ThemeProvider";
+import ThemeSwitcher from "@/app/(base)/Components/ThemeSwitcher";
 
 export default function ProfileHeader({ setIsSidebarOpen }) {
     const { theme } = useTheme();
