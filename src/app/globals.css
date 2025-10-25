@@ -40,6 +40,10 @@
   /* sky-500 */
   --wave-accent: #22d3ee;
   /* cyan-400 */
+
+  /* google font */
+    --font-inter: 'Inter', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
 }
 
 .dark {
@@ -138,4 +142,13 @@
     transform: translateX(0) translateY(0) rotate(0deg);
     border-radius: 45% 55% 50% 50%;
   }
+}
+/* Default body font */
+body {
+  font-family: var(--font-inter);
+}
+
+/* Headings font style */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat);
 }
