@@ -360,6 +360,8 @@
 //     </div>
 //   );
 // }
+
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -376,10 +378,21 @@ export default function VideoChat({ roomId }) {
   const clientId = useRef(makeClientId());
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [cameraOn, setCameraOn] = useState(true);
-  const [micOn, setMicOn] = useState(true);
 
-  // ✅ Safety check if Supabase client missing
+  // ✅ Persistent camera/mic state
+  const [cameraOn, setCameraOn] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("cameraOn") === "false" ? false : true;
+    }
+    return true;
+  });
+  const [micOn, setMicOn] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("micOn") === "false" ? false : true;
+    }
+    return true;
+  });
+
   if (!supabase) {
     return (
       <div className="p-4 text-sm text-red-600 bg-red-50 rounded">
@@ -390,7 +403,7 @@ export default function VideoChat({ roomId }) {
     );
   }
 
-  // ✅ Peer connection setup (with TURN/STUN)
+  // ✅ Peer connection setup
   const createPeerConnection = (peerId) => {
     const existing = peerConnections.current[peerId];
     if (existing && existing.connectionState !== "closed") return existing;
@@ -582,6 +595,13 @@ export default function VideoChat({ roomId }) {
         if (!active) return;
         localStreamRef.current = stream;
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+
+        // Apply persistent camera/mic state
+        const videoTrack = stream.getVideoTracks()[0];
+        const audioTrack = stream.getAudioTracks()[0];
+        if (videoTrack) videoTrack.enabled = cameraOn;
+        if (audioTrack) audioTrack.enabled = micOn;
+
         setStatus("joined");
       } catch (err) {
         console.error("🎥 Media access error:", err);
@@ -591,7 +611,7 @@ export default function VideoChat({ roomId }) {
     };
     start();
     return () => { active = false; };
-  }, [roomId]);
+  }, [roomId, cameraOn, micOn]);
 
   // ✅ Controls
   const toggleCamera = () => {
@@ -601,6 +621,7 @@ export default function VideoChat({ roomId }) {
     if (videoTrack) {
       videoTrack.enabled = !videoTrack.enabled;
       setCameraOn(videoTrack.enabled);
+      localStorage.setItem("cameraOn", videoTrack.enabled);
     }
   };
 
@@ -611,6 +632,7 @@ export default function VideoChat({ roomId }) {
     if (audioTrack) {
       audioTrack.enabled = !audioTrack.enabled;
       setMicOn(audioTrack.enabled);
+      localStorage.setItem("micOn", audioTrack.enabled);
     }
   };
 
@@ -627,7 +649,6 @@ export default function VideoChat({ roomId }) {
     setErrorMessage("");
   };
 
-  // ✅ Render
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -671,7 +692,7 @@ export default function VideoChat({ roomId }) {
             {micOn ? "Mic On" : "Mic Off"}
           </button>
           <button onClick={endCall} className="px-4 py-2 bg-red-500 text-white rounded">
-            End Demo
+            End Call
           </button>
         </div>
       </div>
