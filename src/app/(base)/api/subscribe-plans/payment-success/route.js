@@ -2,7 +2,6 @@ import { connectDb } from "@/lib/connectDb";
 import Subscription from "@/models/SubscriptionModel";
 import User from "@/models/usersModel";
 
-
 export async function POST(request) {
   await connectDb();
 
@@ -10,7 +9,10 @@ export async function POST(request) {
   const body = await request.formData();
   const payload = Object.fromEntries(body);
   const amount = Number(payload.amount || 0);
-  const userId = payload.value_a;
+  const userId = payload.value_a; // uid
+  const planName = payload.value_b; // subscription plan
+  const browser = payload.value_c;
+  const email = payload.value_d;
 
   // 2. Extract IP address
   const forwarded = request.headers.get("x-forwarded-for");
@@ -33,26 +35,15 @@ export async function POST(request) {
     console.warn("ipinfo failed:", err);
   }
 
- 
+  // 4. Get device info
+  const devices = {
+    browser,
+  };
 
-
-   
-
-  //  get device info
-  
-const devices = {
- 
-
-  browser: payload.value_c,
-  
-};
-
-
-
-  // 7. Create Subscription document
+  // 5. Create Subscription document
   const txnDoc = {
     transaction_id: payload.tran_id,
-    email:payload.value_d,
+    email,
     user_id: userId,
     amount,
     devices,
@@ -65,29 +56,31 @@ const devices = {
     timestamp: new Date(),
   };
 
-  // console.log(txnDoc)
-
   try {
-    const created = await Subscription.create(txnDoc);
-    // console.log("Saved txn:", created.transaction_id);
+    await Subscription.create(txnDoc);
   } catch (err) {
     console.error("Failed to save txn:", err);
   }
 
-   // 6. Update user's subscription plan
+  // 6. Update user's subscription plan history
   try {
     await User.findOneAndUpdate(
       { uid: userId },
-      { subscriptionPlans: payload.value_b },
+      {
+        $push: {
+          subscriptionPlans: {
+            plans: planName,
+            time: new Date(),
+          },
+        },
+      },
       { new: true }
     );
   } catch (err) {
     console.error("Failed to update user subscription:", err);
   }
 
-
-
-  // 8. Redirect to frontend
+  // 7. Redirect to frontend
   const redirectHtml = `
     <html>
       <head>

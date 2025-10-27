@@ -26,6 +26,9 @@ export default function SuccessPage() {
 
     const fetchLatestSubscription = async () => {
       try {
+        // 🔹 Get user data
+        const resp = await fetch(`/api/users?uid=${uid}`);
+        const userData = await resp.json();
         // 🔹 Get latest transaction
         const res = await fetch(`/api/subscriptions?user_id=${uid}`);
         const data = await res.json();
@@ -36,10 +39,14 @@ export default function SuccessPage() {
           return;
         }
 
+        console.log("user data",userData.user?.subscriptionPlans);
+        console.log(data.subscriptions);
+
         const latest = data.subscriptions
           ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
         setSubscription(latest);
+        console.log(latest);
 
         // 🔹 Call prediction API
         const predictionRes = await fetch(
