@@ -20,10 +20,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    subscriptionPlans:{
-      type: String,
-      default: null,
-    },
+    
+     subscriptionPlans:[
+      {
+        _id:false,
+        plans:{type:String,default:null},
+        time: { type: Date, default: Date.now },
+      }
+     ],
+      
     
     role: {
       type: String,
