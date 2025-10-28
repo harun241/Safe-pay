@@ -121,7 +121,7 @@ export default function PricingSection() {
                     ? "text-white"
                     : theme === "dark"
                     ? "text-gray-300"
-                    : "text-slate-800"
+                    : "text-slate-600"
                 }`}
               >
                 {plan.title}
