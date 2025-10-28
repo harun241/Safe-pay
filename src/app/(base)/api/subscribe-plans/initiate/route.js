@@ -19,9 +19,9 @@ export async function POST(request) {
     currency: "BDT",
     tran_id,
    
-    success_url: "http://localhost:3000/api/subscribe-plans/payment-success",
-    fail_url: "http://localhost:3000/api/subscribe-plans/payment-fail",
-    cancel_url: "http://localhost:3000/api/subscribe-plans/payment-cancel",
+    success_url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribe-plans/payment-success`,
+    fail_url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribe-plans/payment-fail`,
+    cancel_url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribe-plans/payment-cancel`,
     shipping_method: "NO",
     product_name: "Demo Product",
     product_category: "Test",

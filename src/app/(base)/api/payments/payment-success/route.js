@@ -59,23 +59,23 @@ export async function POST(request) {
     },
   ]);
 
-   const prevSum30d = agg[0]?.sumAmount || 0;
-   
-
-   // 6. Calculate new total INCLUDING current transaction
-   const totalAmount30d = prevSum30d + amount;
+  const prevSum30d = agg[0]?.sumAmount || 0;
 
 
-   
+  // 6. Calculate new total INCLUDING current transaction
+  const totalAmount30d = prevSum30d + amount;
+
+
+
 
   //  get device info
-  
-const devices = {
- 
-  os: payload.value_d,
-  browser: payload.value_c,
-  deviceId: payload.value_b ,
-};
+
+  const devices = {
+
+    os: payload.value_d,
+    browser: payload.value_c,
+    deviceId: payload.value_b,
+  };
 
 
   // 7. Create transaction document
@@ -89,7 +89,7 @@ const devices = {
     merchant_id: payload.store_id || null,
     previous_txn_count_24h: prev24hCount,
     avg_amount_30d: totalAmount30d, // ✅ new field
-   
+
     country,
     city,
     location,
@@ -109,11 +109,11 @@ const devices = {
   const redirectHtml = `
     <html>
       <head>
-        <meta http-equiv="refresh" content="0; url=http://localhost:3000/" />
+        <meta http-equiv="refresh" content="0; url=${process.env.NEXT_PUBLIC_API_BASE_URL}" />
       </head>
       <body>
         <p>Payment processed. Redirecting...</p>
-        <script>window.location.href = "http://localhost:3000/demo-payment/?payment=success";</script>
+        <script>window.location.href = "${process.env.NEXT_PUBLIC_API_BASE_URL}/demo-payment/?payment=success";</script>
       </body>
     </html>
   `;

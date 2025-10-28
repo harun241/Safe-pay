@@ -23,7 +23,7 @@
 //     return (
 //       <div className="p-4 text-sm text-red-600 bg-red-50 rounded">
 //         Supabase client is not configured.  
-//         Please set <strong>NEXT_PUBLIC_SUPABASE_URL</strong> and  
+//         Please set <strong>NEXT_PUBLIC_SUPAprocess.env.NEXT_PUBLIC_API_BASE_URL</strong> and  
 //         <strong> NEXT_PUBLIC_SUPABASE_ANON_KEY</strong>.
 //       </div>
 //     );
@@ -397,7 +397,7 @@ export default function VideoChat({ roomId }) {
     return (
       <div className="p-4 text-sm text-red-600 bg-red-50 rounded">
         Supabase client is not configured.<br />
-        Please set <strong>NEXT_PUBLIC_SUPABASE_URL</strong> and{" "}
+        Please set <strong>NEXT_PUBLIC_SUPAprocess.env.NEXT_PUBLIC_API_BASE_URL</strong> and{" "}
         <strong>NEXT_PUBLIC_SUPABASE_ANON_KEY</strong>.
       </div>
     );
