@@ -84,11 +84,11 @@ export async function POST(request) {
   const redirectHtml = `
     <html>
       <head>
-        <meta http-equiv="refresh" content="0; url=http://localhost:3000/" />
+        <meta http-equiv="refresh" content="0; url=${process.env.NEXT_PUBLIC_API_BASE_URL}" />
       </head>
       <body>
         <p>Payment processed. Redirecting...</p>
-        <script>window.location.href = "http://localhost:3000/plans/success/?payment=success";</script>
+        <script>window.location.href = "${process.env.NEXT_PUBLIC_API_BASE_URL}/plans/success/?payment=success";</script>
       </body>
     </html>
   `;
