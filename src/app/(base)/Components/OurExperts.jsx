@@ -6,9 +6,9 @@ import { useTheme } from "./ThemeProvider";
 
 const experts = [
   {
-    name: "Rajaul islam",
+    name: "Mr.Razaul Karim",
     role: "Frontend Developer",
-    image: "/experts/ayesha.jpg",
+    image: "/experts/razaul.jpg",
   },
   {
     name: "Mr.Muksitul Islam",
