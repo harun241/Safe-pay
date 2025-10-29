@@ -111,6 +111,9 @@ export default function DynamicPlanPage() {
     }
   };
 
+
+  console.log(selectedPlan)
+
   return (
     <section className="relative py-20  min-h-screen overflow-hidden">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
@@ -122,13 +125,12 @@ export default function DynamicPlanPage() {
           className="text-center mb-16"
         >
           <h1
-            className={`text-5xl font-extrabold mb-4 ${
-              selectedPlan.customGradient
-                ? "text-white"
-                : selectedPlan.highlight
+            className={`text-5xl font-extrabold mb-4 ${selectedPlan.customGradient
+              ? "text-white"
+              : selectedPlan.highlight
                 ? "text-cyan-400"
                 : "text-blue-400"
-            }`}
+              }`}
           >
             {selectedPlan.title} Plan
           </h1>
@@ -142,12 +144,21 @@ export default function DynamicPlanPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className={`${
-            selectedPlan.customGradient
-              ? "border text-white"
-              : "bg-gray-800/50 backdrop-blur-md text-white"
-          } rounded-3xl shadow-2xl p-10 md:p-14 border border-gray-700 grid md:grid-cols-2 gap-10`}
+          className={`relative ${selectedPlan.customGradient
+            && "border-y-10 border-x-2 border-cyan-500 text-white"} ${selectedPlan.title === "Pro" && 'bg-cyan-600/30 border-y-10 border-white'} ${selectedPlan.title==='Basic' && 'border border-cyan-500'} rounded-3xl shadow-2xl p-10 md:p-14  grid md:grid-cols-2 gap-10`}
         >
+
+          {selectedPlan.customGradient &&
+            <>
+              {/* Animated gradient orbs */}
+              <div
+                className="absolute -top-10 left-10 w-72 h-72 bg-cyan-600/20 rounded-full blur-3xl"
+              />
+              <div
+                className="absolute bottom-0 right-10 w-60 h-60 bg-cyan-500/20 rounded-full blur-3xl"
+              />
+            </>}
+
           {/* Features */}
           <div>
             <h2 className="text-2xl font-semibold mb-6">Features Included</h2>
@@ -177,24 +188,23 @@ export default function DynamicPlanPage() {
               {selectedPlan.title === "Basic"
                 ? "Essential protection for small businesses"
                 : selectedPlan.title === "Pro"
-                ? "Advanced AI protection for high-volume transactions"
-                : "Tailored protection for enterprise-grade needs"}
+                  ? "Advanced AI protection for high-volume transactions"
+                  : "Tailored protection for enterprise-grade needs"}
             </p>
 
             <button
               disabled={loading}
               onClick={handlePayment}
-              className={`inline-block px-10 py-4 rounded-2xl font-semibold text-lg shadow-lg transition ${
-                selectedPlan.customGradient
-                  ? "bg-white text-gray-900 hover:opacity-90"
-                  : "bg-cyan-400 text-gray-900 hover:opacity-90"
-              }`}
+              className={`inline-block px-10 py-4 rounded-2xl font-semibold text-lg shadow-lg transition ${selectedPlan.customGradient
+                ? "bg-white text-gray-900 hover:opacity-90"
+                : "bg-cyan-400 text-gray-900 hover:opacity-90"
+                }`}
             >
               {loading
                 ? "Redirecting..."
                 : selectedPlan.price === "Custom"
-                ? "Contact Sales"
-                : "Subscribe Now"}
+                  ? "Contact Sales"
+                  : "Subscribe Now"}
             </button>
           </div>
         </motion.div>
