@@ -41,12 +41,14 @@
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.2.0",
     "react-syntax-highlighter": "^16.0.0",
+    "react-tsparticles": "^2.12.2",
     "recharts": "^3.2.1",
     "refractor": "^5.0.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "sslcommerz-lts": "^1.2.0",
     "sweetalert2": "^11.23.0",
+    "tsparticles": "^3.9.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

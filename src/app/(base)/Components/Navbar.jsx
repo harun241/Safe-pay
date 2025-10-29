@@ -393,7 +393,7 @@ export default function Navbar() {
                           exit={{ opacity: 0, y: 10 }}
                           className={`absolute top-full right-0 mt-2 w-56 rounded-xl shadow-xl border z-50 overflow-hidden backdrop-blur-md ${
                             theme === "dark"
-                              ? "bg-gray-950/90 border-gray-700/50"
+                              ? "bg-white border-gray-700/50"
                               : "bg-white/90 border-gray-300/50"
                           }`}
                         >

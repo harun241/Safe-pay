@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
-import { ShieldCheck, Lock, FileCheck, Key, Eye, Server, Sun, Moon } from "lucide-react";
+import { ShieldCheck, Lock, FileCheck, Key, Eye, Server } from "lucide-react";
 
 export default function SecurityCompliance() {
-  const { theme, toggleTheme } = useTheme(); // 🌙 use the global theme
+  const { theme } = useTheme(); // 🌙 use the global theme
 
   const items = [
     {
@@ -52,9 +52,8 @@ export default function SecurityCompliance() {
 
   return (
     <section
-      className={`py-20 px-6 lg:px-20 text-center transition-colors duration-500 `}
+      className={`py-20 px-6 lg:px-20 text-center transition-colors duration-500`}
     >
-
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -63,14 +62,17 @@ export default function SecurityCompliance() {
         className="max-w-7xl mx-auto"
       >
         {/* Heading */}
-        <motion.h2 variants={childVariants} className="text-4xl md:text-5xl font-extrabold mb-8 text-cyan-500">
+        <motion.h2
+          variants={childVariants}
+          className="text-4xl md:text-5xl font-extrabold mb-8 text-cyan-500"
+        >
           Security & Compliance
         </motion.h2>
 
         {/* Description */}
         <motion.p
           variants={childVariants}
-          className={`text-lg md:text-xl max-w-3xl mx-auto mb-16 leading-relaxed`}
+          className="text-lg md:text-xl max-w-3xl mx-auto mb-16 leading-relaxed"
         >
           At <span className="font-semibold text-cyan-400">SafePay</span>, security isn’t just a feature — it’s our
           foundation. Every transaction is protected by enterprise-grade encryption, AI-based fraud detection, and
@@ -84,21 +86,18 @@ export default function SecurityCompliance() {
               key={i}
               variants={childVariants}
               className={`border rounded-2xl p-8 text-left shadow-lg transition-all duration-300 group
-                hover:shadow-cyan-500/20 hover:-translate-y-2 ${theme ? "border-gray-500" : " border-gray-800"
-                }`}
+                ${theme === "dark" ? "bg-gray-800 border-gray-700 hover:shadow-cyan-500/30" : "bg-white border-gray-200 hover:shadow-cyan-500/20 hover:-translate-y-2"}`}
             >
               <div className="flex items-center justify-center mb-6">{item.icon}</div>
-              <h3 className={`text-xl font-semibold mb-3 leading-relaxed $`}>
-                {item.title}
-              </h3>
-              <p className={` text-sm leading-relaxed`}>{item.desc}</p>
+              <h3 className="text-xl font-semibold mb-3 leading-relaxed">{item.title}</h3>
+              <p className="text-sm leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Footer */}
         <motion.div variants={childVariants} className="text-center mt-16">
-          <p className={` leading-relaxed text-sm`}>
+          <p className="leading-relaxed text-sm">
             Certified for <span className="text-cyan-400 font-medium">PCI DSS</span>,{" "}
             <span className="text-cyan-400 font-medium">GDPR</span>, and{" "}
             <span className="text-cyan-400 font-medium">ISO/IEC 27001</span> standards.

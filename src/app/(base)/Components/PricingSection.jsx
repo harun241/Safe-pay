@@ -96,20 +96,20 @@ export default function PricingSection() {
               whileHover={{ y: -5, scale: 1.02 }}
               className={`relative p-10 rounded-2xl transition-all duration-300 ${
                 plan.customGradient
-                  ? "card-bg text-white shadow-lg hover:shadow-cyan-400/50" // ✅ Enterprise/custom card original gradient
+                  ? "card-bg text-white shadow-lg hover:shadow-cyan-400/50" 
                   : theme === "dark"
                   ? plan.highlight
-                    ? "bg-gray-500/80 border-cyan-500/30 text-white shadow-2xl hover:shadow-cyan-400/40"
-                    : "bg-gray-700/70 border-gray-700 text-gray-100 shadow-md hover:shadow-cyan-400/30"
+                    ? "bg-gray-900 border-cyan-500/30 text-white shadow-xl hover:shadow-cyan-400/30"
+                    : "bg-gray-700/70 border-cyan-500/30 text-gray-100 shadow-md hover:shadow-cyan-400/30"
                   : plan.highlight
-                  ? "bg-white border-cyan-400 text-slate-900 shadow-xl hover:shadow-cyan-400/30"
+                  ? "bg-gray-300 border-cyan-400 text-slate-900 shadow-xl hover:shadow-cyan-400/30"
                   : "bg-white border-slate-200 text-slate-900 shadow-md hover:shadow-cyan-300/20"
               }`}
             >
               {plan.highlight && !plan.customGradient && (
                 <span
                   className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full shadow-md
-                    ${theme === "dark" ? "bg-cyan-500 text-white" : "bg-cyan-500 text-black"}`}
+                    ${theme === "dark" ? "bg-cyan-500 text-black" : "bg-cyan-500 text-black"}`}
                 >
                   Most Popular
                 </span>
