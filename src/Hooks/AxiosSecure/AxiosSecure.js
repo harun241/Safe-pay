@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:3000", // All requests will prepend /api
+  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}`, // All requests will prepend /api
+  // baseURL: "https://safe-pay-seven.vercel.app", // All requests will prepend /api
   headers: {
     "Content-Type": "application/json",
   },

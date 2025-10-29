@@ -15,13 +15,13 @@ export default function GoogleSignInButton() {
     const { uid, email, displayName } = response.user;
 
     // Check if user exists
-    const checkRes = await fetch(`http://localhost:3000/api/users?uid=${uid}`);
+    const checkRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users?uid=${uid}`);
     const exists = checkRes.status === 200;
 
 
     const method = exists ? "PATCH" : "POST";
 
-    await fetch("http://localhost:3000/api/users", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users`, {
       method,
       headers: {
         "Content-Type": "application/json",
