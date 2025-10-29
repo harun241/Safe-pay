@@ -41,7 +41,7 @@
   /* cyan-400 */
 
   /* google font */
-    --font-inter: 'Inter', sans-serif;
+  --font-inter: 'Inter', sans-serif;
   --font-montserrat: 'Montserrat', sans-serif;
 }
 
@@ -143,14 +143,33 @@
   }
 
 
-  
+
 }
+
 /* Default body font */
 body {
   font-family: var(--font-inter);
 }
 
 /* Headings font style */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-montserrat);
 }
+
+
+  .primary-button {
+    @apply relative inline-block m-[15px]  bg-transparent cursor-pointer transition ease-out duration-1000 border-2 border-cyan-500 shadow-[inset_0_0_0_0_rgb(6_182_212)] ;
+  }
+
+  .primary-button:hover {
+    @apply text-white shadow-[inset_0_-100px_0_0_theme('colors.cyan.500')];
+  }
+
+  .primary-button:active {
+    @apply scale-90;
+  }

@@ -94,18 +94,29 @@ export default function PricingSection() {
               transition={{ duration: 0.6, delay: i * 0.2 }}
               viewport={{ once: true }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className={`relative p-10 rounded-2xl transition-all duration-300 ${
-                plan.customGradient
-                  ? "card-bg text-white shadow-lg hover:shadow-cyan-400/50" 
+              className={`relative p-10 rounded-2xl transition-all duration-300 ${plan.customGradient
+                  ? "border-y-10 border-x-2 border-cyan-500 text-white shadow-lg hover:shadow-cyan-400/50"
                   : theme === "dark"
-                  ? plan.highlight
-                    ? "bg-gray-900 border-cyan-500/30 text-white shadow-xl hover:shadow-cyan-400/30"
-                    : "bg-gray-700/70 border-cyan-500/30 text-gray-100 shadow-md hover:shadow-cyan-400/30"
-                  : plan.highlight
-                  ? "bg-gray-300 border-cyan-400 text-slate-900 shadow-xl hover:shadow-cyan-400/30"
-                  : "bg-white border-slate-200 text-slate-900 shadow-md hover:shadow-cyan-300/20"
-              }`}
+                    ? plan.highlight
+                      ? "border-y-10   bg-cyan-500/30  text-white shadow-xl hover:shadow-cyan-400/30"
+                      : "border border-cyan-500 text-gray-100 shadow-md hover:shadow-cyan-400/30"
+                    : plan.highlight
+                      ? "bg-gray-300 border-cyan-400 text-slate-900 shadow-xl hover:shadow-cyan-400/30"
+                      : "bg-white border-slate-200 text-slate-900 shadow-md hover:shadow-cyan-300/20"
+                }`}
             >
+              {plan.customGradient &&
+                <>
+                  {/* Animated gradient orbs */}
+                  <div
+                    className="absolute -top-10 left-10 w-72 h-72 bg-cyan-600/20 rounded-full blur-3xl"
+                  />
+                  <div
+                    className="absolute bottom-0 right-10 w-60 h-60 bg-cyan-500/20 rounded-full blur-3xl"
+                  />
+
+                </>}
+
               {plan.highlight && !plan.customGradient && (
                 <span
                   className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full shadow-md
@@ -116,37 +127,34 @@ export default function PricingSection() {
               )}
 
               <h3
-                className={`text-2xl font-semibold mb-3 ${
-                  plan.customGradient
+                className={`text-2xl font-semibold mb-3 ${plan.customGradient
                     ? "text-white"
                     : theme === "dark"
-                    ? "text-gray-300"
-                    : "text-slate-600"
-                }`}
+                      ? "text-gray-300"
+                      : "text-slate-600"
+                  }`}
               >
                 {plan.title}
               </h3>
 
               <p
-                className={`opacity-80 mb-8 ${
-                  plan.customGradient
+                className={`opacity-80 mb-8 ${plan.customGradient
                     ? "text-white"
                     : theme === "dark"
-                    ? "text-gray-300"
-                    : "text-slate-800"
-                }`}
+                      ? "text-gray-300"
+                      : "text-slate-800"
+                  }`}
               >
                 {plan.description}
               </p>
 
               <p
-                className={`text-5xl font-extrabold mb-8 ${
-                  plan.customGradient
+                className={`text-5xl font-extrabold mb-8 ${plan.customGradient
                     ? "text-white"
                     : theme === "dark"
-                    ? "text-gray-300"
-                    : "text-slate-800"
-                }`}
+                      ? "text-gray-300"
+                      : "text-slate-800"
+                  }`}
               >
                 {plan.price === "Custom" ? (
                   "Custom"
@@ -164,22 +172,20 @@ export default function PricingSection() {
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
                     <CheckCircle
-                      className={`w-5 h-5 shrink-0 ${
-                        plan.customGradient
+                      className={`w-5 h-5 shrink-0 ${plan.customGradient
                           ? "text-white"
                           : theme === "dark"
-                          ? "text-gray-300"
-                          : "text-slate-800"
-                      }`}
+                            ? "text-gray-300"
+                            : "text-slate-800"
+                        }`}
                     />
                     <span
-                      className={`${
-                        plan.customGradient
+                      className={`${plan.customGradient
                           ? "text-white"
                           : theme === "dark"
-                          ? "text-gray-300"
-                          : "text-slate-800"
-                      }`}
+                            ? "text-gray-300"
+                            : "text-slate-800"
+                        }`}
                     >
                       {feature}
                     </span>
@@ -193,8 +199,8 @@ export default function PricingSection() {
                   ${plan.customGradient
                     ? "border-white text-white hover:bg-white hover:text-gray-900"
                     : theme === "dark"
-                    ? "border-white text-white hover:bg-white hover:text-gray-900"
-                    : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                      ? "border-white text-white hover:bg-white hover:text-gray-900"
+                      : "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
                   }`}
               >
                 {plan.price === "Custom" ? "Contact Sales" : "Get Started"}

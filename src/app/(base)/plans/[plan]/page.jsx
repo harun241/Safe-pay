@@ -144,7 +144,7 @@ export default function DynamicPlanPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className={`${
             selectedPlan.customGradient
-              ? "bg-gradient-to-r from-yellow-500 to-orange-400 text-white"
+              ? "border text-white"
               : "bg-gray-800/50 backdrop-blur-md text-white"
           } rounded-3xl shadow-2xl p-10 md:p-14 border border-gray-700 grid md:grid-cols-2 gap-10`}
         >
