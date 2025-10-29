@@ -33,6 +33,8 @@ export default function SuccessPage() {
         const res = await fetch(`/api/subscriptions?user_id=${uid}`);
         const data = await res.json();
 
+        
+
         if (!res.ok) {
           console.error("Error:", data.error || data.message);
           setLoading(false);
