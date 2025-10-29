@@ -361,7 +361,7 @@ export default function Navbar() {
             {/* Right Section */}
             <div className="flex items-center space-x-2">
               <div className="hidden lg:flex items-center space-x-2">
-                <ThemeSwitcher />
+                {/* <ThemeSwitcher /> */}
                 {user ? (
                   <div className="relative">
                     {/* Profile Image */}

@@ -6,10 +6,9 @@ import UserDashboard from "./_components/UserDashboard";
 import AdminDashboard from "./_components/AdminDashboard";
 import ModeratorDashboard from "./_components/ModeratorDashboard";
 import { useEffect, useState } from "react";
-import { set } from "mongoose";
 
 export default function DashboardHome() {
-  const { user  } = useAuth();
+  const { user } = useAuth();
   const [userRole, setUserRole] = useState("user");
   const [userLoading, setUserLoading] = useState(true);
 
@@ -26,10 +25,11 @@ export default function DashboardHome() {
     fetchRole();
   }, [user?.uid]);
 
-  if(userLoading){
+  if (userLoading) {
     return <h1>loading</h1>
   }
 
+  console.log(user)
 
   switch (userRole) {
     case "admin":
