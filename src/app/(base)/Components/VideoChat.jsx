@@ -650,52 +650,107 @@ export default function VideoChat({ roomId }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex flex-col gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative rounded-lg overflow-hidden bg-black">
-          <video ref={localVideoRef} autoPlay playsInline muted className="w-full h-64 object-cover rounded-lg" />
-          <span className="absolute bottom-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
-            You
+  <div className="relative w-full h-full bg-black rounded-lg overflow-hidden">
+
+    {/* 🔹 Full Screen Video Grid */}
+    <div
+      className={`grid gap-2 p-2 h-full ${
+        remoteParticipants.length === 0
+          ? "grid-cols-1"
+          : remoteParticipants.length === 1
+          ? "grid-cols-2"
+          : remoteParticipants.length <= 4
+          ? "grid-cols-2"
+          : "grid-cols-3"
+      }`}
+    >
+      {/* Local Video */}
+      <div className="relative bg-black rounded-xl overflow-hidden border border-gray-700">
+        <video
+          ref={localVideoRef}
+          autoPlay
+          playsInline
+          muted
+          className="w-full h-full object-cover"
+        />
+        <span className="absolute bottom-2 left-2 bg-green-600/80 text-white text-xs px-2 py-1 rounded">
+          You
+        </span>
+      </div>
+
+      {/* Remote Participants */}
+      {remoteParticipants.map((p) => (
+        <div
+          key={p.id}
+          className="relative bg-black rounded-xl overflow-hidden border border-gray-700"
+        >
+          <video
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover"
+            ref={(el) => el && !el.srcObject && (el.srcObject = p.stream)}
+          />
+          <span className="absolute bottom-2 left-2 bg-blue-600/80 text-white text-xs px-2 py-1 rounded">
+            Participant
           </span>
         </div>
+      ))}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {remoteParticipants.map((p) => (
-            <div key={p.id} className="relative rounded-lg overflow-hidden bg-black">
-              <video
-                autoPlay
-                playsInline
-                className="w-full h-40 object-cover rounded-lg"
-                ref={(el) => el && !el.srcObject && (el.srcObject = p.stream)}
-              />
-              <span className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                Client
-              </span>
-            </div>
-          ))}
-          {remoteParticipants.length === 0 && (
-            <div className="flex items-center justify-center text-sm text-gray-400">
-              Waiting for another participant...
-            </div>
-          )}
+      {remoteParticipants.length === 0 && (
+        <div className="flex items-center justify-center text-gray-400 text-sm col-span-full">
+          Waiting for others to join…
         </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2 items-center justify-between">
-        <div className="text-sm text-gray-600">Status: {status}</div>
-        {errorMessage && <div className="text-sm text-red-600">{errorMessage}</div>}
-        <div className="flex gap-2 ml-auto">
-          <button onClick={toggleCamera} className={`px-4 py-2 rounded ${cameraOn ? "bg-blue-600" : "bg-gray-400"} text-white`}>
-            {cameraOn ? "Camera On" : "Camera Off"}
-          </button>
-          <button onClick={toggleMic} className={`px-4 py-2 rounded ${micOn ? "bg-blue-600" : "bg-gray-400"} text-white`}>
-            {micOn ? "Mic On" : "Mic Off"}
-          </button>
-          <button onClick={endCall} className="px-4 py-2 bg-red-500 text-white rounded">
-            End Call
-          </button>
-        </div>
-      </div>
+      )}
     </div>
-  );
+
+    {/* ✅ Status on top-left */}
+    <div className="absolute top-2 left-2 text-xs bg-white/10 backdrop-blur-sm text-white px-2 py-1 rounded">
+      {status === "joined"
+        ? "Connected"
+        : status === "joining"
+        ? "Joining…"
+        : "Idle"}
+    </div>
+
+    {/* 🔹 Bottom Control Bar */}
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 bg-white/10 backdrop-blur-lg p-3 rounded-full">
+      
+      {/* Toggle Camera */}
+      <button
+        onClick={toggleCamera}
+        className={`w-12 h-12 rounded-full flex items-center justify-center 
+          ${cameraOn ? "bg-gray-800 text-white" : "bg-red-600 text-white"}`}
+      >
+        {cameraOn ? "🎥" : "🚫"}
+      </button>
+
+      {/* Toggle Mic */}
+      <button
+        onClick={toggleMic}
+        className={`w-12 h-12 rounded-full flex items-center justify-center 
+          ${micOn ? "bg-gray-800 text-white" : "bg-red-600 text-white"}`}
+      >
+        {micOn ? "🎤" : "🔇"}
+      </button>
+
+      {/* ✅ End Call – Center + Red */}
+      <button
+        onClick={endCall}
+        className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center"
+      >
+        📞
+      </button>
+
+      {/* Future Options */}
+      <button className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
+        💬
+      </button>
+      <button className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
+        🖥
+      </button>
+
+    </div>
+  </div>
+);
+
 }
