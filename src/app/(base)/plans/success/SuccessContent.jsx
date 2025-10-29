@@ -33,7 +33,11 @@ export default function SuccessPage() {
         const res = await fetch(`/api/subscriptions?user_id=${uid}`);
         const data = await res.json();
 
-        
+                // 🔹 Get fraudDetactionApi
+        const apiData = await fetch(`/api/fraudDetactionApis`);
+        const api = await apiData.json();
+
+        console.log(api);
 
         if (!res.ok) {
           console.error("Error:", data.error || data.message);
