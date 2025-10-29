@@ -429,7 +429,7 @@ export default function Navbar() {
                 ) : (
                   <Link
                     href="/login"
-                    className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:scale-105 bg-green-500 text-black hover:bg-green-600"
+                    className="primary-button px-6 py-2 text-white font-bold rounded-full"
                   >
                     Login
                   </Link>

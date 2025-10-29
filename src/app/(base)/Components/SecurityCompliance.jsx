@@ -59,7 +59,7 @@ export default function SecurityCompliance() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="max-w-7xl mx-auto"
+        className="max-w-7xl mx-auto "
       >
         {/* Heading */}
         <motion.h2
@@ -85,9 +85,10 @@ export default function SecurityCompliance() {
             <motion.div
               key={i}
               variants={childVariants}
-              className={`border rounded-2xl p-8 text-left shadow-lg transition-all duration-300 group
-                ${theme === "dark" ? "bg-gray-800 border-gray-700 hover:shadow-cyan-500/30" : "bg-white border-gray-200 hover:shadow-cyan-500/20 hover:-translate-y-2"}`}
+              className={`relative border rounded-2xl p-8 text-left shadow-lg transition-all duration-300 group
+                ${theme === "dark" ? " border-cyan-500 hover:shadow-cyan-500/30" : " border-cyan-500 hover:shadow-cyan-500/20 hover:-translate-y-2"}`}
             >
+
               <div className="flex items-center justify-center mb-6">{item.icon}</div>
               <h3 className="text-xl font-semibold mb-3 leading-relaxed">{item.title}</h3>
               <p className="text-sm leading-relaxed">{item.desc}</p>
