@@ -6,7 +6,6 @@ export async function GET(request) {
   try {
     await connectDb();
 
-    // 🔹 Extract uid from query string
     const { searchParams } = new URL(request.url);
     const uid = searchParams.get("user_id");
 
@@ -17,24 +16,23 @@ export async function GET(request) {
       );
     }
 
-    // 🔹 Find subscriptions for this user, newest first
-    const userSubscriptions = await Subscription.find({ user_id: uid })
-      .sort({ timestamp: -1 }) // or createdAt if that's your field
+    const latestSubscription = await Subscription.findOne({ user_id: uid })
+      .sort({ timestamp: -1 })
       .lean();
 
-    if (!userSubscriptions.length) {
+    if (!latestSubscription) {
       return NextResponse.json(
-        { message: "No subscriptions found for this user." },
+        { message: "No subscription found for this user." },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { success: true, subscriptions: userSubscriptions },
+      { success: true, subscriptions: latestSubscription },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error fetching subscriptions:", error);
+    console.error("Error fetching subscription:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
