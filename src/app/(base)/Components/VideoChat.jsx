@@ -274,50 +274,41 @@ export default function VideoChat({ roomId }) {
     return () => {
       active = false;
     };
-  }, [roomId, cameraOn, micOn]);
+  }, [roomId]);
 
   // ✅ Controls
-  const toggleCamera = async () => {
+ const toggleCamera = async () => {
   const stream = localStreamRef.current;
   if (!stream) return;
 
   const videoTrack = stream.getVideoTracks()[0];
 
   if (cameraOn) {
-    // ✅ Turn off camera safely
-    videoTrack.stop();
-    stream.removeTrack(videoTrack);
+    // ✅ Just disable track — DO NOT stop/remove it
+    if (videoTrack) videoTrack.enabled = false;
     setCameraOn(false);
     localStorage.setItem("cameraOn", false);
-
-    Object.values(peerConnections.current).forEach((pc) => {
-      const sender = pc.getSenders().find(s => s.track?.kind === "video");
-      if (sender) sender.replaceTrack(null); // Stop sending video
-    });
-
   } else {
-    // ✅ Restart camera and replace track
-    const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const newTrack = newStream.getVideoTracks()[0];
+    // ✅ If browser removed or stopped track — request fresh one
+    if (!videoTrack || videoTrack.readyState === "ended") {
+      const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const newTrack = newStream.getVideoTracks()[0];
+      stream.addTrack(newTrack);
 
-    newTrack.enabled = true;
-    stream.addTrack(newTrack);
-    localStreamRef.current = stream;
-
-    Object.values(peerConnections.current).forEach((pc) => {
-      const sender = pc.getSenders().find(s => s.track?.kind === "video");
-      if (sender) sender.replaceTrack(newTrack);
-      else pc.addTrack(newTrack, stream);
-    });
-
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = stream;
+      Object.values(peerConnections.current).forEach((pc) => {
+        const sender = pc.getSenders().find(s => s.track?.kind === "video");
+        if (sender) sender.replaceTrack(newTrack);
+        else pc.addTrack(newTrack, stream);
+      });
+    } else {
+      videoTrack.enabled = true;
     }
 
     setCameraOn(true);
     localStorage.setItem("cameraOn", true);
   }
 };
+
 
 
   const toggleMic = () => {
