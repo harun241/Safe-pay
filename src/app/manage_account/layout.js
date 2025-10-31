@@ -9,6 +9,7 @@ const Profile_layout = ({ children }) => {
 
     return (
         <div className="flex flex-col h-screen  overflow-hidden">
+            
             <div>
                 {/* Header (fixed within main area) */}
                 <ProfileHeader setIsSidebarOpen={setIsSidebarOpen} />
