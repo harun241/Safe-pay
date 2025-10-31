@@ -7,16 +7,28 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "next/navigation"; // ✅ URL parameter নেওয়ার জন্য
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 export default function DynamicPlanPage() {
-  const user = useSelector((state) => state.userInfo);
+  const userInfo = useSelector((state) => state.userInfo);
   const [loading, setLoading] = useState(false);
 
-  // ✅ URL parameter থেকে plan নাম নেওয়া
+  const { user } = useAuth()
   const { plan } = useParams();
 
-  console.log("User Info:", user);
+
+  console.log(user)
+
+  if (user === null) {
+    window.location.href= '/login'
+  }
+
+  // ✅ URL parameter থেকে plan নাম নেওয়া
+
+  console.log("UserInfo Info:", userInfo);
   console.log("Selected Plan from URL:", plan);
+
 
   const plans = [
     {
@@ -70,7 +82,7 @@ export default function DynamicPlanPage() {
   const selectedPlan =
     plans.find((p) => p.title.toLowerCase() === normalizedTitle) || plans[0];
 
-  if (!user) {
+  if (!userInfo) {
     return (
       <section className="flex items-center justify-center h-screen bg-black text-white text-2xl">
         Please log in to view this page.
@@ -84,13 +96,13 @@ export default function DynamicPlanPage() {
     setLoading(true);
 
     const payload = {
-      user_id: user.uid,
+      userInfo_id: userInfo.uid,
       amount: selectedPlan.price === "Custom" ? 0 : selectedPlan.price,
       subscriptionPlans: selectedPlan.title,
-      value_a: user.uid,
+      value_a: userInfo.uid,
       value_b: selectedPlan.title,
       value_c: deviceInfo.browser,
-      value_d: user?.email,
+      value_d: userInfo?.email,
     };
 
     try {
@@ -145,7 +157,7 @@ export default function DynamicPlanPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className={`relative ${selectedPlan.customGradient
-            && "border-y-10 border-x-2 border-cyan-500 text-white"} ${selectedPlan.title === "Pro" && 'bg-cyan-600/30 border-y-10 border-white'} ${selectedPlan.title==='Basic' && 'border border-cyan-500'} rounded-3xl shadow-2xl p-10 md:p-14  grid md:grid-cols-2 gap-10`}
+            && "border-y-10 border-x-2 border-cyan-500 text-white"} ${selectedPlan.title === "Pro" && 'bg-cyan-600/30 border-y-10 border-white'} ${selectedPlan.title === 'Basic' && 'border border-cyan-500'} rounded-3xl shadow-2xl p-10 md:p-14  grid md:grid-cols-2 gap-10`}
         >
 
           {selectedPlan.customGradient &&

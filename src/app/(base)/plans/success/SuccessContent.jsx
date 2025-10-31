@@ -32,13 +32,14 @@ export default function SuccessPage() {
         // 🔹 Get latest transaction
         const res = await fetch(`/api/subscriptions?user_id=${uid}`);
         const data = await res.json();
-        console.log("data",data.subscriptions); // =============
 
-                // 🔹 Get fraudDetactionApi
+        // 🔹 Get fraudDetactionApi
         const apiData = await fetch(`/api/fraudDetactionApis`);
         const api = await apiData.json();
 
         console.log(api);
+        console.log(data);
+
 
         if (!res.ok) {
           console.error("Error:", data.error || data.message);
@@ -46,7 +47,7 @@ export default function SuccessPage() {
           return;
         }
 
-        console.log("user data",userData.user?.subscriptionPlans);
+        console.log("user data", userData.user?.subscriptionPlans);
         console.log(data.subscriptions);
 
         const latest = data.subscriptions
@@ -66,6 +67,7 @@ export default function SuccessPage() {
         );
 
         const predictionData = await predictionRes.json();
+        console.log(predictionData)
         setPrediction(predictionData.prediction || "unknown");
         setLoading(false);
 
@@ -114,12 +116,12 @@ export default function SuccessPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
           className={`max-w-lg w-full text-center rounded-3xl shadow-2xl p-12 border transition-all ${prediction === "Real"
-              ? theme === "dark"
-                ? "bg-gray-800 border-green-400"
-                : "bg-white border-green-500"
-              : theme === "dark"
-                ? "bg-gray-800 border-red-400"
-                : "bg-white border-red-500"
+            ? theme === "dark"
+              ? "bg-gray-800 border-green-400"
+              : "bg-white border-green-500"
+            : theme === "dark"
+              ? "bg-gray-800 border-red-400"
+              : "bg-white border-red-500"
             }`}
         >
           {prediction === "Real" ? (
@@ -150,12 +152,12 @@ export default function SuccessPage() {
           {subscription && (
             <div
               className={`text-left mb-6 p-4 rounded-lg border ${prediction === "Real"
-                  ? theme === "dark"
-                    ? "border-green-400 bg-gray-700"
-                    : "border-green-500 bg-green-50"
-                  : theme === "dark"
-                    ? "border-red-400 bg-gray-700"
-                    : "border-red-500 bg-red-50"
+                ? theme === "dark"
+                  ? "border-green-400 bg-gray-700"
+                  : "border-green-500 bg-green-50"
+                : theme === "dark"
+                  ? "border-red-400 bg-gray-700"
+                  : "border-red-500 bg-red-50"
                 }`}
             >
               <p>
