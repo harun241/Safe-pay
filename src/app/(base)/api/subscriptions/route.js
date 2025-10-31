@@ -7,7 +7,7 @@ export async function GET(request) {
     await connectDb();
 
     const { searchParams } = new URL(request.url);
-    const uid = searchParams.get("user_id");
+    const uid = searchParams.get("email");
 
     if (!uid) {
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function GET(request) {
       );
     }
 
-    const latestSubscription = await Subscription.findOne({ user_id: uid })
+    const latestSubscription = await Subscription.findOne({ email: uid })
       .sort({ timestamp: -1 })
       .lean();
 
