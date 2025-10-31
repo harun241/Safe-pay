@@ -5,19 +5,19 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
   {
-    q: "How does Darwinium help Fintechs prevent fraud?",
-    a: "Darwinium provides real-time, AI-driven fraud detection across the entire customer journey. It continuously analyzes user behavior, device intelligence, and transaction context to block fraudulent activity while keeping genuine customers safe.",
+    q: "How does Safepay help Fintechs prevent fraud?",
+    a: " Safepay provides real-time, AI-driven fraud detection across the entire customer journey. It continuously analyzes user behavior, device intelligence, and transaction context to block fraudulent activity while keeping genuine customers safe.",
   },
   {
-    q: "Can Darwinium detect subtle automation or scripted attacks on our platform?",
-    a: "Yes. Darwinium uses advanced behavioral biometrics, velocity checks, and bot-detection models to identify even the most subtle scripted or automated attacks, including credential stuffing, account takeover attempts, and fake account creation.",
+    q: "Can Safepay detect subtle automation or scripted attacks on our platform?",
+    a: "Yes.Safepay uses advanced behavioral biometrics, velocity checks, and bot-detection models to identify even the most subtle scripted or automated attacks, including credential stuffing, account takeover attempts, and fake account creation.",
   },
   {
-    q: "How does Darwinium support regulatory compliance and data privacy in financial services?",
-    a: "Darwinium is designed with compliance in mind. It helps Fintechs meet regulatory obligations such as PSD2, PCI DSS, and GDPR by offering strong authentication, secure data handling, and privacy-preserving risk assessments.",
+    q: "How does Safepay support regulatory compliance and data privacy in financial services?",
+    a: "Safepay is designed with compliance in mind. It helps Fintechs meet regulatory obligations such as PSD2, PCI DSS, and GDPR by offering strong authentication, secure data handling, and privacy-preserving risk assessments.",
   },
   {
-    q: "What types of financial fraud can Darwinium detect and mitigate?",
+    q: "What types of financial fraud can Safepay detect and mitigate?",
     a: (
       <ul className="list-disc list-inside mt-2 space-y-1">
         <li>Account takeover (ATO)</li>
@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "Does SafePay slow down transaction processing or impact customer experience?",
-    a: "No. Darwinium operates in real time with minimal latency. It silently analyzes risk signals in the background, ensuring that genuine users experience seamless and frictionless transactions.",
+    a: "No. Safepay operates in real time with minimal latency. It silently analyzes risk signals in the background, ensuring that genuine users experience seamless and frictionless transactions.",
   },
   {
     q: "How does SafePay differentiate between risky and legitimate users?",
