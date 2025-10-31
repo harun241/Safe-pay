@@ -32,6 +32,7 @@ export default function SuccessPage() {
         // 🔹 Get latest transaction
         const res = await fetch(`/api/subscriptions?user_id=${uid}`);
         const data = await res.json();
+        console.log("data",data.subscriptions); // =============
 
         // 🔹 Get fraudDetactionApi
         const apiData = await fetch(`/api/fraudDetactionApis`);
