@@ -22,7 +22,7 @@ export default function SuccessPage() {
   const uid = user?.uid;
 
   useEffect(() => {
-    if (paymentStatus !== "success" || !uid) return;
+    if (paymentStatus !== "success" && !uid) return;
 
     const fetchLatestSubscription = async () => {
       try {
@@ -30,7 +30,7 @@ export default function SuccessPage() {
         const resp = await fetch(`/api/users?uid=${uid}`);
         const userData = await resp.json();
         // 🔹 Get latest transaction
-        const res = await fetch(`/api/subscriptions?user_id=${uid}`);
+        const res = await fetch(`/api/subscriptions?email=${user.email}`);
         const data = await res.json();
 
         // 🔹 Get fraudDetactionApi
@@ -38,6 +38,10 @@ export default function SuccessPage() {
         const api = await apiData.json();
 
         console.log(api);
+
+
+        const latest = data?.subscriptions
+        console.log(latest);
         console.log(data);
 
 
@@ -47,36 +51,31 @@ export default function SuccessPage() {
           return;
         }
 
-        console.log("user data", userData.user?.subscriptionPlans);
-        console.log(data.subscriptions);
+        if (data?.success === true) {
+ // 🔹 Call prediction API
+          const predictionRes = await fetch(
+            "https://freud-detection-ai-model.onrender.com/predict",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(latest),
+            }
+          );
 
-        const latest = data.subscriptions
-          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+          const predictionData = await predictionRes.json();
+          console.log(predictionData)
+          setPrediction(predictionData.prediction || "unknown");
+          setLoading(false);
 
-        setSubscription(latest);
-        console.log(latest);
-
-        // 🔹 Call prediction API
-        const predictionRes = await fetch(
-          "https://freud-detection-ai-model.onrender.com/predict",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(latest),
+          // 🔹 Show toast
+          if (predictionData.prediction === "Real") {
+            toast.success("✅ Transaction verified as REAL");
+          } else if (predictionData.prediction === "Fraud") {
+            toast.error("⚠️ Transaction flagged as FRAUD");
           }
-        );
-
-        const predictionData = await predictionRes.json();
-        console.log(predictionData)
-        setPrediction(predictionData.prediction || "unknown");
-        setLoading(false);
-
-        // 🔹 Show toast
-        if (predictionData.prediction === "Real") {
-          toast.success("✅ Transaction verified as REAL");
-        } else if (predictionData.prediction === "Fraud") {
-          toast.error("⚠️ Transaction flagged as FRAUD");
         }
+
+
       } catch (err) {
         console.error("Request failed:", err);
         setLoading(false);
@@ -85,7 +84,7 @@ export default function SuccessPage() {
     };
 
     fetchLatestSubscription();
-  }, [uid, paymentStatus]);
+  }, [uid, user, paymentStatus]);
 
 
 
